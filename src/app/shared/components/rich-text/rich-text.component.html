@@ -1,1 +1,6 @@
-<p>rich-text works!</p>
+<div class="rich-text-container">
+    <quill-editor #editor class="quill-editor" [ngModel]="value" (ngModelChange)="onContentChange($event)"
+        [modules]="quillModules" [placeholder]="placeholder" [style.height]="height" [readOnly]="disabled"
+        (onFocus)="onFocus()" (onBlur)="onBlur()" format="html">
+    </quill-editor>
+</div>

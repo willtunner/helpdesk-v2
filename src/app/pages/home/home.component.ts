@@ -13,7 +13,7 @@ import { DynamicThreeToggleComponent } from '../../shared/components/dynamic-thr
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CustomInputComponent, MatButtonModule,
-    DynamicTableComponent, DynamicButtonComponent, MatIconModule, DynamicThreeToggleComponent
+    DynamicTableComponent, DynamicButtonComponent, MatIconModule, DynamicThreeToggleComponent,
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss']

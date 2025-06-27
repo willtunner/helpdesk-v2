@@ -1,0 +1,35 @@
+.rich-text-container {
+    display: block;
+    width: 100%;
+}
+
+.quill-editor {
+    width: 100%;
+    height: 100% !important;
+    margin-top: 15px;
+    background-color: white;
+
+    ::ng-deep .ql-container {
+        font-family: inherit;
+        font-size: inherit;
+        min-height: 100px;
+    }
+
+    ::ng-deep .ql-toolbar {
+        border-radius: 4px 4px 0 0;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-bottom: none;
+    }
+
+    ::ng-deep .ql-container {
+        border-radius: 0 0 4px 4px;
+        border: 1px solid rgba(0, 0, 0, 0.12);
+        border-top: none;
+    }
+
+    ::ng-deep .ql-editor {
+        min-height: 100px;
+        max-height: 300px;
+        overflow-y: auto;
+    }
+}

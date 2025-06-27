@@ -7,11 +7,13 @@ import { environment } from '../app/environments/environment'
 import { getStorage, provideStorage } from '@angular/fire/storage';
 import { provideQuillConfig } from 'ngx-quill';
 import { provideNgxMask } from 'ngx-mask';
+import { provideAnimations } from '@angular/platform-browser/animations';
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideNgxMask(),
     provideRouter(routes),
+    provideAnimations(),
     provideFirebaseApp(() =>
       initializeApp({
         apiKey: environment.firebase.apiKey,
