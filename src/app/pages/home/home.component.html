@@ -1,0 +1,71 @@
+<h1>Bem-vindo à Home!</h1>
+<button mat-raised-button color="warn" (click)="logout()">Logout</button>
+
+<form [formGroup]="form" (ngSubmit)="submit()" style="display: flex; flex-direction: column; gap: 20px; max-width: 500px;">
+    <app-custom-input
+      label="Nome"
+      [control]="getControl('nome')"
+      size="pequeno">
+    </app-custom-input>
+  
+    <app-custom-input
+      label="Email"
+      [control]="getControl('email')"
+      size="full-width"
+      type="email">
+    </app-custom-input>
+  
+    <app-custom-input
+      label="Telefone"
+      [control]="getControl('telefone')"
+      size="medio"
+      type="telefone">
+    </app-custom-input>
+
+    <app-custom-input
+      label="CPF"
+      type="cpf"
+      [control]="getControl('cpf')"
+      size="medio">
+    </app-custom-input>
+
+    <app-custom-input
+      label="CNPJ"
+      type="cnpj"
+      [control]="getControl('cnpj')"
+      size="grande">
+    </app-custom-input>
+
+    <app-custom-input
+    label="CEP"
+    type="cep"
+    [control]="getControl('cep')"
+    size="pequeno">
+  </app-custom-input>
+  
+    <button mat-raised-button color="primary">Enviar</button>
+
+    <app-dynamic-table [headers]="headers" [data]="dados" />
+    
+  </form>
+
+  <!-- Ações -->
+<div class="form-actions">
+  <app-dynamic-button type="save" (clicked)="onSave()" [success]="saveSuccess"></app-dynamic-button>
+  <app-dynamic-button type="edit" (clicked)="onEdit()"></app-dynamic-button>
+  <app-dynamic-button type="delete" (clicked)="onDelete()" [success]="deleteSuccess"></app-dynamic-button>
+  <app-dynamic-button type="clear" (clicked)="onClear()"></app-dynamic-button>
+  <app-dynamic-button type="print" (clicked)="onPrint()"></app-dynamic-button>
+  <app-dynamic-button type="find" (clicked)="onFind()"></app-dynamic-button>
+  <app-dynamic-button type="add"></app-dynamic-button>
+</div>
+  
+
+<app-dynamic-three-toggle
+  [title]="'Período'"
+  [btn1]="{ label: 'Mensal', value: 'mes' }"
+  [btn2]="{ label: 'Semestral', value: 'semestre' }"
+  [btn3]="{ label: 'Anual', value: 'ano' }"
+  [selectedValue]="selectedToggle"
+  (onToggleSelect)="handleToggle($event)"
+></app-dynamic-three-toggle>

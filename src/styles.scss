@@ -1,1 +1,63 @@
 /* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+/* Css referente aos inputs */
+.input-small {
+    width: 120px;
+  }
+  .input-medium {
+    width: 250px;
+  }
+  .input-large {
+    width: 400px;
+  }
+  .input-full {
+    width: 100%;
+  }
+  
+
+  /* Remover espaçamentos e controlar altura do mat-form-field */
+.custom-field {
+
+  ::ng-deep input::placeholder {
+    color: #555 !important; /* cinza escuro e mais visível */
+    opacity: 1 !important;  /* força o placeholder a não ficar transparente */
+  }
+  
+  ::ng-deep .mat-input-element {
+    color: #333 !important; /* cor do texto digitado */
+    font-weight: 400;
+  }
+
+  ::ng-deep .mat-input-element {
+    color: #333 !important; /* Cor escura para o texto digitado */
+    caret-color: #000;       /* Cor do cursor (opcional) */
+    background-color: transparent !important; /* evita fundo azul */
+  }
+
+  ::ng-deep .mat-form-field-infix {
+    padding: 0 !important;
+  }
+
+  ::ng-deep .mat-input-element {
+    padding: 0 12px !important;
+    height: 100% !important;
+    box-sizing: border-box;
+    font-size: 14px;
+  }
+
+  ::ng-deep .mat-form-field-wrapper {
+    padding-bottom: 0 !important;
+  }
+
+  ::ng-deep .mat-form-field-outline {
+    top: 0 !important;
+  }
+
+  ::ng-deep .mat-form-field-outline-start,
+  ::ng-deep .mat-form-field-outline-end {
+    height: 100% !important;
+  }
+}

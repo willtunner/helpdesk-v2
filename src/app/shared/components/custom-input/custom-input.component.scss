@@ -1,0 +1,39 @@
+::ng-deep .mat-mdc-form-field-infix {
+  padding: 4px 8px !important;
+  min-height: 40px !important;
+  display: flex;
+  align-items: center;
+}
+
+::ng-deep .mat-mdc-input-element {
+  padding: 0 !important;
+  margin: 0 !important;
+  height: 24px !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  color: #222 !important; // Texto digitado mais escuro
+  caret-color: #000 !important;
+
+  &::placeholder {
+    color: #555 !important; // Placeholder mais escuro
+    opacity: 1 !important;
+  }
+}
+
+::ng-deep .mat-mdc-floating-label {
+  font-size: 12px !important;
+}
+
+::ng-deep .mat-mdc-form-field-label {
+  font-size: 13px !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  line-height: 1 !important;
+  color: #666 !important; // Label em repouso
+}
+
+::ng-deep .mat-mdc-form-field.mat-form-field-should-float .mat-mdc-form-field-label {
+  transform: translateY(-22px) scale(0.75) !important;
+  font-size: 12px !important;
+  color: #444 !important; // Label flutuante
+}

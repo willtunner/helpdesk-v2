@@ -1,0 +1,34 @@
+<section class="toggle-container">
+    <h3>{{ title }}</h3>
+    <mat-button-toggle-group
+      class="custom-toggle-group"
+      [value]="selectedValue"
+      (change)="onToggle($event.value)"
+      [hideSingleSelectionIndicator]="false"
+    >
+      <mat-button-toggle
+        class="custom-toggle"
+        [ngClass]="{ 'selected': selectedValue === btn1.value }"
+        [value]="btn1.value"
+      >
+        {{ btn1.label }}
+      </mat-button-toggle>
+  
+      <mat-button-toggle
+        class="custom-toggle"
+        [ngClass]="{ 'selected': selectedValue === btn2.value }"
+        [value]="btn2.value"
+      >
+        {{ btn2.label }}
+      </mat-button-toggle>
+  
+      <mat-button-toggle
+        class="custom-toggle"
+        [ngClass]="{ 'selected': selectedValue === btn3.value }"
+        [value]="btn3.value"
+      >
+        {{ btn3.label }}
+      </mat-button-toggle>
+    </mat-button-toggle-group>
+  </section>
+  
