@@ -18,6 +18,26 @@ export interface Company {
     clients: User[];
   }
 
+  export interface HelpDeskCompany {
+    id: string;
+    name: string;
+    keywords: string[]; // Lista de palavras-chave para busca, salvar o nome da empresa em palavra-chave em minusculo
+    created: Date; // timestamp formato do firebase (1 de julho de 2025 às 11:35:36 UTC-3), salvar no formato Date e criar um pipe para exibir a data no formato "01/07/2025 - 11:35:36" 
+    updated: Date; // timestamp formato do firebase (1 de julho de 2025 às 11:35:36 UTC-3), salvar no formato Date e criar um pipe para exibir a data no formato "01/07/2025 - 11:35:36" 
+    cnpj: number;
+    city: string;
+    state: string;
+    address: string;
+    neighborhood: string;
+    zipcode: number;
+    phone: number;
+    email: string;
+    companies: Company[];
+    employees: User[];
+    password?: string;
+    active: boolean;
+  }
+
   export interface Call {
     id: string;
     deleted: boolean;

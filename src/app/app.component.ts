@@ -33,7 +33,8 @@ export class AppComponent {
 
   ngOnInit(): void {
     this.router.events.subscribe(() => {
-      this.showSideNav = this.router.url !== '/login';
+      const publicRoutes = ['/login', '/criar-conta', '/recuperar-senha'];
+      this.showSideNav = !publicRoutes.includes(this.router.url);
     });
   }
 

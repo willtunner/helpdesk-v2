@@ -1,0 +1,34 @@
+<div class="header">
+    <button mat-icon-button (click)="voltar()">
+        <mat-icon>arrow_back</mat-icon>
+    </button>
+    <h2>Cadastro de conta</h2>
+</div>
+
+<div class="form-container" [formGroup]="form">
+    <app-custom-input label="CNPJ" [control]="getControl('cnpj')" (onSearch)="buscarCnpj()" [loading]="loadingCnpj" type="cnpj" size="full-width"></app-custom-input>
+    <app-custom-input label="Nome da empresa" [control]="getControl('name')" size="full-width"></app-custom-input>
+    <app-custom-input label="CEP" (onSearch)="buscarCep()" [loading]="loadingCep" [control]="getControl('zipcode')" type="cep" size="full-width"></app-custom-input>
+    <app-custom-input label="Cidade" [control]="getControl('city')" size="full-width"></app-custom-input>
+    <app-custom-input label="Estado" [control]="getControl('state')" size="full-width"></app-custom-input>
+    <app-custom-input label="Endereço" [control]="getControl('address')" size="full-width"></app-custom-input>
+    <app-custom-input label="Bairro" [control]="getControl('neighborhood')" size="full-width"></app-custom-input>
+    <app-custom-input label="Telefone" [control]="getControl('phone')" type="telefone" size="full-width"></app-custom-input> 
+    <app-custom-input label="E-mail" [control]="getControl('email')" type="email" size="full-width"></app-custom-input>
+    <app-custom-input
+    label="Senha"
+    [control]="getControl('password')"
+    type="password"
+    size="full-width">
+  </app-custom-input>
+  
+  <app-custom-input
+    label="Repetir Senha"
+    [control]="getControl('confirmPassword')"
+    type="password"
+    size="full-width">
+  </app-custom-input>
+    <button mat-raised-button color="primary" class="btn-submit"  (click)="onSubmit()">
+        Criar Conta
+    </button>
+</div>
