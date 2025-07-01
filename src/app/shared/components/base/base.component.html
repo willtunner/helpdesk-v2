@@ -1,0 +1,12 @@
+
+@if(isLoginRoute) {
+<div class="app-base-container">
+    <router-outlet></router-outlet>
+</div>
+}
+
+@else {
+<div class="body" [ngClass]="getBodyClass()">
+    <router-outlet></router-outlet>
+</div>
+}

@@ -1,1 +1,7 @@
-<router-outlet></router-outlet>
+@if(showSideNav) {
+    <ng-container>
+        <app-sidenav (onToggleSideNav)="onToggleSideNav($event)"></app-sidenav>
+      </ng-container>
+    }
+    
+    <app-base [collapsed]="isSideNavCollapsed" [screenWidth]="screenWidth"></app-base>

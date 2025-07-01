@@ -15,8 +15,12 @@ import { CommonModule } from '@angular/common';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
 })
+
 export class LoginComponent {
+
   form!: FormGroup;
+  loading = false;
+
   constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
     this.form = this.fb.group({
       username: ['', Validators.required],
@@ -24,12 +28,27 @@ export class LoginComponent {
     });
   }
 
-  onSubmit() {
+  async onSubmit() {
+    if (this.form.invalid || this.loading) return;
+
     const { username, password } = this.form.value;
-    if (this.auth.login(username!, password!)) {
-      this.router.navigate(['/home']);
-    } else {
-      alert('Credenciais inválidas');
+    this.loading = true;
+
+    try {
+      const success = await this.auth.login(username, password);
+
+      if (success) {
+        this.router.navigate(['/home']);
+      } else {
+        alert('Credenciais inválidas.');
+      }
+    } catch (error) {
+      console.error('Erro ao fazer login:', error);
+      alert('Erro ao fazer login. Verifique suas credenciais.');
+    } finally {
+      this.loading = false;
     }
   }
+
+
 }

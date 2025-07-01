@@ -1,6 +1,27 @@
+<!-- rich-text-editor.component.html -->
 <div class="rich-text-container">
-    <quill-editor #editor class="quill-editor" [ngModel]="value" (ngModelChange)="onContentChange($event)"
-        [modules]="quillModules" [placeholder]="placeholder" [style.height]="height" [readOnly]="disabled"
-        (onFocus)="onFocus()" (onBlur)="onBlur()" format="html">
-    </quill-editor>
-</div>
+    <label *ngIf="label" class="editor-label">{{ label }}</label>
+    
+    <div class="editor-controls">
+      <button mat-button (click)="togglePreview()" class="preview-btn">
+        <mat-icon>{{ showPreview ? 'visibility_off' : 'visibility' }}</mat-icon>
+        {{ showPreview ? 'Ocultar Preview' : 'Mostrar Preview' }}
+      </button>
+    </div>
+  
+    <div *ngIf="!showPreview; else previewTemplate">
+      <quill-editor 
+        class="quill-editor" 
+        [(ngModel)]="editorContent" 
+        (ngModelChange)="onContentChange($event)"
+        [modules]="quillModules"
+        [placeholder]="placeholder"
+        [style.height]="height"
+        format="html">
+      </quill-editor>
+    </div>
+  
+    <ng-template #previewTemplate>
+      <div class="preview-content ql-editor" [innerHTML]="editorContent"></div>
+    </ng-template>
+  </div>

@@ -1,5 +1,5 @@
-import { Component } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Component, forwardRef } from '@angular/core';
+import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomInputComponent } from '../../shared/components/custom-input/custom-input.component';
 import { MatButtonModule } from '@angular/material/button';
@@ -8,21 +8,35 @@ import { DynamicTableComponent } from '../../shared/components/dynamic-table/dyn
 import { DynamicButtonComponent } from '../../shared/components/action-button/action-button.component';
 import { MatIconModule } from '@angular/material/icon';
 import { DynamicThreeToggleComponent } from '../../shared/components/dynamic-three-toggle/dynamic-three-toggle.component';
+import { RichTextEditorComponent } from '../../shared/components/rich-text/rich-text.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CustomInputComponent, MatButtonModule,
     DynamicTableComponent, DynamicButtonComponent, MatIconModule, DynamicThreeToggleComponent,
+    RichTextEditorComponent, MatInputModule
   ],
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss']
+  styleUrls: ['./home.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => RichTextEditorComponent),
+      multi: true
+    }
+  ]
 })
 
 export class HomeComponent {
   form: FormGroup;
+  form2: FormGroup;
   saveSuccess = false;
   deleteSuccess = false;
+  user: any = null;
 
   // Estados de sucesso para os botões
   isSaveOrEditSuccess = false;
@@ -37,6 +51,30 @@ export class HomeComponent {
     btn2: { label: 'Semestre', value: 'semestre' },
     btn3: { label: 'Ano Atual', value: 'ano' }
   };
+
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
+    const session = this.auth.currentUser();
+    if (session) {
+      this.user = session;
+      console.log('Sessão carregada:', this.user);
+    }
+
+    this.form = this.fb.group({
+      nome: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      telefone: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
+      cpf: ['', [Validators.required]],
+      cep: ['', [Validators.required]],
+      cnpj: ['', [Validators.required]],
+      descricao: ['']
+    });
+
+    this.form2 = this.fb.group({
+      title: ['', Validators.required],
+      content: ['<p>Conteúdo inicial</p>', Validators.required],
+      description: ['', Validators.required]
+    });
+  }
 
   onToggleChanged(value: string) {
     console.log('Selecionado:', value);
@@ -58,31 +96,35 @@ export class HomeComponent {
     console.log('🔁 Ano selecionado');
   }
 
-  constructor(private fb: FormBuilder, private auth: AuthService) {
-    this.form = this.fb.group({
-      nome: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      telefone: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
-      cpf: ['', [Validators.required]],
-      cep: ['', [Validators.required]],
-      cnpj: ['', [Validators.required]],
-    });
-  }
+  
 
   getControl(controlName: string): FormControl {
     return this.form.get(controlName) as FormControl;
   }
 
+  
+
   submit() {
     if (this.form.valid) {
-      console.log(this.form.value);
+      console.log('Formulário enviado:', this.form.value);
+      // Mostrar o conteúdo HTML no console
+      console.log('Conteúdo da descrição (HTML):', this.form.get('descricao')?.value);
+      console.log('Termos aceitos (HTML):', this.form.get('termos')?.value);
     } else {
       this.form.markAllAsTouched();
     }
   }
 
+  onSubmit() {
+    if (this.form.valid) {
+      console.log('Formulário enviado:', this.form.value);
+      // O conteúdo HTML estará em this.form.value.content
+    }
+  }
+
   logout() {
     this.auth.logout();
+    this.router.navigate(['/login']);
   }
 
   headers = [

@@ -1,0 +1,334 @@
+{
+  "call": {
+    "formTitle": "Tela de chamados",
+    "titlePage": "Chamados",
+    "saveBtnTitle": "Salvar",
+    "deleteBtnTitle": "Limpar",
+    "updateBtnTitle": "Atualizar",
+    "formControls": [
+      {
+        "name": "id",
+        "label": "Código",
+        "value": "",
+        "type": "text",
+        "class": "",
+        "validators": [
+          {
+            "validatorName": "required",
+            "required": true,
+            "message": "Campo Obrigatório!"
+          },
+          {
+            "validatorName": "minlength",
+            "minLength": 6,
+            "message": "Precisa ter no minimo 6 caracteres!"
+          }
+        ]
+      },
+      {
+        "name": "title",
+        "label": "Titulo",
+        "placeholder": "Digite o titulo!",
+        "value": "",
+        "type": "text",
+        "class": "",
+        "validators": [
+          {
+            "validatorName": "required",
+            "required": true,
+            "message": "Campo Obrigatório!"
+          }
+        ]
+      },
+      {
+        "name": "description",
+        "label": "Descrição",
+        "placeholder": "Digite a descrição!",
+        "value": "",
+        "type": "text",
+        "class": "",
+        "validators": [
+          {
+            "validatorName": "required",
+            "required": true,
+            "message": "Campo Obrigatório!"
+          }
+        ]
+      },
+      {
+        "name": "resolution",
+        "label": "Resolução",
+        "placeholder": "Digite a resolução do problema!",
+        "value": "",
+        "type": "text",
+        "class": "",
+        "validators": [
+          {
+            "validatorName": "required",
+            "required": true,
+            "message": "Campo Obrigatório!"
+          }
+        ]
+      },
+      {
+        "name": "tags",
+        "label": "Tags",
+        "placeholder": "Digite uma ou várias tags separadas por virgula!",
+        "value": "",
+        "type": "text",
+        "class": "",
+        "validators": [
+          {
+            "validatorName": "required",
+            "required": true,
+            "message": "Campo Obrigatório!"
+          }
+        ]
+      },
+      {
+        "name": "connection",
+        "label": "Conexão",
+        "placeholder": "Digite o acesso remoto",
+        "value": "",
+        "type": "text",
+        "class": "",
+        "validators": [
+          {
+            "validatorName": "required",
+            "required": true,
+            "message": "Campo Obrigatório!"
+          }
+        ]
+      },
+      {
+        "name": "client",
+        "label": "Cliente",
+        "options": [
+          {
+            "id": "1",
+            "value": "Cliente 1"
+          },
+          {
+            "id": "2",
+            "value": "Cliente 2"
+          }
+        ],
+        "type": "select",
+        "class": "",
+        "validators": [
+          {
+            "validatorName": "required",
+            "required": true,
+            "message": "Campo Obrigatório!"
+          }
+        ]
+      },
+      {
+        "name": "active",
+        "label": "Ativo",
+        "value": "true",
+        "type": "toggle",
+        "class": "",
+        "validators": []
+      },
+      {
+        "name": "acceptPix",
+        "label": "Aceita Pix",
+        "value": "false",
+        "type": "checkbox",
+        "class": "",
+        "validators": []
+      },
+      {
+        "name": "pixType",
+        "label": "Tipo Pix",
+        "options": [
+          {
+            "id": "1",
+            "value": "CPF/CNPJ"
+          },
+          {
+            "id": "2",
+            "value": "Email"
+          },
+          {
+            "id": "3",
+            "value": "Celular"
+          },
+          {
+            "id": "4",
+            "value": "Chave Aleatória"
+          }
+        ],
+        "type": "select",
+        "class": "",
+        "validators": []
+      },
+      {
+        "name": "keyPix",
+        "label": "Chave Pix",
+        "placeholder": "",
+        "value": "",
+        "type": "text",
+        "class": "",
+        "validators": []
+      },
+      {
+        "name": "obs",
+        "label": "Observação",
+        "value": "",
+        "type": "textarea",
+        "class": "",
+        "validators": []
+      }
+    ]
+  },
+  "product": {
+    "formTitle": "Cadastro de produtos",
+    "titlePage": "Lista produtos",
+    "saveBtnTitle": "Salvar",
+    "deleteBtnTitle": "Limpar",
+    "updateBtnTitle": "Atualizar",
+    "formControls": [
+      {
+        "name": "id",
+        "label": "Código",
+        "value": "",
+        "type": "text",
+        "class": "",
+        "validators": [
+          {
+            "validatorName": "required",
+            "required": true,
+            "message": "Campo Obrigatório!"
+          },
+          {
+            "validatorName": "minlength",
+            "minLength": 6,
+            "message": "Precisa ter no minimo 6 caracteres!"
+          }
+        ]
+      },
+      {
+        "name": "name",
+        "label": "Nome",
+        "placeholder": "Digite seu Usuário!",
+        "value": "",
+        "type": "text",
+        "class": "",
+        "validators": [
+          {
+            "validatorName": "required",
+            "required": true,
+            "message": "Campo Obrigatório!"
+          }
+        ]
+      },
+      {
+        "name": "price",
+        "label": "Preço",
+        "placeholder": "Digite o preço!",
+        "value": "",
+        "type": "number",
+        "class": "",
+        "validators": [
+          {
+            "validatorName": "required",
+            "required": true,
+            "message": "Campo Obrigatório!"
+          }
+        ]
+      },
+      {
+        "name": "productType",
+        "label": "Tipo do produto",
+        "options": [
+          {
+            "id": "1",
+            "value": "Informática"
+          },
+          {
+            "id": "2",
+            "value": "Celular"
+          },
+          {
+            "id": "3",
+            "value": "Eletro Domésticos"
+          },
+          {
+            "id": "4",
+            "value": "Games"
+          }
+        ],
+        "type": "select",
+        "class": "",
+        "validators": [
+          {
+            "validatorName": "required",
+            "required": true,
+            "message": "Campo Obrigatório!"
+          }
+        ]
+      }
+    ]
+  },
+  "navbarData": [
+    {
+      "routeLink": "home",
+      "icon": "home",
+      "label": "Home"
+    },
+    {
+      "routeLink": "calls",
+      "icon": "inventory_2",
+      "label": "Chamados"
+    },
+    {
+      "routeLink": "companies",
+      "icon": "apartment",
+      "label": "Empresas"
+    },
+    {
+      "routeLink": "client",
+      "icon": "groups",
+      "label": "Cliente"
+    },
+    {
+      "routeLink": "system_version",
+      "icon": "system_update_alt",
+      "label": "Ver. Sistema"
+    },
+    {
+      "routeLink": "chat",
+      "icon": "forum",
+      "label": "Chat"
+    },
+    {
+      "routeLink": "tutorials",
+      "icon": "books_movies_and_music",
+      "label": "Videos/Docs"
+    },
+    {
+      "routeLink": "mtb_dev",
+      "icon": "code",
+      "label": "MTB DEV"
+    },
+    {
+      "routeLink": "generates_code",
+      "icon": "developer_mode",
+      "label": "Gera Código"
+    }
+    ,
+    {
+      "routeLink": "profile_settings",
+      "icon": "settings",
+      "label": "Configurações"
+    }
+    ,
+    {
+      "routeLink": "exit",
+      "icon": "logout",
+      "label": "Sair"
+    }
+  ]
+}
