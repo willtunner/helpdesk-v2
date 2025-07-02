@@ -4,10 +4,13 @@ import { map, Observable, tap } from 'rxjs';
 import { CnpjResponse } from '../interface/cnpj-response.interface';
 import { Cep } from '../interface/cep.interface';
 import { ESTADOS, REGIOES } from '../models/brasil-maps';
+import * as CryptoJS from 'crypto-js';
 
+const SECRET_KEY = 'minha-chave-super-secreta';
 @Injectable({
   providedIn: 'root'
 })
+
 export class UtilService {
   constructor(private http: HttpClient) { }
 
@@ -55,6 +58,19 @@ export class UtilService {
       })
     );
   }
-  
-  
+
+  sanitizeCnpj(cnpj: string): string {
+    return cnpj.replace(/\D/g, ''); // Remove tudo que não for número
+  }
+
+  encryptPassword(plainText: string): string {
+    return CryptoJS.AES.encrypt(plainText, SECRET_KEY).toString();
+  }
+
+  decryptPassword(cipherText: string): string {
+    const bytes = CryptoJS.AES.decrypt(cipherText, SECRET_KEY);
+    return bytes.toString(CryptoJS.enc.Utf8);
+  }
 }
+
+

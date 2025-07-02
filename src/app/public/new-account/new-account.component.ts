@@ -28,7 +28,8 @@ export class NewAccountComponent {
   loadingCep = false;
   loadingCnpj = false;
 
-  constructor(private fb: FormBuilder, private router: Router, private utilService: UtilService) {
+  constructor(private fb: FormBuilder, private router: Router, 
+    private utilService: UtilService) {
     this.form = this.fb.group(
       {
         name: ['', Validators.required],
@@ -42,6 +43,7 @@ export class NewAccountComponent {
         email: ['', [Validators.required, Validators.email]],
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
+        active: [false , Validators.required],
       },
       { validators: [this.passwordMatchValidator] }
     );
@@ -108,13 +110,29 @@ export class NewAccountComponent {
 
   onSubmit(): void {
     if (this.form.valid) {
-      const formData = this.form.value;
-      console.log('Criando conta com os dados:', formData);
-      //this.router.navigate(['/login']);
+      const formData = { ...this.form.value };
+  
+      // Sanitize CNPJ
+      formData.cnpj = this.utilService.sanitizeCnpj(formData.cnpj);
+  
+      // Encrypt password
+      formData.password = this.utilService.encryptPassword(formData.password);
+  
+      // Remover confirmPassword do payload final
+      delete formData.confirmPassword;
+  
+      console.log('Dados tratados para envio:', formData);
+  
+      // Aqui você pode enviar para o backend
+      // this.apiService.createAccount(formData).subscribe(...);
+  
+      // Redirecionar após sucesso (opcional)
+      // this.router.navigate(['/login']);
     } else {
       this.form.markAllAsTouched();
     }
   }
+  
 
   voltar(): void {
     this.router.navigate(['/login']);
