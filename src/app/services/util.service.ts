@@ -13,7 +13,7 @@ const SECRET_KEY = 'minha-chave-super-secreta';
 
 export class UtilService {
   constructor(private http: HttpClient) { }
-
+  
   consultarCnpj(cnpj: string): Observable<CnpjResponse> {
     const cnpjLimpo = cnpj.replace(/[^\d]+/g, '');
 

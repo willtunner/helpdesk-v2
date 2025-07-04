@@ -1,4 +1,7 @@
 <h1>Bem-vindo{{ user?.username ? ', ' + user.username : '' }}!</h1>
+<button mat-raised-button (click)="toggleTheme()">
+  {{ theme() === 'dark' ? '🌞 Tema Claro' : '🌙 Tema Escuro' }}
+</button>
 
 <form [formGroup]="form" (ngSubmit)="submit()" 
 style="display: flex; flex-direction: column; gap: 20px; max-width: 500px;">

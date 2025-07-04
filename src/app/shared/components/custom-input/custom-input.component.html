@@ -1,33 +1,25 @@
 <mat-form-field [ngClass]="[getSizeClass(), cssClass]" appearance="outline" class="custom-field">
   <mat-label>{{ label }}</mat-label>
 
-  <input
-    matInput
-    [type]="inputType"
-    [formControl]="control"
-    [placeholder]="placeholder"
-    [mask]="mask"
-    [dropSpecialCharacters]="false"
-  />
+  <input matInput [type]="inputType" [formControl]="control" [placeholder]="placeholder" [mask]="mask"
+    [dropSpecialCharacters]="false" />
 
-  <button
-  *ngIf="isSearchable"
-  mat-icon-button
-  matSuffix
-  (click)="search()"
-  type="button"
-  aria-label="Buscar"
->
-  <mat-icon *ngIf="!loading">search</mat-icon>
-  <mat-spinner *ngIf="loading" diameter="20" strokeWidth="3" color="primary"></mat-spinner>
-</button>
+  <button *ngIf="isSearchable" mat-icon-button matSuffix (click)="search()" type="button" aria-label="Buscar"
+    class="search-button">
+    <mat-icon *ngIf="!loading">search</mat-icon>
+    <mat-spinner *ngIf="loading" diameter="20" strokeWidth="3" color="primary"></mat-spinner>
+  </button>
 
+  <mat-error *ngIf="showError">
+    <ng-container *ngIf="control.errors?.['required']">Campo obrigatório.</ng-container>
+    <ng-container *ngIf="control.errors?.['email']">E-mail inválido.</ng-container>
+    <ng-container *ngIf="control.errors?.['pattern']">Formato inválido.</ng-container>
+    <ng-container *ngIf="control.errors?.['passwordsMismatch']">Senhas não conferem.</ng-container>
+    <ng-container *ngIf="type === 'email' && control.errors?.['emailExists']">E-mail já cadastrado.</ng-container>
+  </mat-error>
 
-<mat-error *ngIf="showError">
-  <ng-container *ngIf="control.errors?.['required']">Campo obrigatório.</ng-container>
-  <ng-container *ngIf="control.errors?.['email']">E-mail inválido.</ng-container>
-  <ng-container *ngIf="control.errors?.['pattern']">Formato inválido.</ng-container>
-  <ng-container *ngIf="control.errors?.['passwordsMismatch']">Senhas não conferem.</ng-container>
-</mat-error>
-
+  <!-- Exibe "Email livre" apenas se for um campo de email -->
+  <mat-hint *ngIf="type === 'email' && !control.errors && control.touched && control.value && control.dirty">
+    E-mail livre
+  </mat-hint>
 </mat-form-field>

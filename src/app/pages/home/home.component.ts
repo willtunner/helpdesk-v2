@@ -1,4 +1,4 @@
-import { Component, forwardRef } from '@angular/core';
+import { Component, forwardRef, Signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomInputComponent } from '../../shared/components/custom-input/custom-input.component';
@@ -12,6 +12,7 @@ import { RichTextEditorComponent } from '../../shared/components/rich-text/rich-
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
+import { ThemeService } from '../../services/theme.service';
 
 @Component({
   selector: 'app-home',
@@ -43,6 +44,7 @@ export class HomeComponent {
   isDeleteSuccess = false;
   isClearSuccess = false;
   isPrintSuccess = false;
+  theme!: Signal<'dark' | 'light'>;
 
   selectedToggle = 'mes';
 
@@ -52,7 +54,10 @@ export class HomeComponent {
     btn3: { label: 'Ano Atual', value: 'ano' }
   };
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router) {
+  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router,
+    private themeService: ThemeService) {
+    this.theme = this.themeService.getTheme();
+
     const session = this.auth.currentUser();
     if (session) {
       this.user = session;
@@ -96,14 +101,12 @@ export class HomeComponent {
     console.log('🔁 Ano selecionado');
   }
 
-  
+
 
   getControl(controlName: string): FormControl {
     return this.form.get(controlName) as FormControl;
   }
-
   
-
   submit() {
     if (this.form.valid) {
       console.log('Formulário enviado:', this.form.value);
@@ -125,6 +128,10 @@ export class HomeComponent {
   logout() {
     this.auth.logout();
     this.router.navigate(['/login']);
+  }
+
+  toggleTheme() {
+    this.themeService.toggleTheme();
   }
 
   headers = [
@@ -254,23 +261,23 @@ export class HomeComponent {
   }
 
   handleDelete(event: Event): void {
-    
+
   }
 
   handleClear(event: Event): void {
 
   }
 
-  handlePrint(event: Event){}
+  handlePrint(event: Event) { }
 
-  onClear() {}
-  deleteCall() {}
-  onFind() {}
+  onClear() { }
+  deleteCall() { }
+  onFind() { }
 
   handleToggle(value: string) {
     console.log('Selecionado:', value);
     this.selectedToggle = value;
-  
+
     if (value === 'mes') this.handleMes();
     else if (value === 'semestre') this.handleSemestre();
     else this.handleAno();

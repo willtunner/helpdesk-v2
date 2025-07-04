@@ -61,3 +61,13 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     height: 100% !important;
   }
 }
+
+/* Label em repouso (dentro do input) */
+.mdc-floating-label {
+  color: #0000009c !important;
+}
+
+/* Label flutuante (quando input está focado ou preenchido) */
+.mat-mdc-form-field.mat-form-field-should-float .mdc-floating-label {
+  color: #0000009c !important;
+}

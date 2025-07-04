@@ -6,6 +6,11 @@ import { CustomInputComponent } from '../../shared/components/custom-input/custo
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { UtilService } from '../../services/util.service';
+import { HelpCompanyService } from '../../services/help-company.service';
+import { SendNotificationService } from '../../services/send-notification.service';
+import { NotificationType } from '../../enums/notificationType.enum';
+import { EmailValidationService } from '../../services/email-validation.service';
+import { emailExistsValidator } from '../../services/email-exists.validator';
 
 @Component({
   selector: 'app-new-account',
@@ -28,8 +33,9 @@ export class NewAccountComponent {
   loadingCep = false;
   loadingCnpj = false;
 
-  constructor(private fb: FormBuilder, private router: Router, 
-    private utilService: UtilService) {
+  constructor(private fb: FormBuilder, private router: Router,
+    private utilService: UtilService, private helpCompanyService: HelpCompanyService,
+    private notify: SendNotificationService, private emailValidator: EmailValidationService ) {
     this.form = this.fb.group(
       {
         name: ['', Validators.required],
@@ -40,10 +46,15 @@ export class NewAccountComponent {
         neighborhood: ['', Validators.required],
         zipcode: ['', Validators.required],
         phone: ['', Validators.required],
-        email: ['', [Validators.required, Validators.email]],
+        email: [
+          '',
+          [Validators.required, Validators.email],
+          [emailExistsValidator(this.emailValidator, ['helpDeskCompany', 'usuarios', 'clientes'])]
+        ],
+        
         password: ['', [Validators.required, Validators.minLength(6)]],
         confirmPassword: ['', Validators.required],
-        active: [false , Validators.required],
+        active: [false, Validators.required],
       },
       { validators: [this.passwordMatchValidator] }
     );
@@ -56,9 +67,9 @@ export class NewAccountComponent {
   passwordMatchValidator(group: AbstractControl): ValidationErrors | null {
     const password = group.get('password')?.value;
     const confirmPasswordControl = group.get('confirmPassword');
-  
+
     if (!confirmPasswordControl) return null;
-  
+
     if (password !== confirmPasswordControl.value) {
       confirmPasswordControl.setErrors({ passwordsMismatch: true });
       return { passwordsMismatch: true };
@@ -70,7 +81,7 @@ export class NewAccountComponent {
       return null;
     }
   }
-  
+
 
   buscarCep() {
     const cep = this.getControl('zipcode').value;
@@ -111,28 +122,33 @@ export class NewAccountComponent {
   onSubmit(): void {
     if (this.form.valid) {
       const formData = { ...this.form.value };
-  
-      // Sanitize CNPJ
+
+      // Sanitize dados
       formData.cnpj = this.utilService.sanitizeCnpj(formData.cnpj);
-  
-      // Encrypt password
       formData.password = this.utilService.encryptPassword(formData.password);
-  
-      // Remover confirmPassword do payload final
       delete formData.confirmPassword;
-  
-      console.log('Dados tratados para envio:', formData);
-  
-      // Aqui você pode enviar para o backend
-      // this.apiService.createAccount(formData).subscribe(...);
-  
-      // Redirecionar após sucesso (opcional)
-      // this.router.navigate(['/login']);
+
+      this.helpCompanyService.createAccountHelpCompany(formData).then(savedCompany => {
+        console.log('Empresa salva com ID:', savedCompany);
+        this.notify.customNotification(
+          NotificationType.SUCCESS,
+          `Empresa "${savedCompany.name}" cadastrada com sucesso!`
+        );
+        this.router.navigate(['/login']);
+      }).catch(error => {
+        this.notify.customNotification(
+          NotificationType.ERROR,
+          `Erro ao cadastrar a empresa.`
+        );
+        console.error('Erro ao salvar empresa:', error);
+      });
+
     } else {
       this.form.markAllAsTouched();
     }
   }
-  
+
+
 
   voltar(): void {
     this.router.navigate(['/login']);
