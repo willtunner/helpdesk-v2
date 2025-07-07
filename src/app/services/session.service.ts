@@ -79,4 +79,25 @@ export class SessionService {
       console.error('Erro ao limpar localStorage:', error);
     }
   }
+
+  updateSession(user: any): void {
+    if (!user || !user.id || !user.username) {
+      console.warn('Dados inválidos para a sessão do usuário.');
+      return;
+    }
+
+    try {
+      localStorage.setItem(this.SESSION_KEY, JSON.stringify(user));
+
+      // Valida se o dado foi salvo corretamente
+      const savedSession = localStorage.getItem(this.SESSION_KEY);
+      if (!savedSession || JSON.parse(savedSession).id !== user.id) {
+        console.error('Falha ao salvar a sessão do usuário.');
+      } else {
+        console.info('Sessão atualizada com sucesso.');
+      }
+    } catch (error) {
+      console.error('Erro ao salvar sessão no localStorage:', error);
+    }
+  }
 }

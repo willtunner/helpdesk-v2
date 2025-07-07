@@ -1,0 +1,115 @@
+<mat-dialog-content [ngClass]="data.closed ? 'closed-bg' : 'open-bg'">
+  <div class="header-wrapper">
+    <h2 class="dialog-title">Detalhes do Chamado</h2>
+    <div class="status-chip" [ngClass]="data.closed ? 'closed' : 'open'">
+      <mat-icon>{{ data.closed ? 'lock' : 'lock_open' }}</mat-icon>
+      {{ data.closed ? 'Fechado' : 'Aberto' }}
+    </div>
+  </div>
+
+  <form [formGroup]="callForm" class="details-form">
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>ID</mat-label>
+        <input matInput formControlName="id" disable>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Título</mat-label>
+        <input matInput formControlName="title">
+      </mat-form-field>
+    </div>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Descrição</mat-label>
+      <textarea matInput formControlName="description" rows="5"></textarea>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Resolução</mat-label>
+      <textarea matInput formControlName="resolution" rows="5"></textarea>
+    </mat-form-field>
+
+    <!-- LISTAGEM DE TAGS -->
+    <div class="tags-list">
+      <label><strong>Tags:</strong></label>
+      <ul>
+        <li *ngFor="let tag of callForm.get('tags')?.value">{{ tag }}</li>
+      </ul>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Conexão</mat-label>
+        <input matInput formControlName="connection">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Empresa</mat-label>
+        <input matInput formControlName="companyName">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>ID Empresa</mat-label>
+        <input matInput formControlName="companyId">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Cliente</mat-label>
+        <input matInput formControlName="clientName">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>ID Cliente</mat-label>
+        <input matInput formControlName="clientId">
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>Atendente</mat-label>
+        <input matInput formControlName="operatorName">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="half-width">
+        <mat-label>ID Atendente</mat-label>
+        <input matInput formControlName="operatorId">
+      </mat-form-field>
+    </div>
+
+    <div class="form-row">
+      <mat-form-field appearance="outline" class="third-width">
+        <mat-label>Criado</mat-label>
+        <input matInput [value]="data.created | dateTimeFormat" disabled>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="third-width">
+        <mat-label>Atualizado</mat-label>
+        <input matInput [value]="data.updated ? (data.updated | dateTimeFormat) : ''" disabled>
+      </mat-form-field>
+
+      <mat-form-field appearance="outline" class="third-width">
+        <mat-label>Finalizado</mat-label>
+        <input matInput [value]="data.finalized ? (data.finalized | dateTimeFormat) : ''" disabled>
+      </mat-form-field>
+    </div>
+
+    <!-- BOTÕES -->
+    <div class="button-container">
+      <button mat-raised-button color="primary" (click)="isEditing ? saveChanges() : enableEditing()">
+        <mat-icon>{{ isEditing ? 'save' : 'edit' }}</mat-icon>
+        {{ isEditing ? 'Salvar' : 'Editar' }}
+      </button>
+      <button mat-raised-button color="warn" (click)="cancelEditing()">
+        <mat-icon>{{ isEditing ? 'cancel' : 'close' }}</mat-icon>
+        {{ isEditing ? 'Cancelar' : 'Fechar' }}
+      </button>
+    </div>
+
+  </form>
+</mat-dialog-content>

@@ -1,4 +1,4 @@
-import { UserType } from "../enums/user-types.enum";
+import { Operator } from "rxjs";
 
 export interface Company {
     id: string;
@@ -15,7 +15,44 @@ export interface Company {
     connectionServ: string;
     email: string;
     versionServ: string | null;
-    clients: User[];
+    clients: Client[];
+  }
+
+  export interface Call {
+    id: string;
+    deleted: boolean;
+    created: Date;  
+    updated: Date;  
+    companyId: string;
+    company?: Company | null;
+    clientId: string;
+    client: Client;
+    title: string;
+    description: string;
+    resolution: string;
+    tags: string[];
+    connection: string;
+    closed: boolean;
+    finalized: Date;
+    operatorId: string;
+    operator?: User;
+    user?: User | null;
+  }
+
+  export interface Client {
+    id: string;
+    name: string;
+    username: string;
+    phone: string;
+    email: string;
+    companyId: string;
+    roles: string[];
+    deleted: boolean;
+    created: Date;
+    updated: Date | null;
+    imageUrl: string;
+    company: Company | null;
+    occurrency?: string;
   }
 
   export interface HelpDeskCompany {
@@ -38,45 +75,39 @@ export interface Company {
     active: boolean;
   }
 
-  export interface Call {
-    id: string;
-    deleted: boolean;
-    created: Date;  
-    updated: Date;  
-    companyId: string;
-    company?: Company | null;
-    clientId: string;
-    client: User;
-    title: string;
-    description: string;
-    resolution: string;
-    tags: string[];
-    connection: string;
-    closed: boolean;
-    finalized: Date;
-    operatorId: string;
-    operator?: User;
-    user?: User | null;
-  }
-
   export interface User {
     id: string;
-    name: string;
+    deleted: boolean;
+    created: Date;
+    updated?: Date | null;
     username: string;
     phone: string;
     email: string;
-    password?: string; // Opcional para casos onde você não quer carregar a senha
-    companyId?: string; // Opcional para clientes que não são de uma empresa
-    roles: string[]; // Define as permissões (ex: ['client'], ['employee'], ['admin'], etc.)
-    deleted: boolean;
-    created: Date;
-    updated: Date | null;
+    password: string;
+    connection?: string | null;
+    userId?: string;
     imageUrl: string;
-    company?: Company | null; // Opcional
-    occurrency?: string; // Opcional, específico para clientes
-    connection?: string | null; // Opcional, específico para funcionários
-    userId?: string; // Opcional, específico para funcionários
-    userType: UserType; // Campo explícito para diferenciar os tipos
+    roles: string[];
+  }
+
+  export interface UserClient {
+    id: string;
+    created: number;
+    deleted: boolean;
+    email: string;
+    phone: string;
+    username: string;
+    name: string;
+    roles: string[];
+    password: string;
+    updated: number;
+    connection: string;
+    imageUrl: string;
+    userId: string
+    companyId?: string;
+    occurrency?: string;
+    company?: Company;
+    isLoggedIn: boolean;
   }
 
   export interface ChatRoom {
@@ -85,7 +116,7 @@ export interface Company {
     created: Date;
     updated?: Date | null;
     operator: User;
-    client: User;
+    client: Client;
     mensages: Message[],
     unreadCount?: number;
   }

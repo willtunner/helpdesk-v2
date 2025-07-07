@@ -1,0 +1,97 @@
+.dialog-title {
+  font-size: 22px;
+  font-weight: bold;
+  margin: 0;
+}
+
+.details-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 16px;
+  flex-wrap: wrap;
+}
+
+.half-width {
+  flex: 1 1 48%;
+}
+.third-width {
+  flex: 1 1 30%;
+}
+
+mat-form-field {
+  width: 100%;
+}
+
+.tags-list {
+  background-color: #f4f6f8;
+  padding: 8px 12px;
+  border-radius: 8px;
+
+  ul {
+    margin: 0;
+    padding-left: 16px;
+  }
+
+  li {
+    line-height: 1.8;
+  }
+}
+
+.button-container {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 24px;
+}
+
+button.mat-raised-button {
+  min-width: 140px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.header-wrapper {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.status-chip {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 16px;
+  font-weight: bold;
+  font-size: 14px;
+  color: #333;
+}
+
+.status-chip mat-icon {
+  font-size: 20px;
+}
+
+.open {
+  background-color: #e6f4ea;
+  color: #2e7d32;
+}
+
+.closed {
+  background-color: #fdecea;
+  color: #c62828;
+}
+
+.open-bg {
+  background-color: #f9fef9;
+}
+
+.closed-bg {
+  background-color: #fff8f8;
+}

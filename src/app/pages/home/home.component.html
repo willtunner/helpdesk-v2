@@ -84,3 +84,29 @@ style="display: flex; flex-direction: column; gap: 20px; max-width: 500px;">
 
   <button mat-raised-button color="primary" type="submit">Enviar</button>
 </form>
+
+
+<app-chart
+  [type]="ChartType.BAR"
+  [title]="'Chamados por Empresa e Mês'"
+  [chamados]="chamadosMock"
+></app-chart>
+
+<app-chart
+  [type]="ChartType.AREA"
+  [title]="'Chamados por Empresa e Mês'"
+  [chamados]="chamadosMock"
+></app-chart>
+
+<app-chart
+  [type]="ChartType.LINE"
+  [title]="'Chamados por Empresa e Mês'"
+  [chamados]="chamadosMock"
+></app-chart>
+
+<app-chart
+  [type]="ChartType.COLUMN"
+  [title]="'Chamados por Empresa e Mês'"
+  [chamados]="chamadosMock"
+></app-chart>
+

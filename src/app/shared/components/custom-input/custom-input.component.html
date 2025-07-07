@@ -15,6 +15,9 @@
     <ng-container *ngIf="control.errors?.['email']">E-mail inválido.</ng-container>
     <ng-container *ngIf="control.errors?.['pattern']">Formato inválido.</ng-container>
     <ng-container *ngIf="control.errors?.['passwordsMismatch']">Senhas não conferem.</ng-container>
+    <ng-container *ngIf="control.errors?.['mask']">Número incompleto ou inválido.</ng-container>
+    <ng-container *ngIf="control.errors?.['cpf']">CPF inválido.</ng-container>
+    <ng-container *ngIf="control.errors?.['cnpj']">CNPJ inválido.</ng-container>
     <ng-container *ngIf="type === 'email' && control.errors?.['emailExists']">E-mail já cadastrado.</ng-container>
   </mat-error>
 

@@ -9,17 +9,19 @@ import { DynamicButtonComponent } from '../../shared/components/action-button/ac
 import { MatIconModule } from '@angular/material/icon';
 import { DynamicThreeToggleComponent } from '../../shared/components/dynamic-three-toggle/dynamic-three-toggle.component';
 import { RichTextEditorComponent } from '../../shared/components/rich-text/rich-text.component';
-import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { ThemeService } from '../../services/theme.service';
+import { cnpjValidator, cpfValidator } from '../../shared/validators/validators';
+import { ChartComponent } from '../../shared/components/line-chart/line-chart.component';
+import { ChartType } from '../../enums/chart-types.enum';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CustomInputComponent, MatButtonModule,
     DynamicTableComponent, DynamicButtonComponent, MatIconModule, DynamicThreeToggleComponent,
-    RichTextEditorComponent, MatInputModule
+    RichTextEditorComponent, MatInputModule, ChartComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -38,6 +40,30 @@ export class HomeComponent {
   saveSuccess = false;
   deleteSuccess = false;
   user: any = null;
+  ChartType = ChartType;
+
+  // Usado para o ChartComponent
+  chamadosMock = [
+    { id: "1", data: "07/07/2025", companyId: "1", companyName: "GreenCode" },
+    { id: "2", data: "06/07/2025", companyId: "1", companyName: "GreenCode" },
+    { id: "3", data: "06/01/2025", companyId: "2", companyName: "Allyenados" },
+    { id: "4", data: "04/07/2025", companyId: "2", companyName: "Allyenados" },
+    { id: "4", data: "04/07/2025", companyId: "2", companyName: "Allyenados" },
+    { id: "4", data: "04/07/2025", companyId: "2", companyName: "Allyenados" },
+    { id: "4", data: "04/07/2025", companyId: "2", companyName: "Allyenados" },
+    { id: "4", data: "04/07/2025", companyId: "2", companyName: "Allyenados" },
+    { id: "5", data: "04/07/2025", companyId: "2", companyName: "Allyenados" },
+    { id: "6", data: "01/07/2025", companyId: "3", companyName: "Pollution" },
+    { id: "7", data: "01/06/2025", companyId: "3", companyName: "Pollution" },
+    { id: "8", data: "12/01/2025", companyId: "1", companyName: "GreenCode" },
+    { id: "9", data: "03/03/2025", companyId: "2", companyName: "Allyenados" },
+    { id: "10", data: "10/10/2025", companyId: "1", companyName: "GreenCode" },
+    { id: "11", data: "12/04/2025", companyId: "1", companyName: "GreenCode" },
+    { id: "12", data: "12/02/2025", companyId: "1", companyName: "GreenCode" },
+    { id: "13", data: "20/05/2025", companyId: "3", companyName: "Pollution" },
+  ];
+  
+
 
   // Estados de sucesso para os botões
   isSaveOrEditSuccess = false;
@@ -67,10 +93,10 @@ export class HomeComponent {
     this.form = this.fb.group({
       nome: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
-      telefone: ['', [Validators.required, Validators.pattern(/^\d+$/)]],
-      cpf: ['', [Validators.required]],
+      telefone: ['', [Validators.required]],
+      cpf: ['', [Validators.required, cpfValidator()]],
       cep: ['', [Validators.required]],
-      cnpj: ['', [Validators.required]],
+      cnpj: ['', [Validators.required, cnpjValidator()]],
       descricao: ['']
     });
 
