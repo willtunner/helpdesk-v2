@@ -11,6 +11,23 @@
 
 .chart-header {
     display: flex;
-    justify-content: flex-end;
+    justify-content: space-between;
+    align-items: flex-end;
     margin-bottom: 1rem;
-}
+    padding: 0 1rem;
+  }
+  
+  .close-all-button {
+    background: none;
+    border: none;
+    color: #007bff;
+    cursor: pointer;
+    font-size: 14px;
+    padding: 4px 8px;
+    transition: color 0.2s;
+  }
+  
+  .close-all-button:hover {
+    color: #0056b3;
+  }
+  

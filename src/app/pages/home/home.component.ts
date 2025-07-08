@@ -16,6 +16,7 @@ import { cnpjValidator, cpfValidator } from '../../shared/validators/validators'
 import { ChartComponent } from '../../shared/components/line-chart/line-chart.component';
 import { ChartType } from '../../enums/chart-types.enum';
 import { PieChartComponent } from '../../shared/components/pie-chart/pie-chart.component';
+import { DropdownVideosComponent } from '../../shared/components/dropdown-videos/dropdown-videos.component';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +24,7 @@ import { PieChartComponent } from '../../shared/components/pie-chart/pie-chart.c
   imports: [CommonModule, ReactiveFormsModule, CustomInputComponent, MatButtonModule,
     DynamicTableComponent, DynamicButtonComponent, MatIconModule, DynamicThreeToggleComponent,
     RichTextEditorComponent, MatInputModule, ChartComponent, 
-    PieChartComponent
+    PieChartComponent, DropdownVideosComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],

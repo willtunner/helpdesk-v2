@@ -1,0 +1,103 @@
+<div class="container">
+  <!-- Formulário para adicionar vídeos -->
+  <form [formGroup]="videoForm">
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Digite o título da seção</mat-label>
+      <input matInput formControlName="sectionTitle" />
+    </mat-form-field>
+
+    @if(isEditable) { 
+      <mat-checkbox (change)="showForm = $event.checked">Deseja incluir novo vídeo?</mat-checkbox>
+    }
+
+    @if(!isEditable || showForm) {
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Digite o título do vídeo</mat-label>
+      <input matInput formControlName="videoTitle" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>URL do vídeo YouTube</mat-label>
+      <input matInput formControlName="videoUrl" />
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      <mat-label>Setor em que o vídeo faz parte</mat-label>
+      <input matInput formControlName="sector" />
+    </mat-form-field>
+  }
+  </form>
+
+  <!-- Botões para ações -->
+  <div class="buttons">
+    @if(isEditable) {
+      <button mat-icon-button color="primary" (click)="sectionSave()">
+        <mat-icon>save_as</mat-icon>
+      </button>
+    }
+    @else {
+      <button mat-icon-button color="primary" (click)="sectionSave()">
+        <mat-icon>save</mat-icon>
+      </button>
+    }
+    <button mat-icon-button color="warn" (click)="deleteDropDownVideo()">
+      <mat-icon>delete</mat-icon>
+    </button>
+  </div>
+
+  <!-- Tabela para listar os vídeos -->
+  @if(isEditable) {
+  <table mat-table [dataSource]="this.data.dropDown.videos" class="mat-elevation-z8">
+    <ng-container matColumnDef="title">
+      <th mat-header-cell *matHeaderCellDef> Título </th>
+      <td mat-cell *matCellDef="let video">
+        <ng-container *ngIf="!editing[video.title]; else editTitle">
+          {{ video.title }}
+        </ng-container>
+        <ng-template #editTitle>
+          <input matInput [(ngModel)]="video.title">
+        </ng-template>
+      </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="url">
+      <th mat-header-cell *matHeaderCellDef> URL </th>
+      <td mat-cell *matCellDef="let video">
+        <ng-container *ngIf="!editing[video.title]; else editUrl">
+          {{ video.url }}
+        </ng-container>
+        <ng-template #editUrl>
+          <input matInput [(ngModel)]="video.url">
+        </ng-template>
+      </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="sector">
+      <th mat-header-cell *matHeaderCellDef> Setor </th>
+      <td mat-cell *matCellDef="let video">
+        <ng-container *ngIf="!editing[video.title]; else editSector">
+          {{ video.sector }}
+        </ng-container>
+        <ng-template #editSector>
+          <input matInput [(ngModel)]="video.sector">
+        </ng-template>
+      </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="actions">
+      <th mat-header-cell *matHeaderCellDef> Ação </th>
+      <td mat-cell *matCellDef="let video" style="display: flex;">
+        <button mat-icon-button color="primary" (click)="toggleEdit(video)">
+          <mat-icon>{{ editing[video.title] ? 'done' : 'edit' }}</mat-icon>
+        </button>
+        <button mat-icon-button color="warn" (click)="deleteVideo(video)">
+          <mat-icon>delete</mat-icon>
+        </button>
+      </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+  }
+</div>

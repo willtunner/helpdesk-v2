@@ -49,62 +49,42 @@ export class ChartComponent implements OnInit, OnChanges {
 
   chartCallback: Highcharts.ChartCallbackFunction = (chart) => {
     this.chartInstance = chart;
-  
-    // Evita botão duplicado
-    if ((chart as any).customCloseAllButton) {
-      (chart as any).customCloseAllButton.destroy();
-    }
-  
-    // Cria botão "Fechar Todos"
-    const button = chart.renderer
-      .text('❌ Fechar Todos', chart.plotLeft, chart.plotTop - 20)
-      .css({
-        color: '#007bff',
-        cursor: 'pointer',
-        fontSize: '14px'
-      })
-      .on('click', () => {
-        chart.series.forEach(s => s.hide());
-      })
-      .add();
-  
-    (chart as any).customCloseAllButton = button;
+    // ❌ REMOVIDO o botão extra criado via renderer
   };
 
   private buildChartOptions(): void {
     const companyMap = new Map<string, { name: string; data: number[] }>();
-  
-    const chamadosFiltrados = this.getFilteredChamados(); // ✅ Usa método de filtro
-  
+    const chamadosFiltrados = this.getFilteredChamados();
+
     for (const chamado of chamadosFiltrados) {
       const { companyId, companyName, data } = chamado;
-  
+
       if (!companyMap.has(companyId)) {
         companyMap.set(companyId, {
           name: companyName,
           data: new Array(12).fill(0),
         });
       }
-  
+
       const [day, month, year] = data.split('/').map(Number);
       if (!day || !month || !year) continue;
-  
+
       const date = new Date(year, month - 1, day);
       const monthIndex = date.getMonth();
-  
+
       const empresa = companyMap.get(companyId);
       if (empresa) {
         empresa.data[monthIndex]++;
       }
     }
-  
+
     const series: Highcharts.SeriesOptionsType[] = Array.from(companyMap.values()).map(company => ({
       type: this.type as any,
       name: company.name,
       data: company.data,
       color: this.generateColorForName(company.name),
     }));
-  
+
     this.chartOptions = {
       chart: {
         type: this.type as any,
@@ -135,43 +115,17 @@ export class ChartComponent implements OnInit, OnChanges {
       },
       series,
     };
-  
-    setTimeout(() => {
-      const chart = Highcharts.charts.find(c => !!c) as Highcharts.Chart | undefined;
-      if (chart) {
-        const existingButton = (chart as any).customCloseAllButton;
-        if (existingButton) {
-          existingButton.destroy();
-        }
-  
-        const button = chart.renderer
-          .text('❌ Fechar Todos', chart.plotLeft, chart.plotTop - 20)
-          .css({
-            color: '#007bff',
-            cursor: 'pointer',
-            fontSize: '14px',
-          })
-          .on('click', () => {
-            chart.series.forEach(s => s.hide());
-          })
-          .add();
-  
-        (chart as any).customCloseAllButton = button;
-      }
-    }, 0);
   }
-  
 
   handleToggle(periodo: string) {
     this.selectedToggle = periodo;
     this.buildChartOptions();
   }
-  
 
   private getFilteredChamados(): typeof this.chamados {
     const hoje = new Date();
     let dataLimite: Date;
-  
+
     switch (this.selectedToggle) {
       case 'mes':
         dataLimite = new Date();
@@ -182,19 +136,22 @@ export class ChartComponent implements OnInit, OnChanges {
         dataLimite.setMonth(dataLimite.getMonth() - 6);
         break;
       case 'ano':
-        dataLimite = new Date(hoje.getFullYear(), 0, 1); // 1º de janeiro do ano atual
+        dataLimite = new Date(hoje.getFullYear(), 0, 1);
         break;
       default:
         return this.chamados;
     }
-  
+
     return this.chamados.filter(chamado => {
       const [day, month, year] = chamado.data.split('/').map(Number);
       const dataChamado = new Date(year, month - 1, day);
       return dataChamado >= dataLimite;
     });
   }
-  
-  
-  
+
+  fecharTodos() {
+    if (this.chartInstance) {
+      this.chartInstance.series.forEach(s => s.hide());
+    }
+  }
 }

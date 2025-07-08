@@ -1,0 +1,62 @@
+<div class="filter-container">
+  <mat-form-field>
+    <mat-label>Filtrar por nome</mat-label>
+    <input matInput (input)="filterVideos()" [(ngModel)]="filters.name" />
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Filtrar por setor</mat-label>
+    <mat-select [(ngModel)]="filters.sector" (selectionChange)="filterVideos()">
+      <mat-option *ngFor="let sector of sectors" [value]="sector">{{ sector }}</mat-option>
+    </mat-select>
+  </mat-form-field>
+
+  <mat-form-field>
+    <mat-label>Filtrar por data</mat-label>
+    <input matInput [matDatepicker]="picker" [(ngModel)]="filters.date" (dateChange)="filterVideos()" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </mat-form-field>
+
+  <button mat-raised-button color="primary" (click)="openAddVideoModal()" class="search">
+    <mat-icon>video_call</mat-icon>
+  </button>
+</div>
+
+<div class="dropdown-container">
+  <div *ngFor="let dropdown of filteredDropdowns; let i = index" class="dropdown">
+    <div class="dropdown-header" (click)="toggleDropdown(i)">
+      <span>{{ dropdown.dropdownText }}</span>
+      <div class="header-actions">
+        <button mat-icon-button color="primary" (click)="openAddVideoModal(dropdown)">
+          <mat-icon>edit</mat-icon>
+        </button>
+        <mat-icon (click)="toggleDropdown(i)">{{ activeDropdown === i ? 'expand_less' : 'expand_more' }}</mat-icon>
+      </div>
+    </div>
+    <div class="dropdown-body" [class.hidden]="activeDropdown !== i">
+      <div class="videos">
+        <div class="video-column" *ngFor="let video of dropdown.videos">
+          <iframe [src]="video.url | youtubeEmbed "></iframe>
+          <div class="video-info">
+            <div class="video-created">{{ video.created | onlyDate }}</div>
+            <div class="video-title">{{ video.title }}</div>
+            <div class="video-profile">
+              <img [src]="video.imgProfile" alt="Profile image" class="profile-img" />
+              <div>
+                <div class="video-profile-name">{{ video.nameProfile }}</div>
+                <div class="video-sector">{{ video.sector }}</div>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mensagem de "sem vídeos" caso a lista esteja vazia -->
+  <div *ngIf="filteredDropdowns.length === 0" class="no-videos-message">
+    <p>Não há sessões de vídeos cadastradas.</p>
+  </div>
+</div>

@@ -1,4 +1,8 @@
 <div class="chart-header">
+  <!-- Botão à esquerda -->
+  <button class="close-all-button" (click)="fecharTodos()">❌ Fechar Todos</button>
+
+  <!-- Toggle à direita -->
   <app-dynamic-three-toggle
     [title]="'Período'"
     [btn1]="{ label: 'Mensal', value: 'mes' }"
@@ -15,4 +19,3 @@
   [callbackFunction]="chartCallback"
   style="width: 100%; height: 400px; display: block;"
 ></highcharts-chart>
-
