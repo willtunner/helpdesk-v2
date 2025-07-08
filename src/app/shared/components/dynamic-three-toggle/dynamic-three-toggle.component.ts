@@ -27,21 +27,14 @@ export class DynamicThreeToggleComponent {
     const button = target.closest('mat-button-toggle');
   
     if (button) {
-      const value = button.getAttribute('value');
-  
-      if (value === this.selectedValue) {
-        console.log(`Desmarcado: ${value}`);
-        
-        // Força o reset visual do grupo
-        requestAnimationFrame(() => {
-          this.selectedValue = '';
-          this.onToggleSelect.emit('');
-        });
-      } else {
-        this.selectedValue = value ?? '';
-        console.log(`Selecionado: ${this.selectedValue}`);
-        this.onToggleSelect.emit(this.selectedValue);
-      }
+      const value = button.getAttribute('value') ?? '';
+      this.selectedValue = value;
+      this.onToggleSelect.emit(this.selectedValue);
     }
   }
+
+  handleChange(value: string) {
+    this.onToggleSelect.emit(value);
+  }
+  
 }

@@ -1,3 +1,14 @@
+<div class="chart-header">
+  <app-dynamic-three-toggle
+    [title]="'Período'"
+    [btn1]="{ label: 'Mensal', value: 'mes' }"
+    [btn2]="{ label: 'Semestral', value: 'semestre' }"
+    [btn3]="{ label: 'Anual', value: 'ano' }"
+    [selectedValue]="selectedToggle"
+    (onToggleSelect)="handleToggle($event)">
+  </app-dynamic-three-toggle>
+</div>
+
 <highcharts-chart
   [Highcharts]="Highcharts"
   [options]="chartOptions"

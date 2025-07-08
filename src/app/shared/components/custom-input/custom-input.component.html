@@ -1,15 +1,43 @@
 <mat-form-field [ngClass]="[getSizeClass(), cssClass]" appearance="outline" class="custom-field">
   <mat-label>{{ label }}</mat-label>
 
-  <input matInput [type]="inputType" [formControl]="control" [placeholder]="placeholder" [mask]="mask"
-    [dropSpecialCharacters]="false" />
+  <!-- Input do tipo texto, telefone, CPF, CNPJ, etc. -->
+  <ng-container *ngIf="type !== 'date'">
+    <input
+      matInput
+      [type]="inputType"
+      [formControl]="control"
+      [placeholder]="placeholder"
+      [mask]="mask"
+      [dropSpecialCharacters]="false" />
 
-  <button *ngIf="isSearchable" mat-icon-button matSuffix (click)="search()" type="button" aria-label="Buscar"
-    class="search-button">
-    <mat-icon *ngIf="!loading">search</mat-icon>
-    <mat-spinner *ngIf="loading" diameter="20" strokeWidth="3" color="primary"></mat-spinner>
-  </button>
+    <!-- Botão de busca (CEP, CNPJ, etc.) -->
+    <button
+      *ngIf="isSearchable"
+      mat-icon-button
+      matSuffix
+      (click)="search()"
+      type="button"
+      aria-label="Buscar"
+      class="search-button">
+      <mat-icon *ngIf="!loading">search</mat-icon>
+      <mat-spinner *ngIf="loading" diameter="20" strokeWidth="3" color="primary"></mat-spinner>
+    </button>
+  </ng-container>
 
+  <!-- Input do tipo data -->
+  <ng-container *ngIf="type === 'date'">
+    <input
+      matInput
+      [matDatepicker]="picker"
+      [formControl]="control"
+      [placeholder]="placeholder || 'Selecione a data'"
+      [value]="control.value | date:'dd/MM/yyyy'" />
+    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+    <mat-datepicker #picker></mat-datepicker>
+  </ng-container>
+
+  <!-- Mensagens de erro -->
   <mat-error *ngIf="showError">
     <ng-container *ngIf="control.errors?.['required']">Campo obrigatório.</ng-container>
     <ng-container *ngIf="control.errors?.['email']">E-mail inválido.</ng-container>
@@ -21,7 +49,7 @@
     <ng-container *ngIf="type === 'email' && control.errors?.['emailExists']">E-mail já cadastrado.</ng-container>
   </mat-error>
 
-  <!-- Exibe "Email livre" apenas se for um campo de email -->
+  <!-- Dica para campo de e-mail válido -->
   <mat-hint *ngIf="type === 'email' && !control.errors && control.touched && control.value && control.dirty">
     E-mail livre
   </mat-hint>

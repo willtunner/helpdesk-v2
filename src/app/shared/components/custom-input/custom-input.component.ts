@@ -1,11 +1,14 @@
-import { Component, EventEmitter, Input, OnInit, Output  } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
-import { NgxMaskDirective, NgxMaskPipe } from 'ngx-mask';
+import { NgxMaskDirective } from 'ngx-mask';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
+import { MatDatepickerToggle } from '@angular/material/datepicker';
 
 @Component({
   selector: 'app-custom-input',
@@ -16,9 +19,11 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
     MatFormFieldModule,
     MatInputModule,
     NgxMaskDirective,
-    NgxMaskPipe,
     MatIconModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+    MatDatepickerToggle,
   ],
   templateUrl: './custom-input.component.html',
   styleUrls: ['./custom-input.component.scss']
@@ -69,7 +74,7 @@ export class CustomInputComponent implements OnInit {
         this.isSearchable = true;
         break;
       default:
-        this.inputType = this.type;
+        this.inputType = this.type !== 'date' ? this.type : 'text';
         this.mask = null;
         break;
     }
