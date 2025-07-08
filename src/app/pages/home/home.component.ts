@@ -15,13 +15,15 @@ import { ThemeService } from '../../services/theme.service';
 import { cnpjValidator, cpfValidator } from '../../shared/validators/validators';
 import { ChartComponent } from '../../shared/components/line-chart/line-chart.component';
 import { ChartType } from '../../enums/chart-types.enum';
+import { PieChartComponent } from '../../shared/components/pie-chart/pie-chart.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CustomInputComponent, MatButtonModule,
     DynamicTableComponent, DynamicButtonComponent, MatIconModule, DynamicThreeToggleComponent,
-    RichTextEditorComponent, MatInputModule, ChartComponent
+    RichTextEditorComponent, MatInputModule, ChartComponent, 
+    PieChartComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -61,9 +63,12 @@ export class HomeComponent {
     { id: "11", data: "12/04/2025", companyId: "1", companyName: "GreenCode" },
     { id: "12", data: "12/02/2025", companyId: "1", companyName: "GreenCode" },
     { id: "13", data: "20/05/2025", companyId: "3", companyName: "Pollution" },
+    { id: "9", data: "03/03/2025", companyId: "4", companyName: "Doom" },
+    { id: "10", data: "10/10/2025", companyId: "4", companyName: "Doom" },
+    { id: "11", data: "12/04/2025", companyId: "4", companyName: "Doom" },
+    { id: "12", data: "12/02/2025", companyId: "4", companyName: "Doom" },
+    { id: "13", data: "20/05/2025", companyId: "4", companyName: "Doom" },
   ];
-  
-
 
   // Estados de sucesso para os botões
   isSaveOrEditSuccess = false;
