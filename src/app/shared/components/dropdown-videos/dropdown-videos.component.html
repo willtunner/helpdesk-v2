@@ -37,7 +37,9 @@
     <div class="dropdown-body" [class.hidden]="activeDropdown !== i">
       <div class="videos">
         <div class="video-column" *ngFor="let video of dropdown.videos">
-          <iframe [src]="video.url | youtubeEmbed "></iframe>
+          <iframe class="youtube-iframe" [src]="getEmbedUrl(video.url)" frameborder="0"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; fullscreen">
+          </iframe>
           <div class="video-info">
             <div class="video-created">{{ video.created | onlyDate }}</div>
             <div class="video-title">{{ video.title }}</div>

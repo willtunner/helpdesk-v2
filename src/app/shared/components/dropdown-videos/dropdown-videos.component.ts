@@ -11,10 +11,9 @@ import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
-import { DropDownVideos } from '../../../models/models';
 import { OnlyDatePipe } from '../../../pipes/onlyDate.pipe';
+import { DropDownVideos } from '../../../models/models';
 import { VideoService } from '../../../services/videoService.service';
-import { YoutubeEmbedPipe } from '../../../pipes/youtubeEmbedPipe.pipe';
 
 @Component({
   selector: 'app-dropdown-videos',
@@ -33,7 +32,6 @@ import { YoutubeEmbedPipe } from '../../../pipes/youtubeEmbedPipe.pipe';
     MatNativeDateModule,
     MatIconModule,
     MatDialogModule,
-    YoutubeEmbedPipe,
     OnlyDatePipe
   ],
 })
@@ -60,6 +58,8 @@ export class DropdownVideosComponent implements OnInit {
       this.dropdowns = data;
       this.filteredDropdowns = [...this.dropdowns];
     });
+
+    
   }
 
   filterVideos() {
@@ -81,14 +81,14 @@ export class DropdownVideosComponent implements OnInit {
   }
   
 
-  // getEmbedUrl(videoUrl: string): SafeResourceUrl {
-  //   if (!videoUrl) return '';
+  getEmbedUrl(videoUrl: string): SafeResourceUrl {
+    if (!videoUrl) return '';
   
-  //   const videoId = videoUrl.split('v=')[1]?.split('&')[0]; // Extrai o ID do vídeo
-  //   const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}`; // Usa a versão sem cookies
+    const videoId = videoUrl.split('v=')[1]?.split('&')[0]; // Extrai o ID do vídeo
+    const embedUrl = `https://www.youtube-nocookie.com/embed/${videoId}`; // Usa a versão sem cookies
     
-  //   return this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl); // Sanitiza a URL
-  // }
+    return this.sanitizer.bypassSecurityTrustResourceUrl(embedUrl); // Sanitiza a URL
+  }
 
   openAddVideoModal(dropDown?: DropDownVideos) {
     const dialogRef = this.dialog.open(AddVideoDialogComponentComponent, {

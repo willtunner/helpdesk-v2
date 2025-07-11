@@ -1,5 +1,3 @@
-import { Operator } from "rxjs";
-
 export interface Company {
     id: string;
     name: string;

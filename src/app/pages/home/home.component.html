@@ -1,4 +1,12 @@
 <h1>Bem-vindo{{ user?.username ? ', ' + user.username : '' }}!</h1>
+
+<h1>Contador</h1>
+<div style="display: flex; flex-direction: column;">
+  <app-number-counter [end]="80" [duration]="1.5"></app-number-counter>
+<app-number-counter [end]="180" [duration]="1.5"></app-number-counter>
+<app-number-counter [end]="25" [duration]="1.5"></app-number-counter>
+</div>
+
 <button mat-raised-button (click)="toggleTheme()">
   {{ theme() === 'dark' ? '🌞 Tema Claro' : '🌙 Tema Escuro' }}
 </button>
@@ -74,3 +82,7 @@
 
 <h1>dropDown abaixo</h1>
 <app-dropdown-videos></app-dropdown-videos>
+<h1>Rich Text</h1>
+<app-mtb-dev></app-mtb-dev>
+
+

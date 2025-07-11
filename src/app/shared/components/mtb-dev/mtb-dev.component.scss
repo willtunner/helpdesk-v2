@@ -1,0 +1,204 @@
+.editor-container {
+  max-width: 1000px;
+  font-family: Arial, sans-serif;
+}
+
+.quill-editor {
+  width: 100%;
+  height: 250px;
+}
+
+.controls {
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+/* Adicione isso junto com os outros estilos de botão */
+.clear-btn {
+  background-color: #f44336;
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  &:hover {
+    background-color: #d32f2f;
+  }
+}
+
+/* Ajuste o action-buttons para lidar com o novo botão */
+.action-buttons {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap; /* Permite quebra de linha em telas pequenas */
+}
+
+.generate-pdf-btn, .save-doc-btn {
+  color: white;
+  border: none;
+  padding: 10px 15px;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  
+  &:hover {
+    opacity: 0.9;
+  }
+
+  mat-spinner {
+    margin-right: 8px;
+    
+    ::ng-deep circle {
+      stroke: white !important;
+    }
+  }
+  
+  &:disabled {
+    opacity: 0.7;
+    cursor: wait;
+  }
+}
+
+.generate-pdf-btn {
+  background-color: #4CAF50;
+  
+  &:hover {
+    background-color: #45a049;
+    width: 120px;
+  }
+}
+
+.save-doc-btn {
+  background-color: #2196F3;
+  
+  &:hover {
+    background-color: #0b7dda;
+  }
+}
+
+.editor-wrapper {
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  padding: 15px;
+  min-height: 400px;
+  margin-bottom: 20px;
+}
+
+.full-width {
+  width: 100%;
+}
+
+.ql-container {
+  min-height: 300px;
+  
+  .ql-editor {
+    min-height: 300px;
+    
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 15px 0;
+      
+      td, th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      
+      th {
+        background-color: #f2f2f2;
+      }
+    }
+  }
+}
+
+.preview-wrapper {
+  padding: 15px;
+  border: 1px solid #eee;
+  border-radius: 4px;
+  background-color: #f9f9f9;
+  
+  h3 {
+    margin-top: 0;
+    color: #333;
+  }
+  
+  .preview-content {
+    min-height: 300px;
+    padding: 15px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    
+    table {
+      border-collapse: collapse;
+      width: 100%;
+      margin: 15px 0;
+      
+      td, th {
+        border: 1px solid #ddd;
+        padding: 8px;
+      }
+      
+      th {
+        background-color: #f2f2f2;
+      }
+    }
+  }
+}
+
+.saved-documents {
+  margin-top: 30px;
+  
+  h3 {
+    margin-bottom: 15px;
+  }
+  
+  table {
+    width: 100%;
+    
+    /* Adicione estas novas regras */
+    .mat-column-actions {
+      text-align: right;
+      width: 1%;  // Isso faz a coluna ocupar apenas o espaço necessário
+      white-space: nowrap; // Evita quebra de linha nos botões
+      
+      .actions {
+        display: flex;
+        justify-content: flex-end;
+        gap: 8px;
+      }
+    }
+
+    /* Mantenha os estilos existentes para os botões */
+    .load-btn {
+      background-color: #ff9800;
+      color: white;
+      border: none;
+      padding: 6px 12px;
+      border-radius: 4px;
+      cursor: pointer;
+      
+      &:hover {
+        background-color: #e68a00;
+      }
+    }
+
+    .delete-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+  }
+}

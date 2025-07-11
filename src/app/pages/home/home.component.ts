@@ -1,4 +1,4 @@
-import { Component, forwardRef, Signal } from '@angular/core';
+import { Component, forwardRef, OnInit, Signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomInputComponent } from '../../shared/components/custom-input/custom-input.component';
@@ -17,14 +17,19 @@ import { ChartComponent } from '../../shared/components/line-chart/line-chart.co
 import { ChartType } from '../../enums/chart-types.enum';
 import { PieChartComponent } from '../../shared/components/pie-chart/pie-chart.component';
 import { DropdownVideosComponent } from '../../shared/components/dropdown-videos/dropdown-videos.component';
+import { DropDownVideos } from '../../models/models';
+import { Observable } from 'rxjs';
+import { VideoService } from '../../services/videoService.service';
+import { MtbDevComponent } from '../../shared/components/mtb-dev/mtb-dev.component';
+import { NumberCounterComponent } from '../../shared/components/number-counter/number-counter.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CustomInputComponent, MatButtonModule,
     DynamicTableComponent, DynamicButtonComponent, MatIconModule, DynamicThreeToggleComponent,
-    RichTextEditorComponent, MatInputModule, ChartComponent, 
-    PieChartComponent, DropdownVideosComponent
+    RichTextEditorComponent, MatInputModule, ChartComponent, NumberCounterComponent,
+    PieChartComponent, DropdownVideosComponent, MtbDevComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -37,7 +42,7 @@ import { DropdownVideosComponent } from '../../shared/components/dropdown-videos
   ]
 })
 
-export class HomeComponent {
+export class HomeComponent implements OnInit {
   form: FormGroup;
   form2: FormGroup;
   saveSuccess = false;
@@ -79,6 +84,7 @@ export class HomeComponent {
   isClearSuccess = false;
   isPrintSuccess = false;
   theme!: Signal<'dark' | 'light'>;
+  videos$!: Observable<DropDownVideos[]>;
 
   selectedToggle = 'mes';
 
@@ -88,8 +94,13 @@ export class HomeComponent {
     btn3: { label: 'Ano Atual', value: 'ano' }
   };
 
-  constructor(private fb: FormBuilder, private auth: AuthService, private router: Router,
-    private themeService: ThemeService) {
+  constructor(
+    private fb: FormBuilder, 
+    private auth: AuthService, 
+    private router: Router,
+    private themeService: ThemeService,
+    private videoTutorialService: VideoService
+  ) {
     this.theme = this.themeService.getTheme();
 
     const session = this.auth.currentUser();
@@ -115,6 +126,20 @@ export class HomeComponent {
       content: ['<p>Conteúdo inicial</p>', Validators.required],
       description: ['', Validators.required]
     });
+
+    
+  }
+
+
+  ngOnInit(): void {
+    this.loadVideoTutorials();
+  }
+
+  loadVideoTutorials(): void {
+    this.videoTutorialService.getSectionVideos().subscribe(videos => {
+      console.log('Vídeos carregados:', videos);
+    });
+   
   }
 
   onToggleChanged(value: string) {

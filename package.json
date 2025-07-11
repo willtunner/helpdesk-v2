@@ -24,6 +24,7 @@
     "@angular/router": "^18.2.0",
     "@highcharts/dashboards": "^3.0.0",
     "crypto-js": "^4.2.0",
+    "firebase": "^10.14.1",
     "highcharts": "^12.0.2",
     "highcharts-angular": "^4.0.1",
     "jspdf": "^2.5.2",
