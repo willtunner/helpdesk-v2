@@ -35,6 +35,8 @@ export interface Company {
     operatorId: string;
     operator?: User;
     user?: User | null;
+    helpDeskCompanyId?: string;
+    helpDeskCompany?: HelpDeskCompany | null;
   }
 
   // export interface Client {
