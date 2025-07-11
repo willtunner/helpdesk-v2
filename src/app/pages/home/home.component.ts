@@ -22,6 +22,8 @@ import { Observable } from 'rxjs';
 import { VideoService } from '../../services/videoService.service';
 import { MtbDevComponent } from '../../shared/components/mtb-dev/mtb-dev.component';
 import { NumberCounterComponent } from '../../shared/components/number-counter/number-counter.component';
+import { UserService } from '../../services/user.service';
+import { User } from 'firebase/auth';
 
 @Component({
   selector: 'app-home',
@@ -49,6 +51,7 @@ export class HomeComponent implements OnInit {
   deleteSuccess = false;
   user: any = null;
   ChartType = ChartType;
+  
 
   // Usado para o ChartComponent
   chamadosMock = [
@@ -99,7 +102,8 @@ export class HomeComponent implements OnInit {
     private auth: AuthService, 
     private router: Router,
     private themeService: ThemeService,
-    private videoTutorialService: VideoService
+    private videoTutorialService: VideoService,
+    private userService: UserService,
   ) {
     this.theme = this.themeService.getTheme();
 
@@ -133,6 +137,9 @@ export class HomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.loadVideoTutorials();
+
+    // const user1: User = { ..., roles: ['admin', 'client'] };
+    console.log(this.userService.getEffectiveUserRole(this.user)); // admin
   }
 
   loadVideoTutorials(): void {

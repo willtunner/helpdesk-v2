@@ -13,7 +13,7 @@ export interface Company {
     connectionServ: string;
     email: string;
     versionServ: string | null;
-    clients: Client[];
+    clients: User[];
   }
 
   export interface Call {
@@ -24,7 +24,7 @@ export interface Company {
     companyId: string;
     company?: Company | null;
     clientId: string;
-    client: Client;
+    client: User;
     title: string;
     description: string;
     resolution: string;
@@ -37,21 +37,21 @@ export interface Company {
     user?: User | null;
   }
 
-  export interface Client {
-    id: string;
-    name: string;
-    username: string;
-    phone: string;
-    email: string;
-    companyId: string;
-    roles: string[];
-    deleted: boolean;
-    created: Date;
-    updated: Date | null;
-    imageUrl: string;
-    company: Company | null;
-    occurrency?: string;
-  }
+  // export interface Client {
+  //   id: string;
+  //   name: string;
+  //   username: string;
+  //   phone: string;
+  //   email: string;
+  //   companyId: string;
+  //   roles: string[];
+  //   deleted: boolean;
+  //   created: Date;
+  //   updated: Date | null;
+  //   imageUrl: string;
+  //   company: Company | null;
+  //   occurrency?: string;
+  // }
 
   export interface HelpDeskCompany {
     id: string;
@@ -79,34 +79,40 @@ export interface Company {
     created: Date;
     updated?: Date | null;
     username: string;
+    name: string;
     phone: string;
     email: string;
     password: string;
-    connection?: string | null;
-    userId?: string;
+    isLoggedIn: boolean;
     imageUrl: string;
     roles: string[];
+    connection?: string | null;
+    helpDeskCompanyId?: string;
+    helpDeskCompany?: HelpDeskCompany | null;
+    companyId?: string;
+    company?: Company;
+    occurrency?: string;
   }
 
-  export interface UserClient {
-    id: string;
-    created: number;
-    deleted: boolean;
-    email: string;
-    phone: string;
-    username: string;
-    name: string;
-    roles: string[];
-    password: string;
-    updated: number;
-    connection: string;
-    imageUrl: string;
-    userId: string
-    companyId?: string;
-    occurrency?: string;
-    company?: Company;
-    isLoggedIn: boolean;
-  }
+  // export interface UserClient {
+  //   id: string;
+  //   created: number;
+  //   deleted: boolean;
+  //   email: string;
+  //   phone: string;
+  //   username: string;
+  //   name: string;
+  //   roles: string[];
+  //   password: string;
+  //   updated: number;
+  //   connection: string;
+  //   imageUrl: string;
+  //   userId: string
+  //   companyId?: string;
+  //   occurrency?: string;
+  //   company?: Company;
+  //   isLoggedIn: boolean;
+  // }
 
   export interface ChatRoom {
     id: string;
@@ -114,7 +120,7 @@ export interface Company {
     created: Date;
     updated?: Date | null;
     operator: User;
-    client: Client;
+    client: User;
     mensages: Message[],
     unreadCount?: number;
   }

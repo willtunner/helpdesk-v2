@@ -6,6 +6,7 @@ export interface INavbarData {
     label: string,
     expanded?: boolean;
     items?: INavbarData[];
+    allowedRoles?: string[];
   }
 
  export interface SideNaveToggle {

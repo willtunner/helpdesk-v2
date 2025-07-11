@@ -9,6 +9,7 @@ import { FirstLetterPipe } from '../../../pipes/firstLetterUpperCase.pipe';
 import { INavbarData } from '../../../interface/side-nav.interface';
 import { FormService } from '../../../services/form.service';
 import { SessionService } from '../../../services/session.service';
+import { SidebarService } from '../../../services/sidebar.service';
 
 interface SideNaveToggle {
   screenWidth: number;
@@ -18,7 +19,8 @@ interface SideNaveToggle {
 @Component({
   selector: 'app-sidenav',
   standalone: true,
-  imports: [RouterModule, CommonModule, MatIconModule, SublevelMenuComponent, FirstLetterPipe],
+  imports: [RouterModule, CommonModule, MatIconModule, 
+    SublevelMenuComponent, FirstLetterPipe],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss',
   animations: [
@@ -61,7 +63,7 @@ export class AppSidenavComponent implements OnInit {
   user: any | null = null;
 
   constructor(
-    private sidenavBar: FormService, 
+    private sidebarService: SidebarService, 
     public router: Router, 
     private sessionService: SessionService) { }
 
@@ -86,6 +88,10 @@ export class AppSidenavComponent implements OnInit {
     this.user = this.sessionService.getSession();
     // Faz uma requisição para obter os dados da barra de navegação através do serviço
     this.navData = NAVBAR_DATA;
+
+    if (this.user) {
+      this.navData = this.sidebarService.getMenuForUser(this.user);
+    }
   }
 
    // Alterna o estado da barra lateral entre colapsado e expandido

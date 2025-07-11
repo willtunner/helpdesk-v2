@@ -3,6 +3,7 @@ import { Firestore, collection, doc, addDoc, updateDoc, query, where, getDocs, g
 import { BehaviorSubject, } from 'rxjs';
 import { ChatRoom, Company, Message, User } from '../models/models';
 import { CompanyService } from './company.service';
+import { UserType } from '../enums/user-types.enum';
 
 const PATH_USERS = 'users';
 const PATH_CLIENTS = 'clients';
@@ -79,6 +80,44 @@ export class UserService {
       console.error('Erro ao buscar usuário por ID:', error);
       throw error;
     }
+  }
+
+  getEffectiveUserRole(user: User): UserType {
+    if (!user || !Array.isArray(user.roles) || user.roles.length === 0) {
+      throw new Error('Usuário deve ter ao menos uma role válida.');
+    }
+  
+    const roles = user.roles.map(r => r.toLowerCase()) as UserType[];
+  
+    // Não permitir OPERATOR e CLIENT juntos
+    if (roles.includes(UserType.OPERATOR) && roles.includes(UserType.CLIENT)) {
+      throw new Error('Usuário não pode ter as roles OPERATOR e CLIENT simultaneamente.');
+    }
+  
+    const hasOperatorOrClient =
+      roles.includes(UserType.OPERATOR) || roles.includes(UserType.CLIENT);
+  
+    const hasMasterOrAdmin =
+      roles.includes(UserType.MASTER) || roles.includes(UserType.ADMIN);
+  
+    if (hasOperatorOrClient && hasMasterOrAdmin) {
+      if (roles.includes(UserType.MASTER)) return UserType.MASTER;
+      if (roles.includes(UserType.ADMIN)) return UserType.ADMIN;
+    }
+  
+    // Ordem de prioridade
+    const priority: UserType[] = [
+      UserType.MASTER,
+      UserType.ADMIN,
+      UserType.OPERATOR,
+      UserType.CLIENT,
+    ];
+  
+    for (const role of priority) {
+      if (roles.includes(role)) return role;
+    }
+  
+    throw new Error('Nenhuma role válida foi identificada.');
   }
 }
 
