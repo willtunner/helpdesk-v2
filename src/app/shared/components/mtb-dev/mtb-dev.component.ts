@@ -12,9 +12,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog } from '@angular/material/dialog';
 import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { DateTimeFormatPipe } from '../../../pipes/dateTimeFormatTimeStamp.pipe';
 import { SavedDocument } from '../../../interface/dynamic-form.interface';
 import { DocumentService } from '../../../services/document.service';
+import { DateFormatPipe } from '../../../pipes/date-format.pipe';
 
 @Component({
   selector: 'app-mtb-dev',
@@ -28,7 +28,7 @@ import { DocumentService } from '../../../services/document.service';
     MatTableModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    DateTimeFormatPipe
+    DateFormatPipe
   ],
   templateUrl: './mtb-dev.component.html',
   styleUrls: ['./mtb-dev.component.scss']
@@ -43,6 +43,8 @@ export class MtbDevComponent implements OnInit {
   savedDocuments = signal<SavedDocument[]>([]);
   nextId = 1;
   isGeneratingPDF = signal(false);
+  isLoadingDoc = false;
+  isProcessingSave = false;
 
   quillModules = {
     toolbar: [
@@ -66,13 +68,13 @@ export class MtbDevComponent implements OnInit {
     effect(() => {
       localStorage.setItem('savedDocuments', JSON.stringify(this.savedDocuments()));
     });
-  
+
     // Efeito para carregar documentos e atualizar sinal
     effect(() => {
       const docs = this.documentService.documents();
       console.log('Documentos carregados:', docs);
       this.savedDocuments.set(docs);
-  
+
       if (docs.length > 0) {
         const maxId = Math.max(...docs.map(doc => Number(doc.id) || 0));
         this.nextId = maxId + 1;
@@ -83,26 +85,26 @@ export class MtbDevComponent implements OnInit {
   ngOnInit() {
 
   }
-  
+
 
   togglePreview() {
     this.showPreview.update(value => !value);
   }
 
+  
   async generatePDF() {
-    if (!this.previewContent?.nativeElement) return;
-
+    if (this.isGeneratingPDF() || !this.previewContent?.nativeElement) return;
+  
     this.showPreview.set(true);
     this.isGeneratingPDF.set(true);
-
-    await new Promise(resolve => setTimeout(resolve, 50));
-
+  
+    await new Promise(resolve => setTimeout(resolve, 80)); // pequeno delay para evitar crash
+  
     try {
       const element = this.previewContent.nativeElement;
       const pdf = new jsPDF('p', 'mm', 'a4');
       const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-
+  
       const canvas = await html2canvas(element, {
         scale: 2,
         logging: false,
@@ -111,70 +113,85 @@ export class MtbDevComponent implements OnInit {
         windowHeight: element.scrollHeight,
         height: element.scrollHeight
       });
-
+  
       const imgData = canvas.toDataURL('image/png');
       const imgProps = pdf.getImageProperties(imgData);
       const imgWidth = pageWidth - 20;
       const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-
-      const marginTop = 10;
-      const marginLeft = 10;
-
-      pdf.addImage(imgData, 'PNG', marginLeft, marginTop, imgWidth, imgHeight);
-
+  
+      pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
+  
+      // Links com segurança:
       const anchors = element.querySelectorAll('a[href]');
       const containerRect = element.getBoundingClientRect();
-
+  
       anchors.forEach((a: HTMLAnchorElement) => {
-        const rect = a.getBoundingClientRect();
         const href = a.getAttribute('href');
         const text = a.textContent?.trim() || 'Link';
-
         if (!href || !text) return;
-
+  
+        const rect = a.getBoundingClientRect();
         const xPx = rect.left - containerRect.left;
         const yPx = rect.top - containerRect.top;
-
+  
         const pxPerMm = canvas.width / imgWidth;
-        const x = xPx / pxPerMm + marginLeft;
-        const y = yPx / pxPerMm + marginTop;
-
+        const x = xPx / pxPerMm + 10;
+        const y = yPx / pxPerMm + 10;
+  
         pdf.setTextColor(0, 0, 255);
         pdf.setFontSize(11);
         pdf.textWithLink(text, x, y + 4, { url: href });
       });
-
-      pdf.save(`${this.documentTitle || 'documento'}-${new Date().toISOString().slice(0, 10)}.pdf`);
+  
+      const safeName = this.documentTitle.trim().replace(/[^a-zA-Z0-9-_]/g, '_');
+      pdf.save(`${safeName || 'documento'}-${new Date().toISOString().slice(0, 10)}.pdf`);
     } catch (error) {
       console.error('Erro ao gerar PDF:', error);
+      this.snackBar.open('Erro ao gerar PDF', 'Fechar', { duration: 2000 });
     } finally {
       this.isGeneratingPDF.set(false);
     }
   }
 
+
+
   async saveDocument() {
-    if (!this.editorContent.trim()) return;
+    if (this.isProcessingSave || !this.editorContent.trim()) return;
 
-    if (this.currentDocumentId) {
-      await this.documentService.updateDocument(
-        this.currentDocumentId,
-        this.documentTitle,
-        this.editorContent
-      );
-      this.snackBar.open('Documento atualizado com sucesso!', 'Fechar', { duration: 2000 });
-    } else {
-      await this.documentService.saveDocument(this.documentTitle, this.editorContent);
-      this.snackBar.open('Documento salvo com sucesso!', 'Fechar', { duration: 2000 });
+    this.isProcessingSave = true;
+
+    try {
+      if (this.currentDocumentId) {
+        await this.documentService.updateDocument(
+          this.currentDocumentId,
+          this.documentTitle,
+          this.editorContent
+        );
+        this.snackBar.open('Documento atualizado com sucesso!', 'Fechar', { duration: 2000 });
+      } else {
+        await this.documentService.saveDocument(this.documentTitle, this.editorContent);
+        this.snackBar.open('Documento salvo com sucesso!', 'Fechar', { duration: 2000 });
+      }
+
+      this.resetEditor();
+    } catch (e) {
+      this.snackBar.open('Erro ao salvar documento', 'Fechar', { duration: 2000 });
+    } finally {
+      this.isProcessingSave = false;
     }
-
-    this.resetEditor();
   }
 
   loadDocument(doc: SavedDocument) {
-    this.editorContent = doc.content;
-    this.documentTitle = doc.title;
-    this.currentDocumentId = doc.id;
-    this.showPreview.set(false);
+    if (this.isLoadingDoc || doc.id === this.currentDocumentId) return;
+    this.isLoadingDoc = true;
+
+    setTimeout(() => {
+      this.editorContent = doc.content;
+      this.documentTitle = doc.title;
+      this.currentDocumentId = doc.id;
+      this.showPreview.set(false);
+      this.isLoadingDoc = false;
+    }, 200); // Simula debounce e evita flood
   }
 
   async deleteDocument(id: string, doc: SavedDocument) {

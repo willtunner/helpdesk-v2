@@ -8,6 +8,7 @@
     </button>
 
     <div class="action-buttons">
+
       <button (click)="generatePDF()" class="generate-pdf-btn" [disabled]="isGeneratingPDF()">
         <div class="button-content">
           @if (isGeneratingPDF()) {
@@ -17,10 +18,12 @@
           }
         </div>
       </button>
-      <button (click)="saveDocument()" class="save-doc-btn">
+
+      <button (click)="saveDocument()" class="save-doc-btn" [disabled]="editorContent.trim() === '' || isProcessingSave">
         <i class="fas" [class.fa-save]="!currentDocumentId" [class.fa-sync-alt]="currentDocumentId"></i>
         {{ currentDocumentId ? 'Atualizar' : 'Salvar' }}
       </button>
+
       <button (click)="clearDocument()" class="clear-btn">
         <i class="fas fa-trash"></i> Limpar
       </button>
@@ -65,9 +68,9 @@
       <ng-container matColumnDef="date">
         <th mat-header-cell *matHeaderCellDef>Data</th>
         <td mat-cell *matCellDef="let doc">
-          {{ doc.createdAt | dateTimeFormat }}
+          {{ doc.createdAt | dateFormat }}
           <span *ngIf="doc.updatedAt" class="updated-info">
-            <br>(editado em {{ doc.updatedAt | dateTimeFormat }})
+            <br>(editado em {{ doc.updatedAt | dateFormat }})
           </span>
         </td>
       </ng-container>
@@ -76,7 +79,7 @@
         <th mat-header-cell *matHeaderCellDef class="actions-header">Ações</th>
         <td mat-cell *matCellDef="let doc" class="actions-cell">
           <div class="actions">
-            <button (click)="loadDocument(doc)" class="load-btn">
+            <button (click)="loadDocument(doc)" class="load-btn" [disabled]="isLoadingDoc || doc.id === currentDocumentId">
               <i class="fas fa-edit"></i> Carregar
             </button>
             <button mat-raised-button (click)="deleteDocument(doc.id, doc)" color="warn" class="delete-btn">
