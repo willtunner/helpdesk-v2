@@ -1,4 +1,4 @@
-import { Component, ViewChild, ElementRef, signal, effect, OnInit } from '@angular/core';
+import { Component, ViewChild, ElementRef, signal, effect, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
@@ -14,7 +14,9 @@ import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SavedDocument } from '../../../interface/dynamic-form.interface';
 import { DocumentService } from '../../../services/document.service';
-import { DateFormatPipe } from '../../../pipes/date-format.pipe';
+import { DynamicTableComponent } from '../dynamic-table/dynamic-table.component';
+import { FirebaseDatePipe } from '../../../pipes/firebase-timestamp.pipe';
+import { DynamicButtonComponent } from '../action-button/action-button.component';
 
 @Component({
   selector: 'app-mtb-dev',
@@ -28,8 +30,11 @@ import { DateFormatPipe } from '../../../pipes/date-format.pipe';
     MatTableModule,
     MatIconModule,
     MatProgressSpinnerModule,
-    DateFormatPipe
+    FirebaseDatePipe,
+    DynamicTableComponent,
+    DynamicButtonComponent
   ],
+  providers: [FirebaseDatePipe],
   templateUrl: './mtb-dev.component.html',
   styleUrls: ['./mtb-dev.component.scss']
 })
@@ -45,6 +50,23 @@ export class MtbDevComponent implements OnInit {
   isGeneratingPDF = signal(false);
   isLoadingDoc = false;
   isProcessingSave = false;
+  firebaseDatePipe = inject(FirebaseDatePipe);
+
+  headers = [
+    { key: 'id', label: 'ID' },
+    { key: 'title', label: 'Título' },
+    {
+      key: 'createdAt',
+      label: 'Data',
+      formatter: (doc: SavedDocument) => {
+        let dateStr = `${this.firebaseDatePipe.transform(doc.createdAt)}`;
+        if (doc.updatedAt) {
+          dateStr += `<br><span class="updated-info">(editado em ${this.firebaseDatePipe.transform(doc.updatedAt)})</span>`;
+        }
+        return dateStr;
+      }
+    }
+  ];
 
   quillModules = {
     toolbar: [
@@ -223,5 +245,9 @@ export class MtbDevComponent implements OnInit {
   clearDocument() {
     this.resetEditor();
     this.showPreview.set(false);
+  }
+
+  editDocument(any: any){
+
   }
 }

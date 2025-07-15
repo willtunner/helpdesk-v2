@@ -1,10 +1,43 @@
 <h1>Bem-vindo{{ user?.username ? ', ' + user.username : '' }}!</h1>
 
 <h1>Contador</h1>
-<div style="display: flex; flex-direction: column;">
-  <app-number-counter [end]="80" [duration]="1.5"></app-number-counter>
-<app-number-counter [end]="180" [duration]="1.5"></app-number-counter>
-<app-number-counter [end]="25" [duration]="1.5"></app-number-counter>
+<div class="dashboard-cards">
+  <app-dashboard-card
+  icon="support_agent"
+  [end]="350"
+  [duration]="1200"
+  label="Usuários"
+  color="#f20f40">
+</app-dashboard-card>
+
+<app-dashboard-card
+  icon="calls"
+  [end]="80"
+  [duration]="1200"
+  label="Chamados"
+  color="#3f51b5">
+</app-dashboard-card>
+
+<app-dashboard-card
+  icon="headset_mic"
+  [end]="350"
+  [duration]="1200"
+  label="Chamados Abertos"
+  color="#4caf50">
+</app-dashboard-card>
+
+<app-dashboard-card
+  icon="headset_off"
+  [end]="350"
+  [duration]="1200"
+  label="Chamados Fechados"
+  color="#ff9800">
+</app-dashboard-card>
+
+<!-- <app-number-counter [end]="180" [duration]="1.5"></app-number-counter>
+<app-number-counter [end]="25" [duration]="1.5"></app-number-counter> -->
+
+
 </div>
 
 <button mat-raised-button (click)="toggleTheme()">
@@ -40,7 +73,11 @@
 
   <button mat-raised-button color="primary">Enviar</button>
 
-  <app-dynamic-table [headers]="headers" [data]="dados" />
+  <app-dynamic-table [headers]="headers" [data]="dados" [actions]="['edit', 'delete']"
+      (edit)="updateDocument()" (delete)="deleteDocument()">
+    </app-dynamic-table>
+
+  <app-dynamic-table [headers]="headers" [data]="dados" (edit)="updateDocument()" (delete)="deleteDocument()"  />
 
 </form>
 
@@ -52,6 +89,7 @@
   <app-dynamic-button type="clear" (clicked)="onClear()"></app-dynamic-button>
   <app-dynamic-button type="print" (clicked)="onPrint()"></app-dynamic-button>
   <app-dynamic-button type="find" (clicked)="onFind()"></app-dynamic-button>
+  <app-dynamic-button type="pdf" (clicked)="generatePDF()"></app-dynamic-button>
   <app-dynamic-button type="add"></app-dynamic-button>
 </div>
 
@@ -84,5 +122,6 @@
 <app-dropdown-videos></app-dropdown-videos>
 <h1>Rich Text</h1>
 <app-mtb-dev></app-mtb-dev>
+
 
 

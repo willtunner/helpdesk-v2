@@ -1,0 +1,13 @@
+<div class="card"
+     [ngStyle]="{ 
+       'border-top-color': color, 
+       'background-color': getContrastingBackground(color) 
+     }">
+  <div class="icon-container" [ngStyle]="{ 'color': color }">
+    <mat-icon class="icon">{{ icon }}</mat-icon>
+  </div>
+  <div class="content">
+    <app-number-counter [end]="end" [duration]="duration"></app-number-counter>
+    <div class="label">{{ label }}</div>
+  </div>
+</div>

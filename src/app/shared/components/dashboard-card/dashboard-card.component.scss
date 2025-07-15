@@ -1,0 +1,65 @@
+.card {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    padding: 16px;
+    border-radius: 12px;
+    background: #fff;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-top: 4px solid;
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    width: 100%;
+    max-width: 280px;
+    gap: 16px;
+    cursor: pointer;
+  
+    &:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25);
+
+      .icon {
+        animation: shake 0.6s ease-in-out;
+      }
+    }
+  }
+  
+  .icon-container {
+    background-color: rgba(0, 0, 0, 0.05);
+    border-radius: 50%;
+    padding: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  
+    .icon {
+      font-size: 25px;
+      transition: transform 0.3s ease;
+    }
+  }
+  
+  .content {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  
+    app-number-counter {
+      font-size: 28px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+  
+    .label {
+      font-size: 14px;
+      color: #7f8c8d;
+    }
+  }
+
+  @keyframes shake {
+    0%   { transform: rotate(0deg); }
+    20%  { transform: rotate(7deg); }
+    40%  { transform: rotate(-7deg); }
+    60%  { transform: rotate(5deg); }
+    80%  { transform: rotate(-5deg); }
+    100% { transform: rotate(0deg); }
+  }
+  

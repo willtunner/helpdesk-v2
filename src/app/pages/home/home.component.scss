@@ -46,4 +46,8 @@
   margin-top: 25px;
 }
 
-
+.dashboard-cards {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}

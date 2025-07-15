@@ -1,27 +1,46 @@
 <div class="filter-container">
-  <mat-form-field>
-    <mat-label>Filtrar por nome</mat-label>
-    <input matInput (input)="filterVideos()" [(ngModel)]="filters.name" />
-  </mat-form-field>
+  <!-- Filtro por Nome (Custom Input) -->
+  <app-custom-input
+    label="Filtrar por nome"
+    [control]="nameControl"
+    type="text"
+    placeholder="Digite o nome"
+    cssClass="input-full"
+    size="full-width"
+    (control.valueChanges)="filterVideos()">
+  </app-custom-input>
 
-  <mat-form-field>
-    <mat-label>Filtrar por setor</mat-label>
-    <mat-select [(ngModel)]="filters.sector" (selectionChange)="filterVideos()">
-      <mat-option *ngFor="let sector of sectors" [value]="sector">{{ sector }}</mat-option>
-    </mat-select>
-  </mat-form-field>
+  <!-- Filtro por Setor (Dynamic Select) -->
+  <app-dynamic-select
+    [label]="'Filtrar por setor'"
+    [model]="filters.sector"
+    (onChange)="filters.sector = $event; filterVideos()"
+    [options]="sectors"
+    [showDefaultOption]="true"
+    [defaultOptionLabel]="'Todos os setores'"
+    [cssClass]="'select-full'"
+    size="md">
+  </app-dynamic-select>
 
-  <mat-form-field>
-    <mat-label>Filtrar por data</mat-label>
-    <input matInput [matDatepicker]="picker" [(ngModel)]="filters.date" (dateChange)="filterVideos()" />
-    <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
-    <mat-datepicker #picker></mat-datepicker>
-  </mat-form-field>
+  <!-- Filtro por Data (Custom Input com type date) -->
+  <app-custom-input
+    label="Filtrar por data"
+    [control]="dateControl"
+    type="date"
+    placeholder="Selecione a data"
+    cssClass="input-full"
+    size="full-width"
+    (control.valueChanges)="filterVideos()">
+  </app-custom-input>
 
-  <button mat-raised-button color="primary" (click)="openAddVideoModal()" class="search">
-    <mat-icon>video_call</mat-icon>
+  <!-- Botão para abrir modal -->
+  <button mat-raised-button (click)="openAddVideoModal()" class="search white-button">
+    <mat-icon style="    height: auto;
+    width: auto;
+    margin: 0px;">video_call</mat-icon>
   </button>
 </div>
+
 
 <div class="dropdown-container">
   <div *ngFor="let dropdown of filteredDropdowns; let i = index" class="dropdown">

@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnInit, Signal } from '@angular/core';
+import { Component, forwardRef, OnInit, signal, Signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomInputComponent } from '../../shared/components/custom-input/custom-input.component';
@@ -23,7 +23,8 @@ import { VideoService } from '../../services/videoService.service';
 import { MtbDevComponent } from '../../shared/components/mtb-dev/mtb-dev.component';
 import { NumberCounterComponent } from '../../shared/components/number-counter/number-counter.component';
 import { UserService } from '../../services/user.service';
-import { User } from 'firebase/auth';
+import { DynamicSelectComponent } from '../../shared/components/dynamic-select/dynamic-select.component';
+import { DashboardCardComponent } from '../../shared/components/dashboard-card/dashboard-card.component';
 
 @Component({
   selector: 'app-home',
@@ -31,7 +32,8 @@ import { User } from 'firebase/auth';
   imports: [CommonModule, ReactiveFormsModule, CustomInputComponent, MatButtonModule,
     DynamicTableComponent, DynamicButtonComponent, MatIconModule, DynamicThreeToggleComponent,
     RichTextEditorComponent, MatInputModule, ChartComponent, NumberCounterComponent,
-    PieChartComponent, DropdownVideosComponent, MtbDevComponent
+    PieChartComponent, DropdownVideosComponent, MtbDevComponent, DynamicSelectComponent,
+    DashboardCardComponent
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],
@@ -80,6 +82,39 @@ export class HomeComponent implements OnInit {
     { id: "23", data: "12/02/2024", companyId: "4", companyName: "Doom" },
     { id: "24", data: "20/05/2024", companyId: "4", companyName: "Doom" },
   ];
+
+  sectors: string[] = ['Arquivos', 'Financeiro', 'Tecnologia'];
+
+  // Filtro atual
+  filters = {
+    name: '',
+    sector: '',
+    date: ''
+  };
+
+  // Lista completa de vídeos
+  allVideos = [
+    { title: 'Video A', sector: 'Tecnologia' },
+    { title: 'Video B', sector: 'Financeiro' },
+    { title: 'Video C', sector: 'Arquivos' },
+    { title: 'Video D', sector: 'Tecnologia' }
+  ];
+
+  // Lista filtrada de vídeos
+  filteredVideos = signal(this.allVideos);
+  
+  filterVideos() {
+    const sector = this.filters.sector;
+
+    if (!sector) {
+      this.filteredVideos.set(this.allVideos);
+      return;
+    }
+
+    const filtered = this.allVideos.filter(video => video.sector === sector);
+    this.filteredVideos.set(filtered);
+  }
+
 
   // Estados de sucesso para os botões
   isSaveOrEditSuccess = false;
@@ -341,6 +376,7 @@ export class HomeComponent implements OnInit {
   onClear() { }
   deleteCall() { }
   onFind() { }
+  generatePDF() {}
 
   handleToggle(value: string) {
     console.log('Selecionado:', value);
@@ -351,6 +387,7 @@ export class HomeComponent implements OnInit {
     else this.handleAno();
   }
 
-
+  deleteDocument() {}
+  updateDocument() {}
 }
 

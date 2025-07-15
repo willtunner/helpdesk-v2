@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 
-type ButtonType = 'save' | 'edit' | 'delete' | 'clear' | 'print' | 'find' | 'add';
+type ButtonType = 'save' | 'edit' | 'delete' | 'clear' | 'print' | 'find' | 'add' | 'pdf';
 
 @Component({
   selector: 'app-dynamic-button',
@@ -31,7 +31,8 @@ export class DynamicButtonComponent {
       clear:  { label: 'LIMPAR',    icon: 'clear',            cssClass: 'clear' },
       print:  { label: 'IMPRIMIR',  icon: 'print',            cssClass: 'print' },
       add:    { label: 'CADASTRAR', icon: 'add_ad',           cssClass: 'add' },
-      find:   { label: 'BUSCAR',    icon: 'search',           cssClass: 'find' }
+      find:   { label: 'BUSCAR',    icon: 'search',           cssClass: 'find' },
+      pdf:    { label: 'PDF',       icon: 'picture_as_pdf', cssClass: 'pdf' },
     };
 
     return map[this.type] ?? map['save'];

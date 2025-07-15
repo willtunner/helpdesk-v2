@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatOptionModule } from '@angular/material/core';
 import { MAT_DIALOG_DATA, MatDialog, MatDialogRef } from '@angular/material/dialog';
@@ -14,6 +14,8 @@ import { DropDownVideos, Video } from '../../../../models/models';
 import { SessionService } from '../../../../services/session.service';
 import { VideoService } from '../../../../services/videoService.service';
 import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
+import { CustomInputComponent } from '../../custom-input/custom-input.component';
+import { DynamicButtonComponent } from '../../action-button/action-button.component';
 
 @Component({
   selector: 'app-addVideoDialogComponent',
@@ -31,7 +33,9 @@ import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmat
     MatTableModule,
     CommonModule,
     ReactiveFormsModule,
-    MatCheckboxModule
+    MatCheckboxModule,
+    CustomInputComponent,
+    DynamicButtonComponent,
   ]
 })
 export class AddVideoDialogComponentComponent {
@@ -195,6 +199,22 @@ export class AddVideoDialogComponentComponent {
 
   onClose(): void {
     this.dialogRef.close();
+  }
+
+  get sectionTitleControl(): FormControl {
+    return this.videoForm.get('sectionTitle') as FormControl;
+  }
+  
+  get videoTitleControl(): FormControl {
+    return this.videoForm.get('videoTitle') as FormControl;
+  }
+  
+  get videoUrlControl(): FormControl {
+    return this.videoForm.get('videoUrl') as FormControl;
+  }
+  
+  get sectorControl(): FormControl {
+    return this.videoForm.get('sector') as FormControl;
   }
 
 }

@@ -9,11 +9,13 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatSelectModule } from '@angular/material/select';
 import { MatInputModule } from '@angular/material/input';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { FormsModule } from '@angular/forms';
+import { FormControl, FormsModule } from '@angular/forms';
 import { DomSanitizer, SafeResourceUrl } from '@angular/platform-browser';
 import { OnlyDatePipe } from '../../../pipes/onlyDate.pipe';
 import { DropDownVideos } from '../../../models/models';
 import { VideoService } from '../../../services/videoService.service';
+import { CustomInputComponent } from '../custom-input/custom-input.component';
+import { DynamicSelectComponent } from '../dynamic-select/dynamic-select.component';
 
 @Component({
   selector: 'app-dropdown-videos',
@@ -32,7 +34,9 @@ import { VideoService } from '../../../services/videoService.service';
     MatNativeDateModule,
     MatIconModule,
     MatDialogModule,
-    OnlyDatePipe
+    OnlyDatePipe,
+    CustomInputComponent,
+    DynamicSelectComponent
   ],
 })
 export class DropdownVideosComponent implements OnInit {
@@ -42,10 +46,29 @@ export class DropdownVideosComponent implements OnInit {
   filters = { name: '', sector: '', date: '' };
   sectors = ['Arquivos', 'Financeiro', 'Tecnologia'];
 
-  constructor(private videoService: VideoService, private dialog: MatDialog, private sanitizer: DomSanitizer) {}
+    // FormControl para campos customizados
+    nameControl = new FormControl<string>(''); // valor inicial = ''
+    dateControl = new FormControl<string>(''); // idem
+
+  constructor(
+    private videoService: VideoService, 
+    private dialog: MatDialog, 
+    private sanitizer: DomSanitizer
+  ) {}
 
   ngOnInit() {
     this.loadVideos();
+
+    // Escutar mudanças nos filtros reativos
+    this.nameControl.valueChanges.subscribe((value) => {
+      this.filters.name = value || '';
+      this.filterVideos();
+    });
+
+    this.dateControl.valueChanges.subscribe((value) => {
+      this.filters.name = value || '';
+      this.filterVideos();
+    });
   }
 
   toggleDropdown(index: number): void {
@@ -54,31 +77,36 @@ export class DropdownVideosComponent implements OnInit {
 
   loadVideos() {
     this.videoService.getSectionVideos().subscribe((data: DropDownVideos[]) => {
-      console.log('Data', data);
       this.dropdowns = data;
       this.filteredDropdowns = [...this.dropdowns];
     });
-
-    
   }
 
   filterVideos() {
     this.filteredDropdowns = this.dropdowns.map((dropdown) => ({
       ...dropdown,
       videos: dropdown.videos.filter((video) => {
-        const matchesName = this.filters.name
-          ? video.title.toLowerCase().includes(this.filters.name.toLowerCase())
+        const nameFilter = (this.filters.name || '').toString().toLowerCase();
+        const sectorFilter = this.filters.sector || '';
+        const dateFilter = this.filters.date;
+  
+        const matchesName = nameFilter
+          ? video.title.toLowerCase().includes(nameFilter)
           : true;
-        const matchesSector = this.filters.sector
-          ? video.sector === this.filters.sector
+  
+        const matchesSector = sectorFilter
+          ? video.sector === sectorFilter
           : true;
-        const matchesDate = this.filters.date
-          ? video.created.toDateString() === new Date(this.filters.date).toDateString()
+  
+        const matchesDate = dateFilter
+          ? video.created.toDateString() === new Date(dateFilter).toDateString()
           : true;
+  
         return matchesName && matchesSector && matchesDate;
       }),
     }));
   }
+  
   
 
   getEmbedUrl(videoUrl: string): SafeResourceUrl {

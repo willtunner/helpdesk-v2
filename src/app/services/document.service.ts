@@ -1,5 +1,6 @@
 import { Injectable, computed, inject, signal } from '@angular/core';
 import { Firestore, collection, addDoc, updateDoc, deleteDoc, doc, getDocs, query, orderBy } from '@angular/fire/firestore';
+import { Timestamp } from '@angular/fire/firestore';
 import { SavedDocument } from '../interface/dynamic-form.interface';
 
 const PATH_DOCS = 'documents';
@@ -19,11 +20,21 @@ export class DocumentService {
   private async loadDocuments() {
     const q = query(this.collectionRef, orderBy('createdAt', 'desc'));
     const snapshot = await getDocs(q);
-    const docs: SavedDocument[] = snapshot.docs.map(d => ({
-      ...(d.data() as Omit<SavedDocument, 'id'>),
-      id: d.id
-    }));
+    const docs: SavedDocument[] = snapshot.docs.map(d => {
+      const data = d.data();
+      return {
+        id: d.id,
+        title: data['title'],
+        content: data['content'],
+        createdAt: this.convertFirebaseTimestamp(data['createdAt']),
+        updatedAt: data['updatedAt'] ? this.convertFirebaseTimestamp(data['updatedAt']) : undefined
+      };
+    });
     this.documentsSignal.set(docs);
+  }
+
+  private convertFirebaseTimestamp(timestamp: Timestamp | Date): Date {
+    return timestamp instanceof Date ? timestamp : timestamp.toDate();
   }
 
   async saveDocument(title: string, content: string) {
@@ -53,7 +64,12 @@ export class DocumentService {
     await updateDoc(docRef, { title, content, updatedAt });
 
     this.documentsSignal.update(docs =>
-      docs.map(d => d.id === id ? { ...d, title, content, updatedAt } : d)
+      docs.map(d => d.id === id ? { 
+        ...d, 
+        title, 
+        content, 
+        updatedAt 
+      } : d)
     );
   }
 

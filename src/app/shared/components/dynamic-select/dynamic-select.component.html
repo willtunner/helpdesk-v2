@@ -1,0 +1,14 @@
+<mat-form-field [ngClass]="[getSizeClass(), cssClass]" appearance="outline" class="custom-field full-width">
+  <mat-label>{{ label }}</mat-label>
+  <mat-select [ngModel]="model" (ngModelChange)="onChange.emit($event)" [disabled]="disabled"
+    [placeholder]="placeholder">
+
+    <mat-option *ngIf="showDefaultOption" [value]="''">{{ defaultOptionLabel }}</mat-option>
+
+    <mat-option *ngFor="let option of options" [value]="option[valueKey] ?? option">
+      {{ option[labelKey] ?? option }}
+    </mat-option>
+  </mat-select>
+
+  <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
+</mat-form-field>

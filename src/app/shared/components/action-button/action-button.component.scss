@@ -183,3 +183,14 @@ $find-color: #1abc9c;
   }
 }
 
+
+$pdf-color: #e74c3c;
+.pdf {
+  background-color: $pdf-color;
+  box-shadow: 0 0 20px 0 rgba($pdf-color, 0.55);
+
+  &.success {
+    background-color: $green;
+  }
+}
+
