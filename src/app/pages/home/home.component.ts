@@ -25,6 +25,7 @@ import { NumberCounterComponent } from '../../shared/components/number-counter/n
 import { UserService } from '../../services/user.service';
 import { DynamicSelectComponent } from '../../shared/components/dynamic-select/dynamic-select.component';
 import { DashboardCardComponent } from '../../shared/components/dashboard-card/dashboard-card.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-home',
@@ -33,7 +34,7 @@ import { DashboardCardComponent } from '../../shared/components/dashboard-card/d
     DynamicTableComponent, DynamicButtonComponent, MatIconModule, DynamicThreeToggleComponent,
     RichTextEditorComponent, MatInputModule, ChartComponent, NumberCounterComponent,
     PieChartComponent, DropdownVideosComponent, MtbDevComponent, DynamicSelectComponent,
-    DashboardCardComponent
+    DashboardCardComponent, TranslateModule
   ],
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.scss'],

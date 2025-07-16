@@ -1,6 +1,6 @@
-<h1>Bem-vindo{{ user?.username ? ', ' + user.username : '' }}!</h1>
+<h1>{{ 'home.welcome' | translate }} {{ user?.username ? ', ' + user.username : '' }}!</h1>
 
-<h1>Contador</h1>
+<h1></h1>
 <div class="dashboard-cards">
   <app-dashboard-card
   icon="support_agent"

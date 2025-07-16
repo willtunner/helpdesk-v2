@@ -1,4 +1,4 @@
-import { ApplicationConfig } from '@angular/core';
+import { ApplicationConfig, importProvidersFrom } from '@angular/core';
 import { provideRouter } from '@angular/router';
 import { routes } from './app.routes';
 import { provideFirebaseApp, initializeApp } from '@angular/fire/app';
@@ -8,6 +8,12 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { provideQuillConfig } from 'ngx-quill';
 import { provideNgxMask } from 'ngx-mask';
 import { provideAnimations } from '@angular/platform-browser/animations';
+import { HttpClient } from '@angular/common/http';
+import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+
+const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: HttpClient) =>
+  new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -25,6 +31,13 @@ export const appConfig: ApplicationConfig = {
         measurementId: environment.firebase.measurementId,
       })
     ),
+    importProvidersFrom([TranslateModule.forRoot({
+      loader: {
+        provide: TranslateLoader,
+        useFactory: httpLoaderFactory,
+        deps: [HttpClient],
+      },
+    })]),
     provideStorage(() => getStorage()),
     provideFirestore(() => getFirestore()),
     provideQuillConfig({

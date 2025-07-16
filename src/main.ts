@@ -1,6 +1,6 @@
 import { bootstrapApplication } from '@angular/platform-browser';
 import { provideRouter } from '@angular/router';
-import { provideHttpClient } from '@angular/common/http';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { importProvidersFrom } from '@angular/core';
 import { routes } from './app/app.routes';
@@ -21,6 +21,15 @@ import { MAT_MOMENT_DATE_ADAPTER_OPTIONS } from '@angular/material-moment-adapte
 import { CUSTOM_DATE_FORMATS } from './app/config/date-format';
 import { environment } from './app/environments/environment';
 
+// 👇 IMPORTAÇÕES DO NGX-TRANSLATE
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+
+// 👇 FUNÇÃO DE LOADER PARA OS JSONS DE TRADUÇÃO
+export function HttpLoaderFactory(http: HttpClient) {
+  return new TranslateHttpLoader(http, 'assets/i18n/', '.json');
+}
+
 // Configuração do Firebase
 const firebaseProviders = [
   provideFirebaseApp(() => initializeApp(environment.firebase)),
@@ -36,7 +45,7 @@ const firebaseProviders = [
 
 bootstrapApplication(AppComponent, {
   providers: [
-    { provide: MAT_DATE_LOCALE, useValue: 'pt-BR' },
+    { provide: MAT_DATE_LOCALE, useValue: 'pt' },
     { provide: DateAdapter, useClass: MomentDateAdapter, deps: [MAT_DATE_LOCALE] },
     { provide: MAT_DATE_FORMATS, useValue: CUSTOM_DATE_FORMATS },
     { provide: MAT_MOMENT_DATE_ADAPTER_OPTIONS, useValue: { useUtc: false } },
@@ -46,7 +55,15 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(
       BrowserAnimationsModule,
       HighchartsChartModule,
-      MatDialogModule
+      MatDialogModule,
+      TranslateModule.forRoot({
+        defaultLanguage: 'BRL',
+        loader: {
+          provide: TranslateLoader,
+          useFactory: HttpLoaderFactory,
+          deps: [HttpClient]
+        }
+      })
     ),
     ...firebaseProviders // Spread operator para incluir todos os providers do Firebase
   ]

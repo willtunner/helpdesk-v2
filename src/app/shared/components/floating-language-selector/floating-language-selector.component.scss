@@ -1,0 +1,26 @@
+.floating-language {
+    position: fixed;
+    top: 16px;
+    right: 16px;
+    z-index: 1000;
+  
+    .flag {
+      width: 28px;
+      height: 18px;
+      border-radius: 3px;
+      object-fit: cover;
+    }
+  
+    button[mat-icon-button] {
+      border-radius: 50%;
+      padding: 6px;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.25);
+      transition: box-shadow 0.3s ease;
+  
+      &:hover {
+        box-shadow: 0 4px 14px rgba(0,0,0,0.35);
+      }
+    }
+  }
+  

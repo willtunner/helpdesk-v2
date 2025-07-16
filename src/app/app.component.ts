@@ -2,14 +2,14 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { AppSidenavComponent } from './shared/components/sidenav/sidenav.component';
 import { BaseComponent } from './shared/components/base/base.component';
-import { LayoutService } from './services/layout.service';
 import { AuthService } from './services/auth.service';
 import { SideNaveToggle } from './interface/side-nav.interface';
+import { FloatingLanguageSelectorComponent } from './shared/components/floating-language-selector/floating-language-selector.component';
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [BaseComponent, AppSidenavComponent],
+  imports: [BaseComponent, AppSidenavComponent, FloatingLanguageSelectorComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -21,7 +21,6 @@ export class AppComponent {
   screenWidth = 0;
 
   constructor(
-    private layoutService: LayoutService,
     public authService: AuthService,
     private router: Router
   ) { }

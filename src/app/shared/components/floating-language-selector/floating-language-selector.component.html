@@ -1,0 +1,14 @@
+<div *ngIf="visible" class="floating-language" style="display: flex; flex-direction: column;">
+    <button mat-icon-button [matMenuTriggerFor]="langMenu">
+        <img [src]="selectedLanguage().flag" alt="Lang" class="flag" />
+    </button>
+
+    <mat-menu #langMenu="matMenu">
+        <button mat-menu-item *ngFor="let lang of languages" (click)="changeLanguage(lang)">
+            <img [src]="lang.flag" class="flag" style="width: 30px;" />
+            <span [style.fontWeight]="selectedLanguage().lang === lang.code ? 'bold' : 'normal'">
+                {{ lang.label }}
+            </span>
+        </button>
+    </mat-menu>
+</div>
