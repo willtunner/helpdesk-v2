@@ -1,6 +1,7 @@
 <h1>{{ 'home.welcome' | translate }} {{ user?.username ? ', ' + user.username : '' }}!</h1>
 
-
-
-
+<app-client-home *ngIf="userRole === UserType.CLIENT" />
+<app-operator-home *ngIf="userRole === UserType.OPERATOR" />
+<app-admin-home *ngIf="userRole === UserType.ADMIN" />
+<app-master-home *ngIf="userRole === UserType.MASTER" />
 

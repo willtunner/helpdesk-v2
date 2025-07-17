@@ -1,5 +1,46 @@
 {
   "home": {
-    "welcome": "Bem vindo"
+    "welcome": "Bem vindo",
+    "components": {
+      "client": "Clientes",
+      "ticket-open": "Chamados Abertos",
+      "ticket-closed": "Chamados Fechados",
+      "ticket-answered": "Chamados Res..",
+      "monthly": "Mensal",
+      "yearly": "Anual",
+      "daily": "Diário",
+      "weekly": "Semanal",
+      "semi-annual": "Semestral",
+      "period": "Período"
+    }
+  },
+  "charts": {
+    "title": "Gráficos",
+    "pieChart": {
+      "title": "Chamados por Empresa PIE",
+      "description": "Este é um exemplo de gráfico de pizza que mostra a distribuição de chamados por empresa."
+    },
+    "lineChart": {
+      "title": "Chamados por Empresa LINHA",
+      "description": "Este é um exemplo de gráfico de pizza que mostra a distribuição de chamados por empresa."
+    },
+    "columnChart": {
+      "title": "Chamados por Empresa COLUNA",
+      "description": "Este é um exemplo de gráfico de pizza que mostra a distribuição de chamados por empresa."
+    },
+    "barChart": {
+      "title": "Chamados por Empresa BARRA",
+      "description": "Este é um exemplo de gráfico de barras que mostra a distribuição de chamados por empresa."
+    }
+  },
+  "sideNav": {
+    "home": "Início",
+    "clients": "Clientes",
+    "tickets": "Chamados",
+    "enterprises": "Empresas",
+    "chat": "Chat",
+    "settings": "Configurações",
+    "logout": "Sair",
+    "video-docs": "Vídeo Docs"
   }
 }

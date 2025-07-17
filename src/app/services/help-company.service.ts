@@ -4,7 +4,8 @@ import {
   collection,
   addDoc,
   updateDoc,
-  doc
+  doc,
+  getDoc
 } from '@angular/fire/firestore';
 import { HelpDeskCompany } from '../models/models';
 import { SendNotificationService } from './send-notification.service';
@@ -45,5 +46,23 @@ export class HelpCompanyService {
       ...helpCompany,
       id: docRef.id
     };
+  }
+
+  async getHelpCompanyById(id: string): Promise<HelpDeskCompany | null> {
+    try {
+      const docRef = doc(this._firestore, `helpCompanies/${id}`);
+      const docSnap = await getDoc(docRef);
+  
+      if (docSnap.exists()) {
+        return docSnap.data() as HelpDeskCompany;
+      } else {
+        this.messageService.customNotification(NotificationType.ERROR, 'Empresa não encontrada');
+        return null;
+      }
+    } catch (error) {
+      console.error('Erro ao buscar empresa por ID:', error);
+      this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar empresa');
+      return null;
+    }
   }
 }

@@ -10,6 +10,7 @@ export class TranslateService {
   private ngxTranslate = inject(NgxTranslateService);
 
   selectedLanguage: WritableSignal<{ lang: string; flag: string }> = signal(this.loadLanguage());
+  translations: WritableSignal<{ [key: string]: string }> = signal({});
 
   constructor() {
     const savedLang = this.selectedLanguage();
@@ -24,7 +25,6 @@ export class TranslateService {
 
   changeLanguage(lang: string, flag: string): void {
     const languageCode = this.getLanguageCode(lang);
-
     this.ngxTranslate.use(languageCode);
     const newLang = { lang, flag };
     this.selectedLanguage.set(newLang);
@@ -38,5 +38,21 @@ export class TranslateService {
       case 'USA': return 'en';
       default: return 'pt';
     }
+  }
+
+  /**
+   * Carrega várias traduções de forma reativa e atualiza o signal.
+   */
+  load(keys: string[]): void {
+    this.ngxTranslate.get(keys).subscribe(result => {
+      this.translations.set(result);
+    });
+  }
+
+  /**
+   * Retorna a tradução instantânea de uma chave.
+   */
+  instant(key: string): string {
+    return this.ngxTranslate.instant(key);
   }
 }

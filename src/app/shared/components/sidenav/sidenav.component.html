@@ -22,7 +22,7 @@
 
                     @if(collapsed) {
                     <span class="sidenav-link-text" @fadeInOut>
-                        {{ data.label }}
+                        {{ data.label | translate }}
                     </span>
                 }
                     @if(data.items && collapsed) {
@@ -40,7 +40,7 @@
 
                     @if(collapsed) {
                     <span class="sidenav-link-text" @fadeInOut>
-                        {{ data.label }}
+                        {{ data.label | translate }}
                     </span>
                 }
                 </a>

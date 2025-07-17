@@ -7,9 +7,9 @@ import { SublevelMenuComponent } from './sublevel-menu/sublevel-menu.component';
 import { NAVBAR_DATA } from './navbar-data';
 import { FirstLetterPipe } from '../../../pipes/firstLetterUpperCase.pipe';
 import { INavbarData } from '../../../interface/side-nav.interface';
-import { FormService } from '../../../services/form.service';
 import { SessionService } from '../../../services/session.service';
 import { SidebarService } from '../../../services/sidebar.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 interface SideNaveToggle {
   screenWidth: number;
@@ -20,7 +20,7 @@ interface SideNaveToggle {
   selector: 'app-sidenav',
   standalone: true,
   imports: [RouterModule, CommonModule, MatIconModule, 
-    SublevelMenuComponent, FirstLetterPipe],
+    SublevelMenuComponent, FirstLetterPipe, TranslateModule],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss',
   animations: [

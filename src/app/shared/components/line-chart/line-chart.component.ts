@@ -4,11 +4,17 @@ import * as Highcharts from 'highcharts';
 import { CommonModule } from '@angular/common';
 import { ChartType } from '../../../enums/chart-types.enum';
 import { DynamicThreeToggleComponent } from '../dynamic-three-toggle/dynamic-three-toggle.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-chart',
   standalone: true,
-  imports: [CommonModule, HighchartsChartModule, DynamicThreeToggleComponent],
+  imports: [
+    CommonModule, 
+    HighchartsChartModule, 
+    DynamicThreeToggleComponent,
+    TranslateModule
+  ],
   templateUrl: './line-chart.component.html',
   styleUrl: './line-chart.component.scss',
 })

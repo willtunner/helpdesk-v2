@@ -11,6 +11,9 @@
 npm-debug.log
 yarn-error.log
 
+# Node (subpastas específicas)
+backend/node_modules
+
 # IDEs and editors
 .idea/
 .project

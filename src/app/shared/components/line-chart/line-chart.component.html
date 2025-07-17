@@ -4,10 +4,10 @@
 
   <!-- Toggle à direita -->
   <app-dynamic-three-toggle
-    [title]="'Período'"
-    [btn1]="{ label: 'Mensal', value: 'mes' }"
-    [btn2]="{ label: 'Semestral', value: 'semestre' }"
-    [btn3]="{ label: 'Anual', value: 'ano' }"
+    [title]="'home.components.period' | translate"
+    [btn1]="{ label: 'home.components.monthly' | translate, value: 'mes' }"
+    [btn2]="{ label: 'home.components.semi-annual' | translate, value: 'semestre' }"
+    [btn3]="{ label: 'home.components.yearly' | translate, value: 'ano' }"
     [selectedValue]="selectedToggle"
     (onToggleSelect)="handleToggle($event)">
   </app-dynamic-three-toggle>

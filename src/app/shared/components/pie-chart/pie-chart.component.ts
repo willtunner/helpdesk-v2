@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HighchartsChartModule } from 'highcharts-angular';
 import * as Highcharts from 'highcharts';
@@ -10,36 +10,25 @@ import * as Highcharts from 'highcharts';
   templateUrl: './pie-chart.component.html',
   styleUrls: ['./pie-chart.component.scss'],
 })
-
 export class PieChartComponent implements OnInit {
+  @Input() title: string = '';
+  @Input() subtitle: string = '';
+  @Input() data: { name: string; y: number }[] = [];
+
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {};
-
-  @Input() chamados: {
-    id: string;
-    data: string;
-    companyId: string;
-    companyName: string;
-  }[] = [];
 
   ngOnInit() {
     this.buildChart();
   }
 
-  private buildChart() {
-    const companyCounts: Record<string, number> = {};
-
-    for (const chamado of this.chamados) {
-      const name = chamado.companyName;
-      companyCounts[name] = (companyCounts[name] || 0) + 1;
+  ngOnChanges(changes: SimpleChanges): void {
+    if (changes['data'] || changes['title'] || changes['subtitle']) {
+      this.buildChart();
     }
+  }
 
-    const data = Object.entries(companyCounts).map(([name, count]) => ({
-      // Formata o nome e a quantidade para exibição no gráfico
-      name: `${name}`,
-      y: count
-    }));
-
+  private buildChart() {
     this.chartOptions = {
       chart: {
         type: 'pie',
@@ -48,10 +37,16 @@ export class PieChartComponent implements OnInit {
         panKey: 'shift'
       },
       title: {
-        text: 'Distribuição de Chamados por Empresa'
+        text: this.title,
+        align: 'center',
+        y: 100, // ajustado
+        style: { fontSize: '18px' }
       },
       subtitle: {
-        text: 'Fonte: chamadosMock'
+        text: this.subtitle,
+        align: 'center',
+        y: 30, // ajustado
+        style: { fontSize: '14px', color: '#666' }
       },
       tooltip: {
         pointFormat: '<b>{point.y} chamados</b>'
@@ -63,18 +58,18 @@ export class PieChartComponent implements OnInit {
           dataLabels: {
             enabled: true,
             format: '{point.name}',
-            style: {
-              fontSize: '1em'
-            }
+            style: { fontSize: '1em' }
           }
         }
       },
-      series: [<Highcharts.SeriesPieOptions>{
-        type: 'pie',
-        name: 'Chamados',
-        colorByPoint: true,
-        data
-      }]
+      series: [
+        {
+          type: 'pie',
+          name: 'Chamados',
+          data: this.data
+        }
+      ]
     };
   }
+  
 }

@@ -1,5 +1,36 @@
 {
   "home": {
-    "welcome": "Welcome"
+    "welcome": "Welcome",
+    "components": {
+      "client": "Clients",
+      "ticket-open": "Open Tickets",
+      "ticket-closed": "Closed Tickets",
+      "ticket-answered": "Answered Tickets",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "semi-annual": "Semi-Annual",
+      "period": "Period"
+    }
+  },
+  "charts": {
+    "title": "Charts",
+    "pieChart": {
+      "title": "Tickets by Company PIE",
+      "description": "This is a sample pie chart that shows the distribution of tickets by company."
+    },
+    "lineChart": {
+      "title": "Tickets by Company LINE",
+      "description": "This is a sample pie chart that shows the distribution of tickets by company."
+    },
+    "columnChart": {
+      "title": "Tickets by Company COLUMN",
+      "description": "This is a sample pie chart that shows the distribution of tickets by company."
+    },
+    "barChart": {
+      "title": "Tickets by Company BAR",
+      "description": "This is a sample bar chart that shows the distribution of tickets by company."
+    }
   }
 }

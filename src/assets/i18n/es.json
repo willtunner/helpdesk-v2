@@ -1,5 +1,36 @@
 {
   "home": {
-    "welcome": "Bienvenido"
+    "welcome": "Bienvenido",
+    "components": {
+      "client": "Clientes",
+      "ticket-open": "Tickets Abiertos",
+      "ticket-closed": "Tickets Cerrados",
+      "ticket-answered": "Tickets Resp..",
+      "monthly": "Mensual",
+      "yearly": "Anual",
+      "daily": "Diario",
+      "weekly": "Semanal",
+      "semi-annual": "Semestral",
+      "period": "Período"
+    }
+  },
+  "charts": {
+    "title": "Gráficos",
+    "pieChart": {
+      "title": "Tickets por Empresa PIE",
+      "description": "Este es un gráfico de pastel de ejemplo que muestra la distribución de tickets por empresa."
+    },
+    "lineChart": {
+      "title": "Tickets por Empresa LÍNEA",
+      "description": "Este es un gráfico de pastel de ejemplo que muestra la distribución de tickets por empresa."
+    },
+    "columnChart": {
+      "title": "Tickets por Empresa COLUMNA",
+      "description": "Este es un gráfico de pastel de ejemplo que muestra la distribución de tickets por empresa."
+    },
+    "barChart": {
+      "title": "Tickets por Empresa BARRA",
+      "description": "Este es un gráfico de barras de ejemplo que muestra la distribución de tickets por empresa."
+    }
   }
 }
