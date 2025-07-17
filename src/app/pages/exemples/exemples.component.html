@@ -1,0 +1,123 @@
+<h1>{{ 'home.welcome' | translate }} {{ user?.username ? ', ' + user.username : '' }}!</h1>
+
+<div class="dashboard-cards">
+  <app-dashboard-card
+  icon="support_agent"
+  [end]="350"
+  [duration]="1200"
+  label="Usuários"
+  color="#f20f40">
+</app-dashboard-card>
+
+<app-dashboard-card
+  icon="calls"
+  [end]="80"
+  [duration]="1200"
+  label="Chamados"
+  color="#3f51b5">
+</app-dashboard-card>
+
+<app-dashboard-card
+  icon="headset_mic"
+  [end]="350"
+  [duration]="1200"
+  label="Chamados Abertos"
+  color="#4caf50">
+</app-dashboard-card>
+
+<app-dashboard-card
+  icon="headset_off"
+  [end]="350"
+  [duration]="1200"
+  label="Chamados Fechados"
+  color="#ff9800">
+</app-dashboard-card>
+
+<!-- <app-number-counter [end]="180" [duration]="1.5"></app-number-counter>
+<app-number-counter [end]="25" [duration]="1.5"></app-number-counter> -->
+
+
+</div>
+
+<button mat-raised-button (click)="toggleTheme()">
+  {{ theme() === 'dark' ? '🌞 Tema Claro' : '🌙 Tema Escuro' }}
+</button>
+
+<form [formGroup]="form" (ngSubmit)="submit()"
+  style="display: flex; flex-direction: column; gap: 20px; max-width: 500px;">
+
+  <app-custom-input label="Nome" [control]="getControl('nome')" size="pequeno">
+  </app-custom-input>
+
+  <app-custom-input label="Email" [control]="getControl('email')" size="full-width" type="email">
+  </app-custom-input>
+
+  <app-custom-input label="Telefone" [control]="getControl('telefone')" size="medio" type="telefone">
+  </app-custom-input>
+
+  <app-custom-input label="CPF" type="cpf" [control]="getControl('cpf')" size="medio">
+  </app-custom-input>
+
+  <app-custom-input label="CNPJ" type="cnpj" [control]="getControl('cnpj')" size="grande">
+  </app-custom-input>
+
+  <app-custom-input label="CEP" type="cep" [control]="getControl('cep')" size="pequeno">
+  </app-custom-input>
+
+  <app-custom-input [label]="'Data Inicial'" [type]="'date'" [control]="getControl('startDate')" [size]="'medio'">
+  </app-custom-input>
+
+  <app-custom-input [label]="'Data Final'" [type]="'date'" [control]="getControl('finalDate')" [size]="'medio'">
+  </app-custom-input>
+
+  <button mat-raised-button color="primary">Enviar</button>
+
+  <app-dynamic-table [headers]="headers" [data]="dados" [actions]="['edit', 'delete']"
+      (edit)="updateDocument()" (delete)="deleteDocument()">
+    </app-dynamic-table>
+
+  <app-dynamic-table [headers]="headers" [data]="dados" (edit)="updateDocument()" (delete)="deleteDocument()"  />
+
+</form>
+
+<!-- Ações -->
+<div class="form-actions">
+  <app-dynamic-button type="save" (clicked)="onSave()" [success]="saveSuccess"></app-dynamic-button>
+  <app-dynamic-button type="edit" (clicked)="onEdit()"></app-dynamic-button>
+  <app-dynamic-button type="delete" (clicked)="onDelete()" [success]="deleteSuccess"></app-dynamic-button>
+  <app-dynamic-button type="clear" (clicked)="onClear()"></app-dynamic-button>
+  <app-dynamic-button type="print" (clicked)="onPrint()"></app-dynamic-button>
+  <app-dynamic-button type="find" (clicked)="onFind()"></app-dynamic-button>
+  <app-dynamic-button type="pdf" (clicked)="generatePDF()"></app-dynamic-button>
+  <app-dynamic-button type="add"></app-dynamic-button>
+</div>
+
+<app-dynamic-three-toggle [title]="'Período'" [btn1]="{ label: 'Mensal', value: 'mes' }"
+  [btn2]="{ label: 'Semestral', value: 'semestre' }" [btn3]="{ label: 'Anual', value: 'ano' }"
+  [selectedValue]="selectedToggle" (onToggleSelect)="handleToggle($event)"></app-dynamic-three-toggle>
+
+<!-- home.component.html -->
+<form [formGroup]="form" (ngSubmit)="submit()">
+  <!-- OU a versão sem mat-form-field -->
+  <app-rich-text-editor formControlName="descricao" label="Descrição" placeholder="Digite sua descrição aqui...">
+  </app-rich-text-editor>
+
+  <button mat-raised-button color="primary" type="submit">Enviar</button>
+</form>
+
+
+<app-chart [type]="ChartType.BAR" [title]="'Chamados por Empresa e Mês'" [chamados]="chamadosMock"></app-chart>
+
+<app-chart [type]="ChartType.AREA" [title]="'Chamados por Empresa e Mês'" [chamados]="chamadosMock"></app-chart>
+
+<app-chart [type]="ChartType.LINE" [title]="'Chamados por Empresa e Mês'" [chamados]="chamadosMock"></app-chart>
+
+<app-chart [type]="ChartType.COLUMN" [title]="'Chamados por Empresa e Mês'" [chamados]="chamadosMock"></app-chart>
+
+<app-pie-chart [chamados]="chamadosMock"></app-pie-chart>
+
+
+<h1>dropDown abaixo</h1>
+<app-dropdown-videos></app-dropdown-videos>
+<h1>Rich Text</h1>
+<app-mtb-dev></app-mtb-dev>

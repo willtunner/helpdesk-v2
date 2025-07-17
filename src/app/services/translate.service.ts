@@ -6,7 +6,7 @@ import { TranslateService as NgxTranslateService } from '@ngx-translate/core';
 })
 export class TranslateService {
   private readonly STORAGE_KEY = 'selectedLanguage';
-  private readonly DEFAULT_LANG = { lang: 'BRL', flag: '/assets/br.png' };
+  private readonly DEFAULT_LANG = { lang: 'pt', flag: '/assets/br.png' };
   private ngxTranslate = inject(NgxTranslateService);
 
   selectedLanguage: WritableSignal<{ lang: string; flag: string }> = signal(this.loadLanguage());

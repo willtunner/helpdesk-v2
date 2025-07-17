@@ -17,26 +17,24 @@ export interface Company {
   }
 
   export interface Call {
-    id: string;
-    deleted: boolean;
-    created: Date;  
-    updated: Date;  
-    companyId: string;
-    company?: Company | null;
-    clientId: string;
-    client: User;
-    title: string;
-    description: string;
-    resolution: string;
-    tags: string[];
-    connection: string;
-    closed: boolean;
-    finalized: Date;
-    operatorId: string;
-    operator?: User;
-    user?: User | null;
-    helpDeskCompanyId?: string;
-    helpDeskCompany?: HelpDeskCompany | null;
+     id: string;
+     deleted: boolean;
+     created: Date;
+     updated: Date;
+     companyId: string;
+     company?: Company | null;
+     clientId: string;
+     client: User;
+     title: string;
+     description: string;
+     resolution: string;
+     tags: string[];
+     connection: string;
+     closed: boolean;
+     finalized: Date;
+     operatorId: string;
+     operator?: User;
+     helpDeskCompanyId?: string;
   }
 
   // export interface Client {

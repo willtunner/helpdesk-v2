@@ -9,3 +9,6 @@ npm list @angular/fire e npm list firebase
 node backend/index.js
 ng s --o --proxy-config proxy.conf.json
 
+configurado currently para rodar varios script backend + fronend
+npm run start
+

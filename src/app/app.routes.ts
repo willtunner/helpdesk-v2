@@ -4,6 +4,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { authGuard } from './guards/auth.guard';
 import { NewAccountComponent } from './public/new-account/new-account.component';
 import { RecoverPasswordComponent } from './public/recover-password/recover-password.component';
+import { ExemplesComponent } from './pages/exemples/exemples.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -11,5 +12,6 @@ export const routes: Routes = [
   { path: 'criar-conta', component: NewAccountComponent },
   { path: 'recuperar-senha', component: RecoverPasswordComponent },
   { path: 'home', component: HomeComponent, canActivate: [authGuard] },
+  { path: 'exemples', component: ExemplesComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'login' }
 ];

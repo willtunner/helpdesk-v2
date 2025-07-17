@@ -57,7 +57,7 @@ bootstrapApplication(AppComponent, {
       HighchartsChartModule,
       MatDialogModule,
       TranslateModule.forRoot({
-        defaultLanguage: 'BRL',
+        defaultLanguage: 'pt',
         loader: {
           provide: TranslateLoader,
           useFactory: HttpLoaderFactory,

@@ -15,7 +15,7 @@ import { NotificationType } from '../enums/notificationType.enum';
 })
 export class HelpCompanyService {
   private _firestore = inject(Firestore);
-  private _collection = collection(this._firestore, 'helpDeskCompany');
+  private _collection = collection(this._firestore, 'helpCompanies');
 
   constructor(private messageService: SendNotificationService) {}
 
