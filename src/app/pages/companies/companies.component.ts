@@ -3,6 +3,8 @@ import { CompanyService } from '../../services/company.service';
 import { AuthService } from '../../services/auth.service';
 import { Company } from '../../models/models';
 import { DynamicTableComponent } from '../../shared/components/dynamic-table/dynamic-table.component';
+import { MatDialog } from '@angular/material/dialog';
+import { UpdateCompanyModalComponent } from './update-company-modal/update-company-modal.component';
 
 @Component({
   selector: 'app-companies',
@@ -18,6 +20,7 @@ export class CompaniesComponent implements OnInit {
   constructor(
     private companyService: CompanyService,
     private auth: AuthService,
+    private dialog: MatDialog
   ) { }
 
   headers = [
@@ -49,7 +52,27 @@ export class CompaniesComponent implements OnInit {
 
   }
 
-  updateDocument() {}
-  deleteDocument() {}
+  // updateDocument(row: any) {
+    
+  //   console.log('Edit row:', row);
+  // }
+  
+  updateDocument(company: Company) {
+    const dialogRef = this.dialog.open(UpdateCompanyModalComponent, {
+      width: '600px',
+      data: company
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        console.log('Empresa atualizada:', result);
+        // Aqui você pode fazer update no backend
+      }
+    });
+  }
+
+  deleteDocument(row: any) {
+    console.log('Delete row:', row);
+  }
 
 }

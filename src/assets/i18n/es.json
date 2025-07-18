@@ -16,20 +16,21 @@
   },
   "charts": {
     "title": "Gráficos",
+    "closeAll": "Cerrar Todos",
     "pieChart": {
-      "title": "Tickets por Empresa PIE",
-      "description": "Este es un gráfico de pastel de ejemplo que muestra la distribución de tickets por empresa."
+      "title": "Tickets por Empresa (Circular)",
+      "description": "Este es un gráfico circular de ejemplo que muestra la distribución de tickets por empresa."
     },
     "lineChart": {
-      "title": "Tickets por Empresa LÍNEA",
-      "description": "Este es un gráfico de línea de ejemplo que muestra la distribución de tickets por empresa."
+      "title": "Tickets por Empresa (Línea)",
+      "description": "Este es un gráfico de líneas de ejemplo que muestra la distribución de tickets por empresa."
     },
     "columnChart": {
-      "title": "Tickets por Empresa COLUMNA",
+      "title": "Tickets por Empresa (Columnas)",
       "description": "Este es un gráfico de columnas de ejemplo que muestra la distribución de tickets por empresa."
     },
     "barChart": {
-      "title": "Tickets por Empresa BARRA",
+      "title": "Tickets por Empresa (Barras)",
       "description": "Este es un gráfico de barras de ejemplo que muestra la distribución de tickets por empresa."
     }
   },
@@ -41,7 +42,7 @@
     "system-version": "Versión del Sistema",
     "chat": "Chat",
     "settings": "Configuraciones",
-    "logout": "Salir",
+    "logout": "Cerrar Sesión",
     "video-docs": "Documentos en Video",
     "developer-area": "Desarrollo",
     "restricted-area": "Área Restringida"
@@ -56,5 +57,25 @@
     "created": "Fecha de Creación",
     "versionServ": "Versión del Sistema",
     "actions": "Acciones"
+  },
+  "errors": {
+    "required": "Campo obligatorio.",
+    "invalid_email": "Correo electrónico inválido.",
+    "invalid_format": "Formato inválido.",
+    "passwords_mismatch": "Las contraseñas no coinciden.",
+    "invalid_mask": "Número incompleto o inválido.",
+    "invalid_cpf": "CPF inválido.",
+    "invalid_cnpj": "CNPJ inválido.",
+    "email_exist": "Correo electrónico ya registrado."
+  },
+  "fields": {
+    "name": "Nombre",
+    "email": "Correo electrónico",
+    "phone": "Teléfono",
+    "cnpj": "CNPJ",
+    "state": "Estado",
+    "city": "Ciudad",
+    "address": "Dirección",
+    "zipcode": "Código Postal"
   }
 }

@@ -163,6 +163,11 @@ $add-dark: #0a042e;
   }
 }
 
+.button.cancel {
+  background-color: #f44336; // vermelho claro
+  color: white;
+}
+
 $pdf-color: #e74c3c;
 .pdf {
   background-color: $pdf-color;

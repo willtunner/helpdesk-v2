@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 import { ChartType } from '../../../enums/chart-types.enum';
 import { DynamicThreeToggleComponent } from '../dynamic-three-toggle/dynamic-three-toggle.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { MatIconModule } from '@angular/material/icon';
 
 @Component({
   selector: 'app-chart',
@@ -13,7 +14,8 @@ import { TranslateModule } from '@ngx-translate/core';
     CommonModule, 
     HighchartsChartModule, 
     DynamicThreeToggleComponent,
-    TranslateModule
+    TranslateModule,
+    MatIconModule
   ],
   templateUrl: './line-chart.component.html',
   styleUrl: './line-chart.component.scss',

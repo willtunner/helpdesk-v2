@@ -16,21 +16,22 @@
   },
   "charts": {
     "title": "Charts",
+    "closeAll": "Close All",
     "pieChart": {
-      "title": "Tickets by Company PIE",
-      "description": "This is an example pie chart showing the distribution of tickets by company."
+      "title": "Tickets by Company (Pie)",
+      "description": "This is a pie chart example showing ticket distribution by company."
     },
     "lineChart": {
-      "title": "Tickets by Company LINE",
-      "description": "This is an example line chart showing the distribution of tickets by company."
+      "title": "Tickets by Company (Line)",
+      "description": "This is a line chart example showing ticket distribution by company."
     },
     "columnChart": {
-      "title": "Tickets by Company COLUMN",
-      "description": "This is an example column chart showing the distribution of tickets by company."
+      "title": "Tickets by Company (Column)",
+      "description": "This is a column chart example showing ticket distribution by company."
     },
     "barChart": {
-      "title": "Tickets by Company BAR",
-      "description": "This is an example bar chart showing the distribution of tickets by company."
+      "title": "Tickets by Company (Bar)",
+      "description": "This is a bar chart example showing ticket distribution by company."
     }
   },
   "sideNav": {
@@ -41,7 +42,7 @@
     "system-version": "System Version",
     "chat": "Chat",
     "settings": "Settings",
-    "logout": "Logout",
+    "logout": "Log Out",
     "video-docs": "Video Docs",
     "developer-area": "Development",
     "restricted-area": "Restricted Area"
@@ -56,5 +57,25 @@
     "created": "Creation Date",
     "versionServ": "System Version",
     "actions": "Actions"
+  },
+  "errors": {
+    "required": "Required field.",
+    "invalid_email": "Invalid email.",
+    "invalid_format": "Invalid format.",
+    "passwords_mismatch": "Passwords don't match.",
+    "invalid_mask": "Incomplete or invalid number.",
+    "invalid_cpf": "Invalid CPF.",
+    "invalid_cnpj": "Invalid CNPJ.",
+    "email_exist": "Email already registered."
+  },
+  "fields": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "cnpj": "CNPJ",
+    "state": "State",
+    "city": "City",
+    "address": "Address",
+    "zipcode": "Zip Code"
   }
 }

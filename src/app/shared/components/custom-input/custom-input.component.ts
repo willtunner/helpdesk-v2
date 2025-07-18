@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { AbstractControl, FormControl, ReactiveFormsModule } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { NgxMaskDirective } from 'ngx-mask';
@@ -9,6 +9,8 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { MatDatepickerToggle } from '@angular/material/datepicker';
+import { TranslateService } from '../../../services/translate.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-custom-input',
@@ -24,13 +26,14 @@ import { MatDatepickerToggle } from '@angular/material/datepicker';
     MatDatepickerModule,
     MatNativeDateModule,
     MatDatepickerToggle,
+    TranslateModule
   ],
   templateUrl: './custom-input.component.html',
   styleUrls: ['./custom-input.component.scss']
 })
 export class CustomInputComponent implements OnInit {
   @Input() label = '';
-  @Input() control!: FormControl;
+  @Input() control!: AbstractControl;
   @Input() type: string = 'text';
   @Input() placeholder: string = '';
   @Input() cssClass: string = '';
@@ -44,9 +47,14 @@ export class CustomInputComponent implements OnInit {
   @Input() loading: boolean = false;
   @Input() customError: string | null = null;
 
+  constructor(private translate: TranslateService) {
+
+  }
+
+
   ngOnInit() {
     if (!this.control || !(this.control instanceof FormControl)) {
-      throw new Error('O parâmetro "control" deve ser uma instância de FormControl.');
+      console.warn('O parâmetro "control" não é um FormControl. Algumas funcionalidades podem não funcionar corretamente.');
     }
 
     // Define máscara e tipo de input com base no "type"
@@ -97,5 +105,9 @@ export class CustomInputComponent implements OnInit {
 
   get showError(): boolean {
     return this.control && this.control.invalid && this.control.touched;
+  }
+
+  get formControl(): FormControl {
+    return this.control as FormControl;
   }
 }

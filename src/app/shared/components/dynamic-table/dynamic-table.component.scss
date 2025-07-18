@@ -4,8 +4,13 @@
 
 .table-wrapper {
   max-width: 1300px;
-  margin: 0 auto; /* centraliza horizontalmente */
-  overflow-x: auto; /* scroll se passar do limite em telas menores */
+  margin: 0 auto;
+  overflow-x: auto;
+}
+
+.table-scroll {
+  width: max-content; /* <- permite que acompanhe o conteúdo da tabela */
+  min-width: 100%;    /* <- garante que ocupe no mínimo 100% da .table-wrapper */
 }
 
 table {
@@ -88,3 +93,9 @@ table {
     opacity: 0.9;
   }
 }
+
+mat-paginator {
+  display: block;
+  width: 100%; /* <- faz a paginação seguir a largura da tabela */
+}
+

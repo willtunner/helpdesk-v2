@@ -1,6 +1,8 @@
 <div class="chart-header">
   <!-- Botão à esquerda -->
-  <button class="close-all-button" (click)="fecharTodos()">❌ Fechar Todos</button>
+  <button class="close-all-button" (click)="fecharTodos()">
+    <mat-icon>playlist_remove</mat-icon> {{ 'charts.closeAll' | translate }}
+  </button>
 
   <!-- Toggle à direita -->
   <app-dynamic-three-toggle

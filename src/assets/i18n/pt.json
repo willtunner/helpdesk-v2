@@ -16,6 +16,7 @@
   },
   "charts": {
     "title": "Gráficos",
+    "closeAll": "Fechar Todos",
     "pieChart": {
       "title": "Chamados por Empresa PIE",
       "description": "Este é um exemplo de gráfico de pizza que mostra a distribuição de chamados por empresa."
@@ -56,5 +57,25 @@
     "created": "Data de Criação",
     "versionServ": "Versão do Sistema",
     "actions": "Ações"
+  },
+  "erros": {
+    "required": "Campo obrigatório.",
+    "invalid_email": "E-mail inválido.",
+    "invalid_format": "Formato inválido.",
+    "passwords_mismatch": "Senhas não conferem.",
+    "invalid_mask": "Número incompleto ou inválido.",
+    "invalid_cpf": "CPF inválido.",
+    "invalid_cnpj": "CNPJ inválido.",
+    "email_exist": "E-mail já cadastrado."
+  },
+  "fields": {
+    "name": "Nome",
+    "email": "E-mail",
+    "phone": "Telefone",
+    "cnpj": "CNPJ",
+    "state": "Estado",
+    "city": "Cidade",
+    "address": "Endereço",
+    "zipcode": "CEP"
   }
 }

@@ -1,0 +1,20 @@
+<div class="modal-container">
+  <div class="modal-header">
+    <h2>Atualizar Empresa</h2>
+  </div>
+
+  <form [formGroup]="form" class="modal-body">
+    <div class="form-grid">
+      <div class="form-field" *ngFor="let field of form.controls | keyvalue">
+        <app-custom-input [label]="'fields.' + field.key" [control]="field.value" [type]="getInputType(field.key)">
+        </app-custom-input>
+
+      </div>
+    </div>
+  </form>
+
+  <div class="modal-actions">
+    <app-dynamic-button type="save" (clicked)="onSave()" [success]="saveSuccess"></app-dynamic-button>
+    <app-dynamic-button type="cancel" (clicked)="onCancel()"></app-dynamic-button>
+  </div>
+</div>

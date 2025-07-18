@@ -49,7 +49,7 @@ export class NewAccountComponent {
         email: [
           '',
           [Validators.required, Validators.email],
-          [emailExistsValidator(this.emailValidator, ['helpDeskCompany', 'usuarios', 'clientes'])]
+          [emailExistsValidator(this.emailValidator, ['helpCompanies', 'users', 'clients'])]
         ],
         
         password: ['', [Validators.required, Validators.minLength(6)]],
