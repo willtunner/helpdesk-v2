@@ -18,19 +18,19 @@
     "title": "Gráficos",
     "pieChart": {
       "title": "Tickets por Empresa PIE",
-      "description": "Este es un ejemplo de un gráfico de pastel que muestra la distribución de tickets por empresa."
+      "description": "Este es un gráfico de pastel de ejemplo que muestra la distribución de tickets por empresa."
     },
     "lineChart": {
       "title": "Tickets por Empresa LÍNEA",
-      "description": "Este es un ejemplo de un gráfico de línea que muestra la distribución de tickets por empresa."
+      "description": "Este es un gráfico de línea de ejemplo que muestra la distribución de tickets por empresa."
     },
     "columnChart": {
       "title": "Tickets por Empresa COLUMNA",
-      "description": "Este es un ejemplo de un gráfico de columnas que muestra la distribución de tickets por empresa."
+      "description": "Este es un gráfico de columnas de ejemplo que muestra la distribución de tickets por empresa."
     },
     "barChart": {
       "title": "Tickets por Empresa BARRA",
-      "description": "Este es un ejemplo de un gráfico de barras que muestra la distribución de tickets por empresa."
+      "description": "Este es un gráfico de barras de ejemplo que muestra la distribución de tickets por empresa."
     }
   },
   "sideNav": {
@@ -49,11 +49,12 @@
   "table": {
     "name": "Nombre",
     "cnpj": "CNPJ",
-    "email": "Correo",
+    "email": "Correo Electrónico",
     "city": "Ciudad",
     "state": "Estado",
     "phone": "Teléfono",
     "created": "Fecha de Creación",
-    "versionServ": "Versión del Sistema"
+    "versionServ": "Versión del Sistema",
+    "actions": "Acciones"
   }
 }

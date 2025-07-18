@@ -18,19 +18,19 @@
     "title": "Charts",
     "pieChart": {
       "title": "Tickets by Company PIE",
-      "description": "This is an example of a pie chart showing the distribution of tickets by company."
+      "description": "This is an example pie chart showing the distribution of tickets by company."
     },
     "lineChart": {
       "title": "Tickets by Company LINE",
-      "description": "This is an example of a line chart showing the distribution of tickets by company."
+      "description": "This is an example line chart showing the distribution of tickets by company."
     },
     "columnChart": {
       "title": "Tickets by Company COLUMN",
-      "description": "This is an example of a column chart showing the distribution of tickets by company."
+      "description": "This is an example column chart showing the distribution of tickets by company."
     },
     "barChart": {
       "title": "Tickets by Company BAR",
-      "description": "This is an example of a bar chart showing the distribution of tickets by company."
+      "description": "This is an example bar chart showing the distribution of tickets by company."
     }
   },
   "sideNav": {
@@ -54,6 +54,7 @@
     "state": "State",
     "phone": "Phone",
     "created": "Creation Date",
-    "versionServ": "System Version"
+    "versionServ": "System Version",
+    "actions": "Actions"
   }
 }

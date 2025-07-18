@@ -54,6 +54,7 @@
     "state": "Estado",
     "phone": "Telefone",
     "created": "Data de Criação",
-    "versionServ": "Versão do Sistema"
+    "versionServ": "Versão do Sistema",
+    "actions": "Ações"
   }
 }

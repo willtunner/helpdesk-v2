@@ -1,29 +1,30 @@
-import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { MatTableModule } from '@angular/material/table';
+import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { TranslateService as NgxTranslateService } from '@ngx-translate/core';
+import { TranslateService as NgxTranslateService, TranslateModule } from '@ngx-translate/core';
+import { MatSortModule } from '@angular/material/sort';
+import { MatPaginator } from '@angular/material/paginator';
 
 @Component({
   selector: 'app-dynamic-table',
   standalone: true,
-  imports: [CommonModule, MatTableModule, MatIconModule, MatButtonModule],
+  imports: [
+    CommonModule, 
+    MatTableModule, 
+    MatIconModule, 
+    MatButtonModule,
+    MatSortModule,
+    MatPaginator,
+    TranslateModule 
+  ],
   templateUrl: './dynamic-table.component.html',
   styleUrls: ['./dynamic-table.component.scss']
 })
 export class DynamicTableComponent {
   
-  @Input() headers: { 
-    key: string; 
-    label: string; 
-    formatter?: (row: any) => string 
-  }[] = [];
-
-  @Input() set data(value: any[]) {
-    this.rows.set(value);
-  }
-
+  @Input() headers: { key: string; label: string; formatter?: (row: any) => string }[] = [];
   @Input() actions: string[] = [];
 
   @Output() edit = new EventEmitter<any>();
@@ -32,8 +33,18 @@ export class DynamicTableComponent {
   @Output() print = new EventEmitter<any>();
   @Output() view = new EventEmitter<any>();
 
-  rows = signal<any[]>([]);
+  dataSource = new MatTableDataSource<any>([]);
   ngxTranslate = inject(NgxTranslateService);
+
+  @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  ngAfterViewInit() {
+    this.dataSource.paginator = this.paginator;
+  }
+
+  @Input() set data(value: any[]) {
+    this.dataSource.data = value;
+  }
 
   get displayedColumns(): string[] {
     return [...this.headers.map(h => h.key), 'actions'];
@@ -48,5 +59,4 @@ export class DynamicTableComponent {
       case 'view': this.view.emit(row); break;
     }
   }
-
 }
