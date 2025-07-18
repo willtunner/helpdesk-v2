@@ -1,8 +1,9 @@
-import { Component, EventEmitter, Input, Output, signal } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
+import { TranslateService as NgxTranslateService } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-dynamic-table',
@@ -32,6 +33,7 @@ export class DynamicTableComponent {
   @Output() view = new EventEmitter<any>();
 
   rows = signal<any[]>([]);
+  ngxTranslate = inject(NgxTranslateService);
 
   get displayedColumns(): string[] {
     return [...this.headers.map(h => h.key), 'actions'];

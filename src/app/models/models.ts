@@ -2,8 +2,8 @@ export interface Company {
     id: string;
     name: string;
     keywords: string[];
-    created: Date;
-    updated: Date; 
+    created: string;
+    updated: string | null; 
     cnpj: string;
     city: string;
     state: string;
@@ -37,22 +37,6 @@ export interface Company {
      operator?: User;
      helpDeskCompanyId?: string;
   }
-
-  // export interface Client {
-  //   id: string;
-  //   name: string;
-  //   username: string;
-  //   phone: string;
-  //   email: string;
-  //   companyId: string;
-  //   roles: string[];
-  //   deleted: boolean;
-  //   created: Date;
-  //   updated: Date | null;
-  //   imageUrl: string;
-  //   company: Company | null;
-  //   occurrency?: string;
-  // }
 
   export interface HelpDeskCompany {
     id: string;

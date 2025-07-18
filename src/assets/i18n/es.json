@@ -45,5 +45,15 @@
     "video-docs": "Documentos en Video",
     "developer-area": "Desarrollo",
     "restricted-area": "Área Restringida"
+  },
+  "table": {
+    "name": "Nombre",
+    "cnpj": "CNPJ",
+    "email": "Correo",
+    "city": "Ciudad",
+    "state": "Estado",
+    "phone": "Teléfono",
+    "created": "Fecha de Creación",
+    "versionServ": "Versión del Sistema"
   }
 }
