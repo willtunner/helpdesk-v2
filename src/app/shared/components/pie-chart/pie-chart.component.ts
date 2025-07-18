@@ -39,7 +39,7 @@ export class PieChartComponent implements OnInit {
       title: {
         text: this.title,
         align: 'center',
-        y: 100, // ajustado
+        y: 40, // ajustado
         style: { fontSize: '18px' }
       },
       subtitle: {

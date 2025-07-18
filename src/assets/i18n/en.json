@@ -7,7 +7,7 @@
       "ticket-closed": "Closed Tickets",
       "ticket-answered": "Answered Tickets",
       "monthly": "Monthly",
-      "yearly": "Yearly",
+      "yearly": "Annual",
       "daily": "Daily",
       "weekly": "Weekly",
       "semi-annual": "Semi-Annual",
@@ -18,19 +18,32 @@
     "title": "Charts",
     "pieChart": {
       "title": "Tickets by Company PIE",
-      "description": "This is a sample pie chart that shows the distribution of tickets by company."
+      "description": "This is an example of a pie chart showing the distribution of tickets by company."
     },
     "lineChart": {
       "title": "Tickets by Company LINE",
-      "description": "This is a sample pie chart that shows the distribution of tickets by company."
+      "description": "This is an example of a line chart showing the distribution of tickets by company."
     },
     "columnChart": {
       "title": "Tickets by Company COLUMN",
-      "description": "This is a sample pie chart that shows the distribution of tickets by company."
+      "description": "This is an example of a column chart showing the distribution of tickets by company."
     },
     "barChart": {
       "title": "Tickets by Company BAR",
-      "description": "This is a sample bar chart that shows the distribution of tickets by company."
+      "description": "This is an example of a bar chart showing the distribution of tickets by company."
     }
+  },
+  "sideNav": {
+    "home": "Home",
+    "clients": "Clients",
+    "tickets": "Tickets",
+    "enterprises": "Companies",
+    "system-version": "System Version",
+    "chat": "Chat",
+    "settings": "Settings",
+    "logout": "Logout",
+    "video-docs": "Video Docs",
+    "developer-area": "Development",
+    "restricted-area": "Restricted Area"
   }
 }

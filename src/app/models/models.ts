@@ -14,6 +14,7 @@ export interface Company {
     email: string;
     versionServ: string | null;
     clients: User[];
+    helpDeskCompanyId?: string;
   }
 
   export interface Call {

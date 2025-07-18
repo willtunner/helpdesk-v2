@@ -5,7 +5,7 @@
       "client": "Clientes",
       "ticket-open": "Tickets Abiertos",
       "ticket-closed": "Tickets Cerrados",
-      "ticket-answered": "Tickets Resp..",
+      "ticket-answered": "Tickets Respondidos",
       "monthly": "Mensual",
       "yearly": "Anual",
       "daily": "Diario",
@@ -18,19 +18,32 @@
     "title": "Gráficos",
     "pieChart": {
       "title": "Tickets por Empresa PIE",
-      "description": "Este es un gráfico de pastel de ejemplo que muestra la distribución de tickets por empresa."
+      "description": "Este es un ejemplo de un gráfico de pastel que muestra la distribución de tickets por empresa."
     },
     "lineChart": {
       "title": "Tickets por Empresa LÍNEA",
-      "description": "Este es un gráfico de pastel de ejemplo que muestra la distribución de tickets por empresa."
+      "description": "Este es un ejemplo de un gráfico de línea que muestra la distribución de tickets por empresa."
     },
     "columnChart": {
       "title": "Tickets por Empresa COLUMNA",
-      "description": "Este es un gráfico de pastel de ejemplo que muestra la distribución de tickets por empresa."
+      "description": "Este es un ejemplo de un gráfico de columnas que muestra la distribución de tickets por empresa."
     },
     "barChart": {
       "title": "Tickets por Empresa BARRA",
-      "description": "Este es un gráfico de barras de ejemplo que muestra la distribución de tickets por empresa."
+      "description": "Este es un ejemplo de un gráfico de barras que muestra la distribución de tickets por empresa."
     }
+  },
+  "sideNav": {
+    "home": "Inicio",
+    "clients": "Clientes",
+    "tickets": "Tickets",
+    "enterprises": "Empresas",
+    "system-version": "Versión del Sistema",
+    "chat": "Chat",
+    "settings": "Configuraciones",
+    "logout": "Salir",
+    "video-docs": "Documentos en Video",
+    "developer-area": "Desarrollo",
+    "restricted-area": "Área Restringida"
   }
 }

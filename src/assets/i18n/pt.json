@@ -38,9 +38,12 @@
     "clients": "Clientes",
     "tickets": "Chamados",
     "enterprises": "Empresas",
+    "system-version": "Versão do Sistema",
     "chat": "Chat",
     "settings": "Configurações",
     "logout": "Sair",
-    "video-docs": "Vídeo Docs"
+    "video-docs": "Vídeo Docs",
+    "developer-area": "Desenvolvimento",
+    "restricted-area": "Área Restrita"
   }
 }
