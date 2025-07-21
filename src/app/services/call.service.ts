@@ -57,6 +57,41 @@ export class CallService {
     );
   }
 
+  getCalls$(closed?: boolean, helpDeskCompanyId?: string): Observable<Call[]> {
+    const constraints: any[] = [];
+  
+    // Se tiver helpDeskCompanyId, filtra
+    if (helpDeskCompanyId) {
+      constraints.push(where('helpDeskCompanyId', '==', helpDeskCompanyId));
+    }
+  
+    // Se closed for true ou false, aplica filtro
+    if (closed === true) {
+      constraints.push(where('closed', '==', true));
+    } else if (closed === false) {
+      constraints.push(where('closed', '==', false));
+    }
+  
+    const q = query(this._collectionCalls, ...constraints);
+  
+    return collectionData(q, { idField: 'id' }).pipe(
+      map((calls: any[]) => {
+        return calls.map(call => ({
+          ...call,
+          created: (call.created as any)?.toDate?.() || new Date(),
+          updated: (call.updated as any)?.toDate?.() || new Date(),
+          finalized: (call.finalized as any)?.toDate?.() || null
+        }));
+      }),
+      catchError(error => {
+        console.error('Erro ao buscar chamadas:', error);
+        this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar chamadas');
+        return of([]);
+      })
+    );
+  }
+  
+
 
 
 }

@@ -6,12 +6,8 @@ import { AuthService } from '../../services/auth.service';
 import { MatIconModule } from '@angular/material/icon';
 import { RichTextEditorComponent } from '../../shared/components/rich-text/rich-text.component';
 import { MatInputModule } from '@angular/material/input';
-import { ThemeService } from '../../services/theme.service';
-import { ChartComponent } from '../../shared/components/line-chart/line-chart.component';
 import { ChartType } from '../../enums/chart-types.enum';
-import { PieChartComponent } from '../../shared/components/pie-chart/pie-chart.component';
 import { User } from '../../models/models';
-import { DashboardCardComponent } from '../../shared/components/dashboard-card/dashboard-card.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { HelpCompanyService } from '../../services/help-company.service';
 import { CallService } from '../../services/call.service';
@@ -31,11 +27,7 @@ import { UserType } from '../../enums/user-types.enum';
     MatButtonModule,
     MatIconModule,
     MatInputModule, 
-    ChartComponent,
-    PieChartComponent,
-    DashboardCardComponent,
     TranslateModule,
-    PieChartComponent,
     ClientHomeComponent,
     OperatorHomeComponent,
     AdminHomeComponent,
@@ -63,7 +55,7 @@ export class HomeComponent implements OnInit {
     private auth: AuthService,
     private helpCompanyService: HelpCompanyService,
     private callService: CallService,
-    private userService: UserService
+    private userService: UserService,
   ) {
 
     const session = this.auth.currentUser();
@@ -90,7 +82,7 @@ export class HomeComponent implements OnInit {
           })
           .catch(error => {
             console.error('Erro ao buscar empresa:', error);
-          });
+          });        
       } else {
         console.warn('Usuário não está associado a uma empresa');
       }

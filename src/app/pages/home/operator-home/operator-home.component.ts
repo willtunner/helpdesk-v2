@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { User } from '../../../models/models';
 import { ChartType } from '../../../enums/chart-types.enum';
 import { UserType } from '../../../enums/user-types.enum';
@@ -16,40 +16,53 @@ import { MatButtonModule } from '@angular/material/button';
 import { ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { TranslateService } from '../../../services/translate.service';
+import { CompanyService } from '../../../services/company.service';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { forkJoin, of } from 'rxjs';
+import { take, catchError } from 'rxjs/operators';
+import { SendNotificationService } from '../../../services/send-notification.service';
+import { NotificationType } from '../../../enums/notificationType.enum';
 
 @Component({
   selector: 'app-operator-home',
   standalone: true,
   imports: [
-        CommonModule,
-        ReactiveFormsModule,
-        MatButtonModule,
-        MatIconModule,
-        MatInputModule, 
-        ChartComponent,
-        PieChartComponent,
-        DashboardCardComponent,
-        TranslateModule,
-        PieChartComponent,
+    CommonModule,
+    ReactiveFormsModule,
+    MatButtonModule,
+    MatIconModule,
+    MatInputModule, 
+    ChartComponent,
+    PieChartComponent,
+    DashboardCardComponent,
+    TranslateModule,
+    MatProgressSpinnerModule
   ],
   templateUrl: './operator-home.component.html',
   styleUrl: './operator-home.component.scss'
 })
-export class OperatorHomeComponent {
-user!: User;
+export class OperatorHomeComponent implements OnInit {
+  user!: User;
   ChartType = ChartType;
   UserType = UserType;
   userRole: UserType | null = null;
   pieChartData: { name: string; y: number }[] = [];
+  countCompanies: number = 0;
+  countOpenCalls: number = 0;
+  countClosedCalls: number = 0; 
+  countAllCalls: number = 0;
+  isLoading = true;
 
   constructor(
     private auth: AuthService,
     private helpCompanyService: HelpCompanyService,
     private callService: CallService,
     private userService: UserService,
-    private translateService: TranslateService
+    private translateService: TranslateService,
+    private companyService: CompanyService,
+    private cdr: ChangeDetectorRef,
+    private messageService: SendNotificationService
   ) {
-
     const session = this.auth.currentUser();
     if (session) {
       this.user = session;
@@ -62,43 +75,86 @@ user!: User;
       } catch (err) {
         console.error('Erro ao detectar role:', err);
       }
-
-      if (this.user.helpDeskCompanyId) {
-        this.helpCompanyService.getHelpCompanyById(this.user.helpDeskCompanyId)
-          .then(company => {
-            if (company) {
-              console.log('Empresa do usuário:', company);
-            } else {
-              console.error('Empresa não encontrada');
-            }
-          })
-          .catch(error => {
-            console.error('Erro ao buscar empresa:', error);
-          });
-      } else {
-        console.warn('Usuário não está associado a uma empresa');
-      }
     }
   }
 
-  ngOnInit(): void {
+  async ngOnInit(): Promise<void> {
     this.pieChartData = this.getPieData(this.chamadosMock);
-
+  
     this.translateService.load([
       'charts.pieChart.title',
       'charts.pieChart.description',
       'dashboard.clients'
     ]);
-
+  
     if (this.user.helpDeskCompanyId) {
-      this.callService.getCallsByHelpDeskCompany$(this.user.helpDeskCompanyId, this.user.id)
-        .subscribe(calls => {
-          console.log('Chamadas da empresa:', calls);
-        });
+      await this.loadAllData(this.user.helpDeskCompanyId); // aguarda o carregamento de todos os dados
+    } else {
+      console.warn('Usuário não está associado a uma empresa');
+      this.isLoading = false;
     }
-
+  
     const role = this.userService.getEffectiveUserRole(this.user);
     console.log('Função efetiva do usuário:', role);
+  }
+
+  private async loadAllData(helpDeskCompanyId: string): Promise<void> {
+    try {
+      const [company, count] = await Promise.all([
+        this.helpCompanyService.getHelpCompanyById(helpDeskCompanyId),
+        this.companyService.countCompaniesByHelpDeskId(helpDeskCompanyId)
+      ]);
+  
+      this.countCompanies = count;
+      console.log('Quantidade de empresas associadas:', this.countCompanies);
+  
+      forkJoin({
+        open: this.callService.getCalls$(false, helpDeskCompanyId).pipe(
+          take(1),
+          catchError(err => {
+            this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar chamados abertos');
+            return of([]);
+          })
+        ),
+        closed: this.callService.getCalls$(true, helpDeskCompanyId).pipe(
+          take(1),
+          catchError(err => {
+            this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar chamados fechados');
+            return of([]);
+          })
+        ),
+        all: this.callService.getCalls$(undefined, helpDeskCompanyId).pipe(
+          take(1),
+          catchError(err => {
+            this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar todos os chamados');
+            return of([]);
+          })
+        )
+      }).subscribe({
+        next: ({ open, closed, all }) => {
+          this.countOpenCalls = open.length;
+          this.countClosedCalls = closed.length;
+          this.countAllCalls = all.length;
+  
+          console.log('Chamadas abertas:', this.countOpenCalls);
+          console.log('Chamadas fechadas:', this.countClosedCalls);
+          console.log('Chamadas totais:', this.countAllCalls);
+        },
+        error: () => {
+          this.messageService.customNotification(NotificationType.ERROR, 'Erro geral ao carregar os dados de chamados');
+        },
+        complete: () => {
+          this.isLoading = false;
+          this.cdr.detectChanges();
+        }
+      });
+  
+    } catch (error) {
+      this.messageService.customNotification(NotificationType.ERROR, 'Erro ao carregar dados da empresa');
+      console.error('Erro ao carregar dados:', error);
+      this.isLoading = false;
+      this.cdr.detectChanges();
+    }
   }
 
   chamadosMock = [
