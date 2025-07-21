@@ -1,0 +1,64 @@
+<mat-dialog-content class="dialog-content">
+
+    <!-- HEADER da Modal -->
+    <div class="modal-header">
+      <div class="modal-header-row">
+        <h2>Lista de Clientes</h2>
+        <button mat-icon-button (click)="close()" aria-label="Fechar">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+  
+      <!-- Campo de busca e botão -->
+      <div class="search-area">
+        <app-custom-input
+          [label]="'Pesquisar Cliente'"
+          [placeholder]="'Digite nome, email ou CNPJ...'"
+          [control]="searchControl"
+          [type]="'text'"
+          [size]="'full-width'"
+          (onSearch)="onSearchClients()"
+        ></app-custom-input>
+  
+        <app-dynamic-button
+          type="find"
+          (clicked)="onSearchClients()"
+          [label]="'Buscar'"
+          class="search-button"
+        ></app-dynamic-button>
+      </div>
+    </div>
+  
+    <!-- Lista de Clientes -->
+    <div *ngIf="clients && clients.length > 0; else noClients" class="call-list">
+      <h3>Clientes Encontrados:</h3>
+  
+      <div
+        class="call-item"
+        *ngFor="let client of clients"
+        tabindex="0"
+      >
+        <div class="call-title">
+          <strong>{{ client.name }}</strong>
+        </div>
+  
+        <div class="call-meta">
+          <span><strong>CNPJ:</strong> {{ client.cnpj || 'Não informado' }}</span>
+          <span><strong>Email:</strong> {{ client.email || 'Não informado' }}</span>
+          <span><strong>Estado:</strong> {{ client.state || '-' }}</span>
+          <span><strong>Cidade:</strong> {{ client.city || '-' }}</span>
+        </div>
+  
+        <div class="keywords" *ngIf="client.keywords?.length">
+          <span class="keyword" *ngFor="let kw of client.keywords">{{ kw }}</span>
+        </div>
+      </div>
+    </div>
+  
+    <!-- Nenhum cliente -->
+    <ng-template #noClients>
+      <p style="text-align: center; margin-top: 2rem;">Nenhum cliente encontrado.</p>
+    </ng-template>
+  
+  </mat-dialog-content>
+  

@@ -1,0 +1,26 @@
+<mat-dialog-content>
+  <p><strong>Quantidade de Chamados:</strong> {{ data.count }}</p>
+  <p *ngIf="data.month"><strong>Mês:</strong> {{ data.month }}</p>
+
+  <div *ngIf="calls.length > 0" class="call-list">
+    <h3>Lista de Chamados:</h3>
+    <div 
+      class="call-item" 
+      *ngFor="let call of calls" 
+      (click)="openCallDetails(call)"
+      tabindex="0"
+    >
+      <div class="call-title">
+        <strong>{{ call.title }}</strong>
+        <span class="status" [ngClass]="{ 'closed': call.closed, 'open': !call.closed }">
+          {{ call.closed ? 'Fechado' : 'Aberto' }}
+        </span>
+      </div>
+      <div class="call-meta">
+        <span><strong>Empresa:</strong> {{ call.company?.name || 'Não especificada' }}</span>
+        <span><strong>Operador:</strong> {{ call.operator?.username || 'Não especificado' }}</span>
+        <span><strong>Data:</strong> {{ formatDate(call.created) }}</span>
+      </div>
+    </div>
+  </div>
+</mat-dialog-content>

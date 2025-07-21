@@ -86,23 +86,5 @@ export class CompanyService {
     }
   }
 
-  async countCompaniesByHelpDeskId(helpDeskCompanyId: string): Promise<number> {
-    try {
-      const q = query(
-        collection(this._firestore, PATH),
-        where('helpDeskCompanyId', '==', helpDeskCompanyId)
-      );
-  
-      const querySnapshot = await getDocs(q);
-      return querySnapshot.size;
-    } catch (error) {
-      console.error('Erro ao contar empresas por helpDeskCompanyId:', error);
-      this.messageService.customNotification(
-        NotificationType.ERROR,
-        'Erro ao contar empresas pelo Help Desk ID'
-      );
-      return 0;
-    }
-  }
 
 }

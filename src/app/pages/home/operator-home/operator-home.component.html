@@ -1,5 +1,5 @@
 <div class="container" *ngIf="!isLoading">
-  <app-dashboard-card icon="support_agent" [end]="countCompanies" [duration]="1200" [label]="'home.components.client' | translate" color="#f20f40">
+  <app-dashboard-card  (click)="openClientsModal()" icon="support_agent" [end]="countCompanies" [duration]="1200" [label]="'home.components.client' | translate" color="#f20f40">
   </app-dashboard-card>
 
   <app-dashboard-card icon="calls" [end]="countOpenCalls" [duration]="1200" [label]="'home.components.ticket-open' | translate" color="#3f51b5">

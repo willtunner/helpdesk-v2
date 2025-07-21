@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { User } from '../../../models/models';
+import { Company, User } from '../../../models/models';
 import { ChartType } from '../../../enums/chart-types.enum';
 import { UserType } from '../../../enums/user-types.enum';
 import { AuthService } from '../../../services/auth.service';
@@ -22,6 +22,8 @@ import { forkJoin, of } from 'rxjs';
 import { take, catchError } from 'rxjs/operators';
 import { SendNotificationService } from '../../../services/send-notification.service';
 import { NotificationType } from '../../../enums/notificationType.enum';
+import { MatDialog } from '@angular/material/dialog';
+import { ClientsModalComponent } from '../clients-modal/clients-modal.component';
 
 @Component({
   selector: 'app-operator-home',
@@ -48,6 +50,7 @@ export class OperatorHomeComponent implements OnInit {
   userRole: UserType | null = null;
   pieChartData: { name: string; y: number }[] = [];
   countCompanies: number = 0;
+  clients: Company[] = []; // Array para armazenar as empresas
   countOpenCalls: number = 0;
   countClosedCalls: number = 0; 
   countAllCalls: number = 0;
@@ -61,7 +64,8 @@ export class OperatorHomeComponent implements OnInit {
     private translateService: TranslateService,
     private companyService: CompanyService,
     private cdr: ChangeDetectorRef,
-    private messageService: SendNotificationService
+    private messageService: SendNotificationService,
+    private dialog: MatDialog
   ) {
     const session = this.auth.currentUser();
     if (session) {
@@ -100,13 +104,14 @@ export class OperatorHomeComponent implements OnInit {
 
   private async loadAllData(helpDeskCompanyId: string): Promise<void> {
     try {
-      const [company, count] = await Promise.all([
+      const [company, clients] = await Promise.all([
         this.helpCompanyService.getHelpCompanyById(helpDeskCompanyId),
-        this.companyService.countCompaniesByHelpDeskId(helpDeskCompanyId)
+        this.companyService.getCompanyByHelpDeskId(helpDeskCompanyId)
       ]);
-  
-      this.countCompanies = count;
-      console.log('Quantidade de empresas associadas:', this.countCompanies);
+      
+      this.clients = clients; // Armazena as empresas associadas
+      this.countCompanies = clients.length;
+      console.log('Quantidade de empresas associadas:', this.countCompanies, 'Empresas:', clients, 'Company:', company);
   
       forkJoin({
         open: this.callService.getCalls$(false, helpDeskCompanyId).pipe(
@@ -155,6 +160,14 @@ export class OperatorHomeComponent implements OnInit {
       this.isLoading = false;
       this.cdr.detectChanges();
     }
+  }
+  
+  openClientsModal(): void {
+    this.dialog.open(ClientsModalComponent, {
+      width: '1000px',
+      panelClass: 'custom-modal',
+      data: this.clients ? this.clients : []
+    });
   }
 
   chamadosMock = [
