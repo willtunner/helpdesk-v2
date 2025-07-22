@@ -1,0 +1,52 @@
+<mat-dialog-content class="dialog-content">
+    <div class="modal-header">
+      <div class="modal-header-row">
+        <h2>Lista de Chamados</h2>
+        <button mat-icon-button (click)="close()" aria-label="Fechar">
+          <mat-icon>close</mat-icon>
+        </button>
+      </div>
+  
+      <div class="search-area">
+        <app-custom-input
+          [label]="'Pesquisar Chamado'"
+          [placeholder]="'Digite título, operador ou conexão...'"
+          [control]="searchControl"
+          [type]="'text'"
+          [size]="'full-width'"
+          (onSearch)="onSearchCalls()"
+        ></app-custom-input>
+  
+        <app-dynamic-button
+          type="find"
+          (clicked)="onSearchCalls()"
+          [label]="'Buscar'"
+          class="search-button"
+        ></app-dynamic-button>
+      </div>
+    </div>
+  
+    <div *ngIf="hasCalls; else noCalls" class="call-list">
+      <h3>Chamados Encontrados:</h3>
+  
+      <div class="call-item" *ngFor="let call of calls" tabindex="0">
+        <div class="call-title"><strong>{{ call.title }}</strong></div>
+  
+        <div class="call-meta">
+          <span><strong>Cliente:</strong> {{ call.client?.name || '-' }}</span>
+          <span><strong>Operador:</strong> {{ call.operator?.name || '-' }}</span>
+          <span><strong>Status:</strong> {{ call.closed ? 'Fechado' : 'Aberto' }}</span>
+          <span><strong>Conexão:</strong> {{ call.connection || '-' }}</span>
+        </div>
+  
+        <div class="keywords" *ngIf="call.tags?.length">
+          <span class="keyword" *ngFor="let tag of call.tags">{{ tag }}</span>
+        </div>
+      </div>
+    </div>
+  
+    <ng-template #noCalls>
+      <p style="text-align: center; margin-top: 2rem;">Nenhum chamado encontrado.</p>
+    </ng-template>
+  </mat-dialog-content>
+  

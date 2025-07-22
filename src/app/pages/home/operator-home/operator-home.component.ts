@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Company, User } from '../../../models/models';
+import { Call, Company, User } from '../../../models/models';
 import { ChartType } from '../../../enums/chart-types.enum';
 import { UserType } from '../../../enums/user-types.enum';
 import { AuthService } from '../../../services/auth.service';
@@ -24,6 +24,7 @@ import { SendNotificationService } from '../../../services/send-notification.ser
 import { NotificationType } from '../../../enums/notificationType.enum';
 import { MatDialog } from '@angular/material/dialog';
 import { ClientsModalComponent } from '../clients-modal/clients-modal.component';
+import { CallModalComponent } from '../call-modal/call-modal.component';
 
 @Component({
   selector: 'app-operator-home',
@@ -169,6 +170,28 @@ export class OperatorHomeComponent implements OnInit {
       data: this.clients ? this.clients : []
     });
   }
+
+  openCallsModal(type: 'open' | 'closed' | 'all'): void {
+    let closed: boolean | undefined;
+  
+    if (type === 'open') closed = false;
+    else if (type === 'closed') closed = true;
+  
+    this.callService.getCalls$(closed, this.user.helpDeskCompanyId).pipe(take(1)).subscribe({
+      next: (calls: Call[]) => {
+        this.dialog.open(CallModalComponent, {
+          width: '1000px',
+          panelClass: 'custom-modal',
+          data: calls
+        });
+      },
+      error: (err) => {
+        this.messageService.customNotification(NotificationType.ERROR, 'Erro ao carregar chamados');
+        console.error(err);
+      }
+    });
+  }
+  
 
   chamadosMock = [
     { id: "1", data: "07/02/2025", companyId: "1", companyName: "GreenCode" },
