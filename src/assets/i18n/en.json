@@ -77,5 +77,11 @@
     "city": "City",
     "address": "Address",
     "zipcode": "Zip Code"
+  },
+  "roles": {
+    "client": "Client",
+    "operator": "Operator",
+    "admin": "Administrator",
+    "master": "Master"
   }
 }

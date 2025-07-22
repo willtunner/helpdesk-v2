@@ -8,7 +8,7 @@ import { RichTextEditorComponent } from '../../shared/components/rich-text/rich-
 import { MatInputModule } from '@angular/material/input';
 import { ChartType } from '../../enums/chart-types.enum';
 import { User } from '../../models/models';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { HelpCompanyService } from '../../services/help-company.service';
 import { CallService } from '../../services/call.service';
 import { UserService } from '../../services/user.service';
@@ -18,6 +18,7 @@ import { AdminHomeComponent } from './admin-home/admin-home.component';
 import { MasterHomeComponent } from './master-home/master-home.component';
 import { UserType } from '../../enums/user-types.enum';
 
+
 @Component({
   selector: 'app-home',
   standalone: true,
@@ -26,7 +27,7 @@ import { UserType } from '../../enums/user-types.enum';
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
-    MatInputModule, 
+    MatInputModule,
     TranslateModule,
     ClientHomeComponent,
     OperatorHomeComponent,
@@ -56,6 +57,7 @@ export class HomeComponent implements OnInit {
     private helpCompanyService: HelpCompanyService,
     private callService: CallService,
     private userService: UserService,
+    private translate: TranslateService
   ) {
 
     const session = this.auth.currentUser();
@@ -82,7 +84,7 @@ export class HomeComponent implements OnInit {
           })
           .catch(error => {
             console.error('Erro ao buscar empresa:', error);
-          });        
+          });
       } else {
         console.warn('Usuário não está associado a uma empresa');
       }
@@ -102,7 +104,13 @@ export class HomeComponent implements OnInit {
     console.log('Função efetiva do usuário:', role);
   }
 
-  
+  get translatedRole(): string {
+    if (!this.userRole) return '';
+    return this.translate.instant(`roles.${this.userRole}`);
+  }
+
+
+
 
 }
 

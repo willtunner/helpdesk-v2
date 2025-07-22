@@ -77,5 +77,11 @@
     "city": "Cidade",
     "address": "Endereço",
     "zipcode": "CEP"
+  },
+  "roles": {
+    "client": "Cliente",
+    "operator": "Operador",
+    "admin": "Administrador",
+    "master": "Master"
   }
 }
