@@ -6,6 +6,7 @@ import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { Call } from '../../../models/models';
 import { CustomInputComponent } from '../../../shared/components/custom-input/custom-input.component';
 import { DynamicButtonComponent } from '../../../shared/components/action-button/action-button.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-call-modal',
@@ -17,6 +18,7 @@ import { DynamicButtonComponent } from '../../../shared/components/action-button
     MatIconModule,
     CustomInputComponent,
     DynamicButtonComponent,
+    TranslateModule
   ],
   templateUrl: './call-modal.component.html',
   styleUrl: './call-modal.component.scss',
@@ -24,12 +26,14 @@ import { DynamicButtonComponent } from '../../../shared/components/action-button
 export class CallModalComponent {
   public calls: Call[] = [];
   searchControl = new FormControl('');
+  public type: 'open' | 'closed' | 'all' = 'all';
 
   constructor(
     public dialogRef: MatDialogRef<CallModalComponent>,
-    @Inject(MAT_DIALOG_DATA) calls: Call[]
+    @Inject(MAT_DIALOG_DATA) public data: { calls: Call[], type: 'open' | 'closed' | 'all' }
   ) {
-    this.calls = calls ?? [];
+    this.calls = data.calls ?? [];
+    this.type = data.type;
   }
 
   close(): void {
@@ -44,4 +48,16 @@ export class CallModalComponent {
   get hasCalls(): boolean {
     return Array.isArray(this.calls) && this.calls.length > 0;
   }
+
+  getTitle(): string {
+    switch (this.type) {
+      case 'open':
+        return 'titles-modals.call-list-open';
+      case 'closed':
+        return 'titles-modals.call-list-close';
+      default:
+        return 'titles-modals.call-list';
+    }
+  }
+
 }

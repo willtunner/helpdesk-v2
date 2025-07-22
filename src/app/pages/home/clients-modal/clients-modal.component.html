@@ -1,24 +1,25 @@
 <mat-dialog-content class="modal-shared">
   <div class="modal-header">
     <div class="modal-header-row">
-      <h2>Lista de Clientes</h2>
+      <h2>{{ 'titles-modals.client-list' | translate }} </h2>
       <button mat-icon-button (click)="close()" aria-label="Fechar">
         <mat-icon>close</mat-icon>
       </button>
     </div>
 
     <div class="search-area">
-      <app-custom-input [label]="'Pesquisar Cliente'" [placeholder]="'Digite nome, email ou CNPJ...'"
-        [control]="searchControl" [type]="'text'" [size]="'full-width'"
-        (onSearch)="onSearchClients()"></app-custom-input>
+      <app-custom-input 
+        [label]="'inputs.client-modal.search-label' | translate"
+        [placeholder]="'inputs.client-modal.search-placeholder' | translate" 
+        [control]="searchControl" [type]="'text'"
+        [size]="'full-width'" (onSearch)="onSearchClients()"></app-custom-input>
 
-      <app-dynamic-button type="find" (clicked)="onSearchClients()"
-        class="search-button"></app-dynamic-button>
+      <app-dynamic-button type="find" (clicked)="onSearchClients()" class="search-button"></app-dynamic-button>
     </div>
   </div>
 
   <div *ngIf="clients && clients.length > 0; else noClients" class="modal-list">
-    <h3>Clientes Encontrados: <span class="highlight-count">{{ clients.length }}</span></h3>
+    <h3>{{ 'inputs.client-modal.found-clients-title' | translate }} <span class="highlight-count">{{ clients.length }}</span></h3>
 
     <div class="modal-item" *ngFor="let client of clients" tabindex="0">
       <div class="call-title"><strong>{{ client.name }}</strong></div>

@@ -76,7 +76,8 @@
     "state": "Estado",
     "city": "Cidade",
     "address": "Endereço",
-    "zipcode": "CEP"
+    "zipcode": "CEP",
+    "valid-mail": "Email válido"
   },
   "roles": {
     "client": "Cliente",
@@ -94,5 +95,23 @@
     "FIND": "BUSCAR",
     "PDF": "PDF",
     "CANCEL": "CANCELAR"
+  },
+  "inputs": {
+    "client-modal": {
+      "search-label": "Pesquisar Cliente",
+      "search-placeholder": "Digite nome, email ou CNPJ...",
+      "found-clients-title": "Clientes Encontrados:"
+    },
+    "call-modal": {
+      "search-label": "Buscar Llamado",
+      "search-placeholder": "Ingrese título, operador o conexión...",
+      "found-calls-title": "Chamados Encontrados:"
+    }
+  },
+  "titles-modals": {
+    "call-list": "Todos os Chamados",
+    "call-list-open": "Lista todos Chamados abertos",
+    "call-list-close": "Lista todos Chamados fechados",
+    "client-list": "Lista de Clientes"
   }
 }

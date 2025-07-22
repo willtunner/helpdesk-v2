@@ -182,7 +182,7 @@ export class OperatorHomeComponent implements OnInit {
         this.dialog.open(CallModalComponent, {
           width: '1000px',
           panelClass: 'custom-modal',
-          data: calls
+          data: { calls, type }
         });
       },
       error: (err) => {

@@ -5,12 +5,13 @@ import { MAT_DIALOG_DATA, MatDialogModule, MatDialogRef } from '@angular/materia
 import { MatIconModule } from '@angular/material/icon';
 import { DynamicButtonComponent } from '../../../shared/components/action-button/action-button.component';
 import { CustomInputComponent } from '../../../shared/components/custom-input/custom-input.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-clients-modal',
   standalone: true,
   imports: [CommonModule, MatIconModule, MatDialogModule, 
-    DynamicButtonComponent, CustomInputComponent],
+    DynamicButtonComponent, CustomInputComponent, TranslateModule],
   templateUrl: './clients-modal.component.html',
   styleUrl: './clients-modal.component.scss'
 })

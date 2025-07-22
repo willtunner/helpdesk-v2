@@ -72,8 +72,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   color: #0000009c !important;
 }
 
+
 .modal-shared {
-  padding: 0;
+  padding: 0 !important;
   background-color: #f5f5f5;
   display: flex;
   flex-direction: column;
@@ -90,48 +91,47 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.05);
     display: flex;
     flex-direction: column;
+  }
 
-    .modal-header-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-
-      h2 {
-        margin: 0;
-        font-size: 1.5rem;
-        font-weight: 600;
-        color: #333;
-      }
-
-      button {
-        color: #888;
-        transform: scale(0.8);
-        padding: 4px;
-      }
+  .modal-header-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-left: 20px;
+    padding-right: 15px;
+    h2 {
+      margin: 0;
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: #333;
     }
 
-    .search-area {
-      margin-top: 1rem;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 0.5rem;
+    button {
+      color: #888;
+      transform: scale(0.8);
+      // padding: 4px;
+    }
+  }
 
-      app-custom-input {
-        flex: 0 1 400px;
-      }
+  .search-area {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
 
-      .search-button {
-        flex-shrink: 0;
-      }
+    app-custom-input {
+      flex: 0 1 400px;
+    }
+
+    .search-button {
+      flex-shrink: 0;
     }
   }
 
   .modal-list {
-    padding: 1.5rem;
+    padding: 1rem 1.5rem; // Um pouco mais compacto
     display: flex;
     flex-direction: column;
-    gap: 1.5rem;
+    gap: 1rem; // Reduzido para diminuir espaçamento entre os itens
 
     h3 {
       margin-bottom: 0.5rem;
@@ -151,12 +151,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     background-color: #ffffff;
     border: 1px solid #ddd;
     border-radius: 6px;
-    padding: 1rem;
+    padding: 0.8rem; // Menor padding interno
     transition: box-shadow 0.2s, background-color 0.2s;
     cursor: pointer;
     display: flex;
     flex-direction: column;
-    gap: 0.8rem;
+    gap: 0.5rem; // Reduzido
 
     &:hover {
       background-color: #f8f8f8;
@@ -172,7 +172,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     .call-meta {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.3rem;
 
       span {
         font-size: 0.9rem;
@@ -183,7 +183,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     .keywords {
       display: flex;
       flex-wrap: wrap;
-      gap: 0.5rem;
+      gap: 0.3rem;
 
       .keyword {
         background-color: #eeeeee;
@@ -211,5 +211,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     }
   }
 }
+
+
+
+
 
 

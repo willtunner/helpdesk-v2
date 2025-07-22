@@ -94,5 +94,23 @@
     "FIND": "BUSCAR",
     "PDF": "PDF",
     "CANCEL": "CANCELAR"
+  },
+  "inputs": {
+    "client-modal": {
+      "search-label": "Buscar Cliente",
+      "search-placeholder": "Ingrese nombre, correo electrónico o CNPJ...",
+      "found-clients-title": "Clientes Encontrados:"
+    },
+    "call-modal": {
+      "search-label": "Buscar Llamado",
+      "search-placeholder": "Ingrese título, operador o conexión...",
+      "found-calls-title": "Llamados Encontrados:"
+    }
+  },
+  "titles-modals": {
+    "call-list": "Todos los Llamados",
+    "call-list-open": "Lista de Llamados Abiertos",
+    "call-list-close": "Lista de Llamados Cerrados",
+    "client-list": "Lista de Clientes"
   }
 }

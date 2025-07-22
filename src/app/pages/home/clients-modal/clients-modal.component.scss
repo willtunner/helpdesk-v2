@@ -133,3 +133,7 @@
 //     }
 //   }
 // }
+
+:host ::ng-deep .mat-mdc-dialog-container .mat-mdc-dialog-content {
+    padding: 0 !important;
+  }
