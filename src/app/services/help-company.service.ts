@@ -10,6 +10,7 @@ import {
 import { HelpDeskCompany } from '../models/models';
 import { SendNotificationService } from './send-notification.service';
 import { NotificationType } from '../enums/notificationType.enum';
+import { UtilService } from './util.service';
 
 @Injectable({
   providedIn: 'root'
@@ -18,14 +19,16 @@ export class HelpCompanyService {
   private _firestore = inject(Firestore);
   private _collection = collection(this._firestore, 'helpCompanies');
 
-  constructor(private messageService: SendNotificationService) {}
+  constructor(
+    private messageService: SendNotificationService,
+    private utilService: UtilService) {}
 
   async createAccountHelpCompany(data: Partial<HelpDeskCompany>): Promise<HelpDeskCompany> {
     const now = new Date();
 
     const helpCompany: Omit<HelpDeskCompany, 'id'> = {
       ...data,
-      keywords: [data.name?.toLowerCase() || ''],
+      keywords: this.utilService.generateKeywordsFromName(data.name || ''),
       created: now,
       updated: now,
       cnpj: Number(data.cnpj),

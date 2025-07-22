@@ -71,6 +71,18 @@ export class UtilService {
     const bytes = CryptoJS.AES.decrypt(cipherText, SECRET_KEY);
     return bytes.toString(CryptoJS.enc.Utf8);
   }
+
+  generateKeywordsFromName(name: string): string[] {
+    if (!name) return [];
+  
+    return name
+      .toLowerCase()
+      .replace(/[^a-z\s]/gi, '') // Remove tudo que não for letra ou espaço
+      .trim()
+      .split(/\s+/)
+      .filter(word => word.length > 0);
+  }
+  
 }
 
 
