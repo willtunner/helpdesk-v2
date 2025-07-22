@@ -1,6 +1,7 @@
 <button [class]="cssClass" (click)="emit()" [disabled]="disabled">
-    <span>{{ computedLabel }}</span>
+    <span>{{ label || config.labelKey | translate }}</span>
     <div class="icon">
-        <mat-icon class="sidenav-link-icon large-icon">{{ iconName }}</mat-icon>
+      <mat-icon class="sidenav-link-icon large-icon">{{ iconName }}</mat-icon>
     </div>
-</button>
+  </button>
+  

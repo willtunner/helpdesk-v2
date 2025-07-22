@@ -83,5 +83,16 @@
     "operator": "Operador",
     "admin": "Administrador",
     "master": "Master"
+  },
+  "BUTTON": {
+    "SAVE": "GUARDAR",
+    "EDIT": "EDITAR",
+    "DELETE": "ELIMINAR",
+    "CLEAR": "LIMPIAR",
+    "PRINT": "IMPRIMIR",
+    "ADD": "REGISTRAR",
+    "FIND": "BUSCAR",
+    "PDF": "PDF",
+    "CANCEL": "CANCELAR"
   }
 }
