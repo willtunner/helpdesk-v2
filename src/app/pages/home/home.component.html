@@ -1,8 +1,8 @@
-<h1>
+<h3>
   {{ 'home.welcome' | translate }} 
   <ng-container *ngIf="translatedRole"> ({{ translatedRole }})</ng-container>
   <ng-container *ngIf="user?.username">, {{ user.username }}</ng-container>!
-</h1>
+</h3>
 
 <app-client-home *ngIf="userRole === UserType.CLIENT" />
 <app-operator-home *ngIf="userRole === UserType.OPERATOR" />
