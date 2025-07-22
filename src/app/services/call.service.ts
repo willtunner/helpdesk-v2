@@ -1,11 +1,12 @@
 import { inject, Injectable } from '@angular/core';
-import { Observable, combineLatest, map, from, switchMap, catchError, of } from 'rxjs';
-import { Call, Company, User } from '../models/models';
+import { Observable, combineLatest, map, from, switchMap, catchError, of, forkJoin } from 'rxjs';
+import { Call, Company, SimplifiedCall, User } from '../models/models';
 import { addDoc, collection, collectionData, deleteDoc, doc, Firestore, getDoc, getDocs, orderBy, query, Timestamp, updateDoc, where } from '@angular/fire/firestore';
 import { SendNotificationService } from './send-notification.service';
 import { SessionService } from './session.service';
 import { AuthService } from './auth.service';
 import { NotificationType } from '../enums/notificationType.enum';
+import { formatDate } from '@angular/common';
 
 const PATH_CALLS = 'calls';
 const PATH_COMPANIES = 'company';
@@ -59,21 +60,21 @@ export class CallService {
 
   getCalls$(closed?: boolean, helpDeskCompanyId?: string): Observable<Call[]> {
     const constraints: any[] = [];
-  
+
     // Se tiver helpDeskCompanyId, filtra
     if (helpDeskCompanyId) {
       constraints.push(where('helpDeskCompanyId', '==', helpDeskCompanyId));
     }
-  
+
     // Se closed for true ou false, aplica filtro
     if (closed === true) {
       constraints.push(where('closed', '==', true));
     } else if (closed === false) {
       constraints.push(where('closed', '==', false));
     }
-  
+
     const q = query(this._collectionCalls, ...constraints);
-  
+
     return collectionData(q, { idField: 'id' }).pipe(
       map((calls: any[]) => {
         return calls.map(call => ({
@@ -90,7 +91,59 @@ export class CallService {
       })
     );
   }
-  
+
+  // No CallService
+  getSimplifiedCalls(helpDeskCompanyId?: string): Observable<SimplifiedCall[]> {
+    const constraints: any[] = [];
+
+    if (helpDeskCompanyId) {
+      constraints.push(where('helpDeskCompanyId', '==', helpDeskCompanyId));
+    }
+
+    const q = query(this._collectionCalls, ...constraints);
+
+    return collectionData(q, { idField: 'id' }).pipe(
+      switchMap((calls: any[]) => {
+        // Processa cada chamado para obter o nome da empresa
+        const processedCalls = calls.map(call => {
+          const callDate = (call.created as any)?.toDate?.() || new Date();
+          const formattedDate = formatDate(callDate, 'dd/MM/yyyy', 'en-US');
+
+          // Se já tiver os dados da empresa incluídos
+          if (call.company) {
+            return of({
+              id: call.id,
+              data: formattedDate,
+              companyId: call.companyId,
+              companyName: call.company.name
+            });
+          }
+
+          // Caso contrário, busca o nome da empresa
+          const companyRef = doc(this._firestore, PATH_COMPANIES, call.companyId);
+          return from(getDoc(companyRef)).pipe(
+            map(companySnap => ({
+              id: call.id,
+              data: formattedDate,
+              companyId: call.companyId,
+              companyName: companySnap.exists() ? (companySnap.data() as Company).name : 'Empresa Desconhecida'
+            }))
+          );
+        });
+
+        // Combina todos os observables em um único array
+        return forkJoin(processedCalls);
+      }),
+      catchError(error => {
+        console.error('Erro ao buscar chamados simplificados:', error);
+        this.messageService.customNotification(
+          NotificationType.ERROR,
+          'Erro ao buscar lista de chamados'
+        );
+        return of([]);
+      })
+    );
+  }
 
 
 

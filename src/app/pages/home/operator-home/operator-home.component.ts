@@ -1,5 +1,5 @@
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { Call, Company, User } from '../../../models/models';
+import { Call, Company, SimplifiedCall, User } from '../../../models/models';
 import { ChartType } from '../../../enums/chart-types.enum';
 import { UserType } from '../../../enums/user-types.enum';
 import { AuthService } from '../../../services/auth.service';
@@ -34,7 +34,7 @@ import { CallModalComponent } from '../call-modal/call-modal.component';
     ReactiveFormsModule,
     MatButtonModule,
     MatIconModule,
-    MatInputModule, 
+    MatInputModule,
     ChartComponent,
     PieChartComponent,
     DashboardCardComponent,
@@ -53,9 +53,10 @@ export class OperatorHomeComponent implements OnInit {
   countCompanies: number = 0;
   clients: Company[] = []; // Array para armazenar as empresas
   countOpenCalls: number = 0;
-  countClosedCalls: number = 0; 
+  countClosedCalls: number = 0;
   countAllCalls: number = 0;
   isLoading = true;
+  simplifiedCalls: SimplifiedCall[] = [];
 
   constructor(
     private auth: AuthService,
@@ -85,22 +86,33 @@ export class OperatorHomeComponent implements OnInit {
 
   async ngOnInit(): Promise<void> {
     this.pieChartData = this.getPieData(this.chamadosMock);
-  
+
     this.translateService.load([
       'charts.pieChart.title',
       'charts.pieChart.description',
       'dashboard.clients'
     ]);
-  
+
     if (this.user.helpDeskCompanyId) {
       await this.loadAllData(this.user.helpDeskCompanyId); // aguarda o carregamento de todos os dados
     } else {
       console.warn('Usuário não está associado a uma empresa');
       this.isLoading = false;
     }
-  
+
     const role = this.userService.getEffectiveUserRole(this.user);
     console.log('Função efetiva do usuário:', role);
+
+    this.callService.getSimplifiedCalls(this.user.helpDeskCompanyId)
+      .subscribe({
+        next: (simplifiedCalls) => {
+          this.simplifiedCalls = simplifiedCalls;
+          console.log('Chamados simplificados:', simplifiedCalls);
+        },
+        error: (err) => {
+          console.error('Erro:', err);
+        }
+      });
   }
 
   private async loadAllData(helpDeskCompanyId: string): Promise<void> {
@@ -109,11 +121,11 @@ export class OperatorHomeComponent implements OnInit {
         this.helpCompanyService.getHelpCompanyById(helpDeskCompanyId),
         this.companyService.getCompanyByHelpDeskId(helpDeskCompanyId)
       ]);
-      
+
       this.clients = clients; // Armazena as empresas associadas
       this.countCompanies = clients.length;
       console.log('Quantidade de empresas associadas:', this.countCompanies, 'Empresas:', clients, 'Company:', company);
-  
+
       forkJoin({
         open: this.callService.getCalls$(false, helpDeskCompanyId).pipe(
           take(1),
@@ -141,7 +153,7 @@ export class OperatorHomeComponent implements OnInit {
           this.countOpenCalls = open.length;
           this.countClosedCalls = closed.length;
           this.countAllCalls = all.length;
-  
+
           console.log('Chamadas abertas:', this.countOpenCalls);
           console.log('Chamadas fechadas:', this.countClosedCalls);
           console.log('Chamadas totais:', this.countAllCalls);
@@ -154,7 +166,7 @@ export class OperatorHomeComponent implements OnInit {
           this.cdr.detectChanges();
         }
       });
-  
+
     } catch (error) {
       this.messageService.customNotification(NotificationType.ERROR, 'Erro ao carregar dados da empresa');
       console.error('Erro ao carregar dados:', error);
@@ -162,7 +174,7 @@ export class OperatorHomeComponent implements OnInit {
       this.cdr.detectChanges();
     }
   }
-  
+
   openClientsModal(): void {
     this.dialog.open(ClientsModalComponent, {
       width: '1000px',
@@ -173,10 +185,10 @@ export class OperatorHomeComponent implements OnInit {
 
   openCallsModal(type: 'open' | 'closed' | 'all'): void {
     let closed: boolean | undefined;
-  
+
     if (type === 'open') closed = false;
     else if (type === 'closed') closed = true;
-  
+
     this.callService.getCalls$(closed, this.user.helpDeskCompanyId).pipe(take(1)).subscribe({
       next: (calls: Call[]) => {
         this.dialog.open(CallModalComponent, {
@@ -191,7 +203,7 @@ export class OperatorHomeComponent implements OnInit {
       }
     });
   }
-  
+
 
   chamadosMock = [
     { id: "1", data: "07/02/2025", companyId: "1", companyName: "GreenCode" },

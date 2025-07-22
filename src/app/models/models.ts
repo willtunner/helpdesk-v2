@@ -79,25 +79,6 @@ export interface Company {
     occurrency?: string;
   }
 
-  // export interface UserClient {
-  //   id: string;
-  //   created: number;
-  //   deleted: boolean;
-  //   email: string;
-  //   phone: string;
-  //   username: string;
-  //   name: string;
-  //   roles: string[];
-  //   password: string;
-  //   updated: number;
-  //   connection: string;
-  //   imageUrl: string;
-  //   userId: string
-  //   companyId?: string;
-  //   occurrency?: string;
-  //   company?: Company;
-  //   isLoggedIn: boolean;
-  // }
 
   export interface ChatRoom {
     id: string;
@@ -162,5 +143,12 @@ export interface Company {
     userId: string;
     comment: string;
     create: Date;
+  }
+
+  export interface SimplifiedCall {
+    id: string;
+    data: string;
+    companyId: string;
+    companyName: string;
   }
 

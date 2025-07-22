@@ -26,15 +26,15 @@
 
 
 <div class="chart-container">
-  <app-chart [type]="ChartType.BAR" [title]="'charts.barChart.title' | translate" [chamados]="chamadosMock"></app-chart>
+  <app-chart [type]="ChartType.BAR" [title]="'charts.barChart.title' | translate" [chamados]="simplifiedCalls"></app-chart>
 
   <app-pie-chart [title]="'charts.pieChart.title' | translate" [data]="pieChartData">
   </app-pie-chart>
 
 
   <app-chart [type]="ChartType.LINE" [title]="'charts.lineChart.title' | translate"
-    [chamados]="chamadosMock"></app-chart>
+    [chamados]="simplifiedCalls"></app-chart>
 
   <app-chart [type]="ChartType.COLUMN" [title]="'charts.columnChart.title' | translate"
-    [chamados]="chamadosMock"></app-chart>
+    [chamados]="simplifiedCalls"></app-chart>
 </div>
