@@ -14,7 +14,9 @@ import { CustomInputComponent } from '../../../shared/components/custom-input/cu
   templateUrl: './clients-modal.component.html',
   styleUrl: './clients-modal.component.scss'
 })
+
 export class ClientsModalComponent {
+
   public clients: any[] = [];
   searchControl = new FormControl('');
 
@@ -31,7 +33,6 @@ export class ClientsModalComponent {
 
   onSearchClients() {
     const term = this.searchControl.value?.toLowerCase() || '';
-    // Aqui você pode fazer um filtro em `clients`, ou emitir para o parent, etc.
     console.log('Buscar cliente:', term);
   }
 
