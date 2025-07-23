@@ -113,5 +113,16 @@
     "call-list-open": "Lista todos Chamados abertos",
     "call-list-close": "Lista todos Chamados fechados",
     "client-list": "Lista de Clientes"
+  },
+  "paginator": {
+    "itemsPerPageLabel": "Itens por página:",
+    "nextPageLabel": "Próxima página",
+    "previousPageLabel": "Página anterior",
+    "firstPageLabel": "Primeira página",
+    "lastPageLabel": "Última página",
+    "rangeLabel": {
+      "empty": "0 de {{length}}",
+      "full": "{{start}} – {{end}} de {{length}}"
+    }
   }
 }

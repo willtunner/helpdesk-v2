@@ -24,6 +24,8 @@ import { environment } from './app/environments/environment';
 // 👇 IMPORTAÇÕES DO NGX-TRANSLATE
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
+import { MatPaginatorIntl } from '@angular/material/paginator';
+import { CustomMatPaginatorIntl } from './app/services/mat-paginator-intl.service';
 
 // 👇 FUNÇÃO DE LOADER PARA OS JSONS DE TRADUÇÃO
 export function HttpLoaderFactory(http: HttpClient) {
@@ -65,6 +67,7 @@ bootstrapApplication(AppComponent, {
         }
       })
     ),
+    { provide: MatPaginatorIntl, useClass: CustomMatPaginatorIntl },
     ...firebaseProviders // Spread operator para incluir todos os providers do Firebase
   ]
 }).catch(err => console.error(err));
