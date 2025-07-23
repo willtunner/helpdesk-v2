@@ -34,6 +34,17 @@
       "description": "Este es un gráfico de barras de ejemplo que muestra la distribución de tickets por empresa."
     }
   },
+  "chart": {
+    "callsByMonth": "Llamados por mes",
+    "period": "Período",
+    "monthYear": "Mes/Año",
+    "callCount": "Cantidad de Llamados",
+    "noDataTitle": "No hay datos disponibles",
+    "noDataSubtitle": "No hay llamados para el período seleccionado",
+    "last30Days": "Últimos 30 días",
+    "last6Months": "Últimos 6 meses",
+    "allAvailableData": "Todos los datos disponibles"
+  },
   "sideNav": {
     "home": "Inicio",
     "clients": "Clientes",

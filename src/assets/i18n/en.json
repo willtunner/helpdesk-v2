@@ -34,6 +34,17 @@
       "description": "This is a bar chart example showing ticket distribution by company."
     }
   },
+  "chart": {
+    "callsByMonth": "Calls by Month",
+    "period": "Period",
+    "monthYear": "Month/Year",
+    "callCount": "Call Count",
+    "noDataTitle": "No data available",
+    "noDataSubtitle": "There are no calls for the selected period",
+    "last30Days": "Last 30 Days",
+    "last6Months": "Last 6 Months",
+    "allAvailableData": "All Available Data"
+  },
   "sideNav": {
     "home": "Home",
     "clients": "Clients",

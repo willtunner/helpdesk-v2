@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, Signal, effect, inject } from '@angular/core';
 import { HighchartsChartModule } from 'highcharts-angular';
 import * as Highcharts from 'highcharts';
 import { CommonModule } from '@angular/common';
@@ -6,6 +6,7 @@ import { ChartType } from '../../../enums/chart-types.enum';
 import { DynamicThreeToggleComponent } from '../dynamic-three-toggle/dynamic-three-toggle.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
+import { TranslateService } from '../../../services/translate.service'; // Ajuste o path conforme seu projeto
 
 @Component({
   selector: 'app-chart',
@@ -24,10 +25,10 @@ export class ChartComponent implements OnInit, OnChanges {
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {};
   chartInstance!: Highcharts.Chart;
-  selectedToggle: string = 'ano'; // Alterado para 'ano' como padrão
+  selectedToggle: string = 'ano';
 
   @Input() type: ChartType = ChartType.COLUMN;
-  @Input() title: string = 'Gráfico de Chamados por Empresa';
+  @Input() title: string = '';
   @Input() subtitle: string = '';
   @Input() chamados: {
     id: string;
@@ -38,24 +39,24 @@ export class ChartComponent implements OnInit, OnChanges {
 
   private readonly months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
   private colorMap: Map<string, string> = new Map();
+  private translateService = inject(TranslateService);
 
   ngOnInit(): void {
+    this.setupReactivity();
     this.buildChartOptions();
   }
 
-  ngOnChanges(changes: SimpleChanges): void {
-    if (changes['chamados']) {
-      this.colorMap.clear(); // Limpa o mapa de cores quando os dados mudam
-      this.buildChartOptions();
-    }
+  ngOnChanges(): void {
+    this.colorMap.clear();
+    this.buildChartOptions();
   }
 
-  private generateColorForName(name: string): string {
-    if (!this.colorMap.has(name)) {
-      const color = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
-      this.colorMap.set(name, color);
-    }
-    return this.colorMap.get(name)!;
+  private setupReactivity() {
+    // Reage a mudanças de idioma
+    effect(() => {
+      const _ = this.translateService.selectedLanguage(); // dispara reação
+      this.buildChartOptions();
+    });
   }
 
   chartCallback: Highcharts.ChartCallbackFunction = (chart) => {
@@ -76,23 +77,18 @@ export class ChartComponent implements OnInit, OnChanges {
       return;
     }
 
-    // Encontra o ano mínimo e máximo para ajustar as categorias
     const years = new Set<number>();
     for (const chamado of chamadosFiltrados) {
       const [day, month, year] = chamado.data.split('/').map(Number);
-      if (day && month && year) {
-        years.add(year);
-      }
+      if (day && month && year) years.add(year);
     }
 
     const sortedYears = Array.from(years).sort();
     const categories = this.generateCategories(sortedYears);
 
-    // Processa os dados
     for (const chamado of chamadosFiltrados) {
       const { companyId, companyName, data } = chamado;
       const [day, month, year] = data.split('/').map(Number);
-      
       if (!day || !month || !year) continue;
 
       if (!companyMap.has(companyId)) {
@@ -103,9 +99,8 @@ export class ChartComponent implements OnInit, OnChanges {
       }
 
       const date = new Date(year, month - 1, day);
-      const monthIndex = date.getMonth();
       const yearIndex = sortedYears.indexOf(year);
-      const categoryIndex = yearIndex * 12 + monthIndex;
+      const categoryIndex = yearIndex * 12 + date.getMonth();
 
       const empresa = companyMap.get(companyId);
       if (empresa && categoryIndex < empresa.data.length) {
@@ -120,31 +115,31 @@ export class ChartComponent implements OnInit, OnChanges {
       color: this.generateColorForName(company.name),
     }));
 
+    const t = (key: string) => this.translateService.instant(key);
+
     this.chartOptions = {
       chart: {
         type: this.type as any,
         inverted: this.type === ChartType.BAR,
       },
       title: { 
-        text: this.title || 'Chamados por mês',
+        text: this.title || t('chart.callsByMonth'),
         align: 'left'
       },
       subtitle: {
-        text: this.subtitle || `Período: ${this.getPeriodLabel()}`,
+        text: this.subtitle || `${t('chart.period')}: ${this.getPeriodLabel()}`,
         align: 'left'
       },
       xAxis: {
         categories: categories,
-        title: { text: 'Mês/Ano' },
+        title: { text: t('chart.monthYear') },
         labels: {
           rotation: -45,
-          style: {
-            fontSize: '10px'
-          }
+          style: { fontSize: '10px' }
         }
       },
       yAxis: {
-        title: { text: 'Qtd de Chamados' },
+        title: { text: t('chart.callCount') },
         allowDecimals: false,
         min: 0
       },
@@ -157,18 +152,14 @@ export class ChartComponent implements OnInit, OnChanges {
         layout: 'horizontal',
         align: 'center',
         verticalAlign: 'bottom',
-        itemStyle: {
-          fontSize: '12px'
-        }
+        itemStyle: { fontSize: '12px' }
       },
       plotOptions: {
         series: {
           dataLabels: { 
             enabled: true,
             format: '{point.y}',
-            style: {
-              textOutline: 'none'
-            }
+            style: { textOutline: 'none' }
           },
           enableMouseTracking: true,
         },
@@ -178,42 +169,21 @@ export class ChartComponent implements OnInit, OnChanges {
         }
       },
       series: series.length > 0 ? series : [{ type: 'line', data: [] }],
-      credits: {
-        enabled: false
-      }
+      credits: { enabled: false }
     };
   }
 
-  private generateCategories(years: number[]): string[] {
-    if (years.length === 0) return [];
-    
-    if (years.length === 1) {
-      return this.months.map(month => `${month}/${years[0]}`);
-    }
-
-    const categories = [];
-    for (const year of years) {
-      for (const month of this.months) {
-        categories.push(`${month}/${year}`);
-      }
-    }
-    return categories;
-  }
-
   private showNoDataMessage(): void {
+    const t = (key: string) => this.translateService.instant(key);
+
     this.chartOptions = {
       title: {
-        text: 'Nenhum dado disponível',
-        style: {
-          color: '#666666',
-          fontWeight: 'bold'
-        }
+        text: t('chart.noDataTitle'),
+        style: { color: '#666', fontWeight: 'bold' }
       },
       subtitle: {
-        text: 'Não há chamados para o período selecionado',
-        style: {
-          color: '#999999'
-        }
+        text: t('chart.noDataSubtitle'),
+        style: { color: '#999' }
       },
       series: [{
         type: 'line',
@@ -222,11 +192,21 @@ export class ChartComponent implements OnInit, OnChanges {
     };
   }
 
+  private generateCategories(years: number[]): string[] {
+    if (years.length === 0) return [];
+    const months = this.months;
+
+    return years.length === 1
+      ? months.map(m => `${m}/${years[0]}`)
+      : years.flatMap(year => months.map(m => `${m}/${year}`));
+  }
+
   private getPeriodLabel(): string {
+    const t = (key: string) => this.translateService.instant(key);
     switch (this.selectedToggle) {
-      case 'mes': return 'Últimos 30 dias';
-      case 'semestre': return 'Últimos 6 meses';
-      case 'ano': return 'Todos os dados disponíveis';
+      case 'mes': return t('chart.last30Days');
+      case 'semestre': return t('chart.last6Months');
+      case 'ano': return t('chart.allAvailableData');
       default: return '';
     }
   }
@@ -237,7 +217,7 @@ export class ChartComponent implements OnInit, OnChanges {
   }
 
   private getFilteredChamados(): typeof this.chamados {
-    if (!this.chamados || this.chamados.length === 0) return [];
+    if (!this.chamados?.length) return [];
 
     const hoje = new Date();
     let dataLimite: Date;
@@ -251,23 +231,23 @@ export class ChartComponent implements OnInit, OnChanges {
         dataLimite = new Date(hoje);
         dataLimite.setMonth(dataLimite.getMonth() - 6);
         break;
-      case 'ano':
-        return this.chamados; // Mostra todos os dados sem filtro
       default:
         return this.chamados;
     }
 
     return this.chamados.filter(chamado => {
-      try {
-        const [day, month, year] = chamado.data.split('/').map(Number);
-        if (isNaN(day)) return false;
-        
-        const dataChamado = new Date(year, month - 1, day);
-        return dataChamado >= dataLimite;
-      } catch {
-        return false;
-      }
+      const [d, m, y] = chamado.data.split('/').map(Number);
+      if (isNaN(d)) return false;
+      return new Date(y, m - 1, d) >= dataLimite;
     });
+  }
+
+  private generateColorForName(name: string): string {
+    if (!this.colorMap.has(name)) {
+      const color = '#' + Math.floor(Math.random() * 16777215).toString(16).padStart(6, '0');
+      this.colorMap.set(name, color);
+    }
+    return this.colorMap.get(name)!;
   }
 
   fecharTodos() {
