@@ -85,8 +85,6 @@ export class OperatorHomeComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    this.pieChartData = this.getPieData(this.chamadosMock);
-
     this.translateService.load([
       'charts.pieChart.title',
       'charts.pieChart.description',
@@ -94,7 +92,7 @@ export class OperatorHomeComponent implements OnInit {
     ]);
 
     if (this.user.helpDeskCompanyId) {
-      await this.loadAllData(this.user.helpDeskCompanyId); // aguarda o carregamento de todos os dados
+      await this.loadAllData(this.user.helpDeskCompanyId);
     } else {
       console.warn('Usuário não está associado a uma empresa');
       this.isLoading = false;
@@ -102,18 +100,8 @@ export class OperatorHomeComponent implements OnInit {
 
     const role = this.userService.getEffectiveUserRole(this.user);
     console.log('Função efetiva do usuário:', role);
-
-    this.callService.getSimplifiedCalls(this.user.helpDeskCompanyId)
-      .subscribe({
-        next: (simplifiedCalls) => {
-          this.simplifiedCalls = simplifiedCalls;
-          console.log('Chamados simplificados:', simplifiedCalls);
-        },
-        error: (err) => {
-          console.error('Erro:', err);
-        }
-      });
   }
+
 
   private async loadAllData(helpDeskCompanyId: string): Promise<void> {
     try {
@@ -122,9 +110,9 @@ export class OperatorHomeComponent implements OnInit {
         this.companyService.getCompanyByHelpDeskId(helpDeskCompanyId)
       ]);
 
-      this.clients = clients; // Armazena as empresas associadas
+      this.clients = clients;
       this.countCompanies = clients.length;
-      console.log('Quantidade de empresas associadas:', this.countCompanies, 'Empresas:', clients, 'Company:', company);
+      console.log('Empresas associadas:', clients);
 
       forkJoin({
         open: this.callService.getCalls$(false, helpDeskCompanyId).pipe(
@@ -147,16 +135,23 @@ export class OperatorHomeComponent implements OnInit {
             this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar todos os chamados');
             return of([]);
           })
+        ),
+        simplified: this.callService.getSimplifiedCalls(helpDeskCompanyId).pipe(
+          take(1),
+          catchError(err => {
+            this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar dados para os gráficos');
+            return of([]);
+          })
         )
       }).subscribe({
-        next: ({ open, closed, all }) => {
+        next: ({ open, closed, all, simplified }) => {
           this.countOpenCalls = open.length;
           this.countClosedCalls = closed.length;
           this.countAllCalls = all.length;
+          this.simplifiedCalls = simplified;
+          this.pieChartData = this.getPieData(simplified);
 
-          console.log('Chamadas abertas:', this.countOpenCalls);
-          console.log('Chamadas fechadas:', this.countClosedCalls);
-          console.log('Chamadas totais:', this.countAllCalls);
+          console.log('Chamadas simplificadas:', simplified);
         },
         error: () => {
           this.messageService.customNotification(NotificationType.ERROR, 'Erro geral ao carregar os dados de chamados');
@@ -203,34 +198,6 @@ export class OperatorHomeComponent implements OnInit {
       }
     });
   }
-
-
-  chamadosMock = [
-    { id: "1", data: "07/02/2025", companyId: "1", companyName: "GreenCode" },
-    { id: "2", data: "06/07/2025", companyId: "1", companyName: "GreenCode" },
-    { id: "3", data: "06/01/2025", companyId: "2", companyName: "Allyenados" },
-    { id: "4", data: "04/01/2025", companyId: "2", companyName: "Allyenados" },
-    { id: "5", data: "04/01/2025", companyId: "2", companyName: "Allyenados" },
-    { id: "6", data: "04/01/2025", companyId: "2", companyName: "Allyenados" },
-    { id: "7", data: "04/07/2025", companyId: "2", companyName: "Allyenados" },
-    { id: "8", data: "04/07/2025", companyId: "2", companyName: "Allyenados" },
-    { id: "9", data: "04/07/2025", companyId: "2", companyName: "Allyenados" },
-    { id: "10", data: "01/01/2025", companyId: "3", companyName: "Pollution" },
-    { id: "11", data: "01/02/2025", companyId: "3", companyName: "Pollution" },
-    { id: "12", data: "01/07/2025", companyId: "3", companyName: "Pollution" },
-    { id: "13", data: "01/06/2025", companyId: "3", companyName: "Pollution" },
-    { id: "14", data: "12/01/2023", companyId: "1", companyName: "GreenCode" },
-    { id: "15", data: "03/03/2023", companyId: "2", companyName: "Allyenados" },
-    { id: "16", data: "10/10/2023", companyId: "1", companyName: "GreenCode" },
-    { id: "17", data: "12/04/2025", companyId: "1", companyName: "GreenCode" },
-    { id: "18", data: "12/02/2025", companyId: "1", companyName: "GreenCode" },
-    { id: "19", data: "20/05/2025", companyId: "3", companyName: "Pollution" },
-    { id: "20", data: "03/03/2025", companyId: "4", companyName: "Doom" },
-    { id: "21", data: "10/10/2025", companyId: "4", companyName: "Doom" },
-    { id: "22", data: "12/04/2023", companyId: "4", companyName: "Doom" },
-    { id: "23", data: "12/02/2024", companyId: "4", companyName: "Doom" },
-    { id: "24", data: "20/05/2024", companyId: "4", companyName: "Doom" },
-  ];
 
   getPieData(chamados: any[]) {
     const companyCounts: Record<string, number> = {};

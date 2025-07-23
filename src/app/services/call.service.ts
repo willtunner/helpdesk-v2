@@ -92,7 +92,6 @@ export class CallService {
     );
   }
 
-  // No CallService
   getSimplifiedCalls(helpDeskCompanyId?: string): Observable<SimplifiedCall[]> {
     const constraints: any[] = [];
 

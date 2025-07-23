@@ -25,7 +25,7 @@
 
 
 
-<div class="chart-container">
+<div class="chart-container" *ngIf="!isLoading" >
   <app-chart [type]="ChartType.BAR" [title]="'charts.barChart.title' | translate" [chamados]="simplifiedCalls"></app-chart>
 
   <app-pie-chart [title]="'charts.pieChart.title' | translate" [data]="pieChartData">
@@ -38,3 +38,5 @@
   <app-chart [type]="ChartType.COLUMN" [title]="'charts.columnChart.title' | translate"
     [chamados]="simplifiedCalls"></app-chart>
 </div>
+
+<!-- <pre>{{ simplifiedCalls | json }}</pre> -->
