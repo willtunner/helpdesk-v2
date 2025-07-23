@@ -18,7 +18,7 @@
     "title": "Gráficos",
     "closeAll": "Cerrar Todos",
     "pieChart": {
-      "title": "Tickets por Empresa (Circular)",
+      "title": "Tickets por Empresa",
       "description": "Este es un gráfico circular de ejemplo que muestra la distribución de tickets por empresa."
     },
     "lineChart": {

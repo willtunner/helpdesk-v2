@@ -18,7 +18,7 @@
     "title": "Gráficos",
     "closeAll": "Fechar Todos",
     "pieChart": {
-      "title": "Chamados por Empresa PIE",
+      "title": "Chamados por Empresa",
       "description": "Este é um exemplo de gráfico de pizza que mostra a distribuição de chamados por empresa."
     },
     "lineChart": {

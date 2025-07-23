@@ -18,7 +18,7 @@
     "title": "Charts",
     "closeAll": "Close All",
     "pieChart": {
-      "title": "Tickets by Company (Pie)",
+      "title": "Tickets by Company",
       "description": "This is a pie chart example showing ticket distribution by company."
     },
     "lineChart": {
