@@ -25,7 +25,7 @@
       <div class="call-title"><strong>{{ call.title }}</strong></div>
 
       <div class="call-meta">
-        <span><strong>Cliente:</strong> {{ call.client?.name || '-' }}</span>
+        <span><strong>Cliente:</strong> {{ call.client.name || '-' }}</span>
         <span><strong>Operador:</strong> {{ call.operator?.name || '-' }}</span>
         <span><strong>Status:</strong> {{ call.closed ? 'Fechado' : 'Aberto' }}</span>
         <span><strong>Conexão:</strong> {{ call.connection || '-' }}</span>

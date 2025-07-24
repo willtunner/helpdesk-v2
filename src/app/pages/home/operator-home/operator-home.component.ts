@@ -1,3 +1,4 @@
+//operator-home.ts
 import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
 import { Call, Company, SimplifiedCall, User } from '../../../models/models';
 import { ChartType } from '../../../enums/chart-types.enum';
@@ -51,7 +52,7 @@ export class OperatorHomeComponent implements OnInit {
   userRole: UserType | null = null;
   pieChartData: { name: string; y: number }[] = [];
   countCompanies: number = 0;
-  clients: Company[] = []; // Array para armazenar as empresas
+  clients: Company[] = [];
   countOpenCalls: number = 0;
   countClosedCalls: number = 0;
   countAllCalls: number = 0;
@@ -150,8 +151,6 @@ export class OperatorHomeComponent implements OnInit {
           this.countAllCalls = all.length;
           this.simplifiedCalls = simplified;
           this.pieChartData = this.getPieData(simplified);
-
-          console.log('Chamadas simplificadas:', simplified);
         },
         error: () => {
           this.messageService.customNotification(NotificationType.ERROR, 'Erro geral ao carregar os dados de chamados');

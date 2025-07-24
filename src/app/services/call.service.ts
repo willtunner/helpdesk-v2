@@ -1,3 +1,4 @@
+// call.service.ts
 import { inject, Injectable } from '@angular/core';
 import { Observable, combineLatest, map, from, switchMap, catchError, of, forkJoin } from 'rxjs';
 import { Call, Company, SimplifiedCall, User } from '../models/models';
@@ -143,6 +144,56 @@ export class CallService {
       })
     );
   }
+
+  getSimplifiedCallsByCompanyId(companyId: string): Observable<SimplifiedCall[]> {
+    if (!companyId) {
+      this.messageService.customNotification(NotificationType.ERROR, 'ID da empresa não fornecido');
+      return of([]);
+    }
+  
+    const q = query(this._collectionCalls, where('companyId', '==', companyId));
+  
+    return collectionData(q, { idField: 'id' }).pipe(
+      switchMap((calls: any[]) => {
+        const processedCalls = calls.map(call => {
+          const callDate = (call.created as any)?.toDate?.() || new Date();
+          const formattedDate = formatDate(callDate, 'dd/MM/yyyy', 'en-US');
+  
+          if (call.company) {
+            return of({
+              id: call.id,
+              data: formattedDate,
+              companyId: call.companyId,
+              companyName: call.company.name
+            });
+          }
+  
+          const companyRef = doc(this._firestore, PATH_COMPANIES, call.companyId);
+          return from(getDoc(companyRef)).pipe(
+            map(companySnap => ({
+              id: call.id,
+              data: formattedDate,
+              companyId: call.companyId,
+              companyName: companySnap.exists()
+                ? (companySnap.data() as Company).name
+                : 'Empresa Desconhecida'
+            }))
+          );
+        });
+  
+        return forkJoin(processedCalls);
+      }),
+      catchError(error => {
+        console.error('Erro ao buscar chamados por companyId:', error);
+        this.messageService.customNotification(
+          NotificationType.ERROR,
+          'Erro ao buscar chamados da empresa'
+        );
+        return of([]);
+      })
+    );
+  }
+  
 
 
 
