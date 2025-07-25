@@ -5,6 +5,9 @@ import * as Highcharts from 'highcharts';
 import { TranslateService } from '../../../services/translate.service';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { TagDetailModalComponent } from '../../../pages/home/detail-modal/tag-detail-modal.component';
+import { Call } from '../../../models/models';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-pie-chart',
@@ -17,6 +20,7 @@ export class PieChartComponent implements OnInit {
   @Input() title: string = '';
   @Input() subtitle: string = '';
   @Input() data: { name: string; y: number }[] = [];
+  callsByTag: Record<string, Call[]> = {};
 
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {};
@@ -24,7 +28,7 @@ export class PieChartComponent implements OnInit {
   private translateService = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
 
-  constructor() {
+  constructor(public dialog: MatDialog,) {
     effect(() => {
       const traducoes = this.translateService.translations();
       const chamadosText = traducoes['chart.calls'] || 'Chamados';
@@ -74,6 +78,13 @@ export class PieChartComponent implements OnInit {
             enabled: true,
             format: '{point.name}',
             style: { fontSize: '1em' }
+          },
+          point: {
+            events: {
+              click: (event) => {
+                this.openTagModal(event.point );
+              }
+            }
           }
         }
       },
@@ -85,6 +96,28 @@ export class PieChartComponent implements OnInit {
         }
       ]
     };
+  }
+
+  private openTagModal(point: Highcharts.Point): void {
+    
+    const tagName = point.name;
+    const count = point.y;
+  
+    // Recuperar os chamados da tag clicada
+    const calls = this.callsByTag[tagName] || [];
+  
+    const dialogRef = this.dialog.open(TagDetailModalComponent, {
+      width: '600px',
+      data: {
+        tagName,
+        count,
+        calls
+      }
+    });
+  
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('Modal de tag fechado', result);
+    });
   }
 
   
