@@ -1,5 +1,5 @@
 //operator-home.ts
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
+import { ChangeDetectorRef, Component, Injector, OnInit } from '@angular/core';
 import { Call, Company, SimplifiedCall, User } from '../../../models/models';
 import { ChartType } from '../../../enums/chart-types.enum';
 import { UserType } from '../../../enums/user-types.enum';
@@ -43,14 +43,14 @@ import { CallModalComponent } from '../call-modal/call-modal.component';
     MatProgressSpinnerModule
   ],
   templateUrl: './operator-home.component.html',
-  styleUrl: './operator-home.component.scss'
+  styleUrls: ['./operator-home.component.scss']
 })
 export class OperatorHomeComponent implements OnInit {
   user!: User;
   ChartType = ChartType;
   UserType = UserType;
   userRole: UserType | null = null;
-  pieChartData: { name: string; y: number }[] = [];
+  pieChartData: { name: string; y: number; calls: Call[] }[] = [];
   countCompanies: number = 0;
   clients: Company[] = [];
   countOpenCalls: number = 0;
@@ -68,7 +68,8 @@ export class OperatorHomeComponent implements OnInit {
     private companyService: CompanyService,
     private cdr: ChangeDetectorRef,
     private messageService: SendNotificationService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private injector: Injector
   ) {
     const session = this.auth.currentUser();
     if (session) {
@@ -137,7 +138,7 @@ export class OperatorHomeComponent implements OnInit {
             return of([]);
           })
         ),
-        simplified: this.callService.getSimplifiedCalls(helpDeskCompanyId).pipe(
+        simplified: this.callService.getSimplifiedCallsFiltered(helpDeskCompanyId).pipe(
           take(1),
           catchError(err => {
             this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar dados para os gráficos');
@@ -198,17 +199,23 @@ export class OperatorHomeComponent implements OnInit {
     });
   }
 
-  getPieData(chamados: any[]) {
-    const companyCounts: Record<string, number> = {};
+  getPieData(chamados: any): { name: string; y: number; calls: Call[] }[] {
+  const companyMap: Record<string, Call[]> = {};
 
-    for (const chamado of chamados) {
-      const name = chamado.companyName;
-      companyCounts[name] = (companyCounts[name] || 0) + 1;
+  for (const call of chamados) {
+    const name = call.companyName;
+    if (!companyMap[name]) {
+      companyMap[name] = [];
     }
-
-    return Object.entries(companyCounts).map(([name, count]) => ({
-      name,
-      y: count
-    }));
+    companyMap[name].push(call);
   }
+
+  return Object.entries(companyMap).map(([name, calls]) => ({
+    name,
+    y: calls.length,
+    calls
+  }));
+}
+
+  
 }

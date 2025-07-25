@@ -43,7 +43,8 @@
     "noDataSubtitle": "There are no calls for the selected period",
     "last30Days": "Last 30 Days",
     "last6Months": "Last 6 Months",
-    "allAvailableData": "All Available Data"
+    "allAvailableData": "All Available Data",
+    "calls": "Tickets"
   },
   "sideNav": {
     "home": "Home",

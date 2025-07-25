@@ -43,7 +43,8 @@
     "noDataSubtitle": "Não há chamados para o período selecionado",
     "last30Days": "Últimos 30 dias",
     "last6Months": "Últimos 6 meses",
-    "allAvailableData": "Todos os dados disponíveis"
+    "allAvailableData": "Todos os dados disponíveis",
+    "calls": "Chamados"
   },
   "sideNav": {
     "home": "Início",

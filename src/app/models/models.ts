@@ -146,8 +146,8 @@ export interface Company {
   }
 
   export interface SimplifiedCall {
-    id: string;
-    data: string;
+    callId: string;
+    date: string;
     companyId: string;
     companyName: string;
   }

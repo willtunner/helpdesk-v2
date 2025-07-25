@@ -15,15 +15,12 @@ import { ThemeService } from '../../services/theme.service';
 import { cnpjValidator, cpfValidator } from '../../shared/validators/validators';
 import { ChartComponent } from '../../shared/components/line-chart/line-chart.component';
 import { ChartType } from '../../enums/chart-types.enum';
-import { PieChartComponent } from '../../shared/components/pie-chart/pie-chart.component';
 import { DropdownVideosComponent } from '../../shared/components/dropdown-videos/dropdown-videos.component';
 import { DropDownVideos } from '../../models/models';
 import { Observable } from 'rxjs';
 import { VideoService } from '../../services/videoService.service';
 import { MtbDevComponent } from '../../shared/components/mtb-dev/mtb-dev.component';
-import { NumberCounterComponent } from '../../shared/components/number-counter/number-counter.component';
 import { UserService } from '../../services/user.service';
-import { DynamicSelectComponent } from '../../shared/components/dynamic-select/dynamic-select.component';
 import { DashboardCardComponent } from '../../shared/components/dashboard-card/dashboard-card.component';
 import { TranslateModule } from '@ngx-translate/core';
 
@@ -32,11 +29,11 @@ import { TranslateModule } from '@ngx-translate/core';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CustomInputComponent, MatButtonModule,
       DynamicTableComponent, DynamicButtonComponent, MatIconModule, DynamicThreeToggleComponent,
-      RichTextEditorComponent, MatInputModule, ChartComponent, NumberCounterComponent,
-      PieChartComponent, DropdownVideosComponent, MtbDevComponent, DynamicSelectComponent,
+      RichTextEditorComponent, MatInputModule, ChartComponent, 
+      DropdownVideosComponent, MtbDevComponent,
       DashboardCardComponent, TranslateModule],
   templateUrl: './exemples.component.html',
-  styleUrl: './exemples.component.scss',
+  styleUrls: ['./exemples.component.scss'],
   providers: [
     {
       provide: NG_VALUE_ACCESSOR,

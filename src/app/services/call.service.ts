@@ -1,6 +1,6 @@
 // call.service.ts
 import { inject, Injectable } from '@angular/core';
-import { Observable, combineLatest, map, from, switchMap, catchError, of, forkJoin } from 'rxjs';
+import { Observable, combineLatest, map, from, switchMap, catchError, of, forkJoin, throwError } from 'rxjs';
 import { Call, Company, SimplifiedCall, User } from '../models/models';
 import { addDoc, collection, collectionData, deleteDoc, doc, Firestore, getDoc, getDocs, orderBy, query, Timestamp, updateDoc, where } from '@angular/fire/firestore';
 import { SendNotificationService } from './send-notification.service';
@@ -93,45 +93,50 @@ export class CallService {
     );
   }
 
-  getSimplifiedCalls(helpDeskCompanyId?: string): Observable<SimplifiedCall[]> {
+  getSimplifiedCallsFiltered(
+    helpDeskCompanyId?: string | null,
+    companyId?: string | null
+  ): Observable<SimplifiedCall[]> {
     const constraints: any[] = [];
 
-    if (helpDeskCompanyId) {
+    if (helpDeskCompanyId != null) {
       constraints.push(where('helpDeskCompanyId', '==', helpDeskCompanyId));
+    }
+
+    if (companyId != null) {
+      constraints.push(where('companyId', '==', companyId));
     }
 
     const q = query(this._collectionCalls, ...constraints);
 
     return collectionData(q, { idField: 'id' }).pipe(
       switchMap((calls: any[]) => {
-        // Processa cada chamado para obter o nome da empresa
         const processedCalls = calls.map(call => {
           const callDate = (call.created as any)?.toDate?.() || new Date();
           const formattedDate = formatDate(callDate, 'dd/MM/yyyy', 'en-US');
 
-          // Se já tiver os dados da empresa incluídos
           if (call.company) {
             return of({
-              id: call.id,
-              data: formattedDate,
+              callId: call.id,
+              date: formattedDate,
               companyId: call.companyId,
               companyName: call.company.name
             });
           }
 
-          // Caso contrário, busca o nome da empresa
           const companyRef = doc(this._firestore, PATH_COMPANIES, call.companyId);
           return from(getDoc(companyRef)).pipe(
             map(companySnap => ({
-              id: call.id,
-              data: formattedDate,
+              callId: call.id,
+              date: formattedDate,
               companyId: call.companyId,
-              companyName: companySnap.exists() ? (companySnap.data() as Company).name : 'Empresa Desconhecida'
+              companyName: companySnap.exists()
+                ? (companySnap.data() as Company).name
+                : 'Empresa Desconhecida'
             }))
           );
         });
 
-        // Combina todos os observables em um único array
         return forkJoin(processedCalls);
       }),
       catchError(error => {
@@ -145,56 +150,82 @@ export class CallService {
     );
   }
 
-  getSimplifiedCallsByCompanyId(companyId: string): Observable<SimplifiedCall[]> {
-    if (!companyId) {
-      this.messageService.customNotification(NotificationType.ERROR, 'ID da empresa não fornecido');
-      return of([]);
-    }
-  
-    const q = query(this._collectionCalls, where('companyId', '==', companyId));
-  
-    return collectionData(q, { idField: 'id' }).pipe(
-      switchMap((calls: any[]) => {
-        const processedCalls = calls.map(call => {
-          const callDate = (call.created as any)?.toDate?.() || new Date();
-          const formattedDate = formatDate(callDate, 'dd/MM/yyyy', 'en-US');
-  
-          if (call.company) {
-            return of({
-              id: call.id,
-              data: formattedDate,
-              companyId: call.companyId,
-              companyName: call.company.name
-            });
+  getCallsByIds(ids: string | string[]): Observable<Call | Call[]> {
+    // Se for um único ID
+    if (typeof ids === 'string') {
+      const callRef = doc(this._firestore, PATH_CALLS, ids);
+      return from(getDoc(callRef)).pipe(
+        map(callSnap => {
+          if (!callSnap.exists()) {
+            throw new Error(`Chamado com ID ${ids} não encontrado`);
           }
-  
-          const companyRef = doc(this._firestore, PATH_COMPANIES, call.companyId);
-          return from(getDoc(companyRef)).pipe(
-            map(companySnap => ({
-              id: call.id,
-              data: formattedDate,
-              companyId: call.companyId,
-              companyName: companySnap.exists()
-                ? (companySnap.data() as Company).name
-                : 'Empresa Desconhecida'
-            }))
+          const callData = callSnap.data() as any;
+          return {
+            id: callSnap.id,
+            ...callData,
+            created: callData.created?.toDate?.() || new Date(),
+            updated: callData.updated?.toDate?.() || new Date(),
+            finalized: callData.finalized?.toDate?.() || null
+          } as Call;
+        }),
+        catchError(error => {
+          console.error(`Erro ao buscar chamado ${ids}:`, error);
+          this.messageService.customNotification(
+            NotificationType.ERROR,
+            `Erro ao buscar chamado`
           );
-        });
-  
-        return forkJoin(processedCalls);
-      }),
-      catchError(error => {
-        console.error('Erro ao buscar chamados por companyId:', error);
-        this.messageService.customNotification(
-          NotificationType.ERROR,
-          'Erro ao buscar chamados da empresa'
-        );
-        return of([]);
-      })
-    );
-  }
-  
+          return throwError(() => error);
+        })
+      );
+    }
 
+    // Se for uma lista de IDs
+    if (Array.isArray(ids)) {
+      if (ids.length === 0) return of([]);
+
+      // Remove IDs duplicados
+      const uniqueIds = [...new Set(ids)];
+
+      // Cria um array de observables para cada ID
+      const calls$ = uniqueIds.map(id => {
+        const callRef = doc(this._firestore, PATH_CALLS, id);
+        return from(getDoc(callRef)).pipe(
+          map(callSnap => {
+            if (!callSnap.exists()) {
+              console.warn(`Chamado com ID ${id} não encontrado`);
+              return null;
+            }
+            const callData = callSnap.data() as any;
+            return {
+              id: callSnap.id,
+              ...callData,
+              created: callData.created?.toDate?.() || new Date(),
+              updated: callData.updated?.toDate?.() || new Date(),
+              finalized: callData.finalized?.toDate?.() || null
+            } as Call;
+          }),
+          catchError(error => {
+            console.error(`Erro ao buscar chamado ${id}:`, error);
+            return of(null); // Retorna null para chamados com erro
+          })
+        );
+      });
+
+      return forkJoin(calls$).pipe(
+        map(calls => calls.filter(call => call !== null) as Call[]), // Filtra nulos
+        catchError(error => {
+          console.error('Erro ao buscar lista de chamados:', error);
+          this.messageService.customNotification(
+            NotificationType.ERROR,
+            'Erro ao buscar lista de chamados'
+          );
+          return of([]);
+        })
+      );
+    }
+
+    return throwError(() => new Error('Tipo de parâmetro inválido'));
+  }
 
 
 }

@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, Signal, effect, inject } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, effect, inject } from '@angular/core';
 import { HighchartsChartModule } from 'highcharts-angular';
 import * as Highcharts from 'highcharts';
 import { CommonModule } from '@angular/common';
@@ -19,7 +19,7 @@ import { TranslateService } from '../../../services/translate.service'; // Ajust
     MatIconModule
   ],
   templateUrl: './line-chart.component.html',
-  styleUrl: './line-chart.component.scss',
+  styleUrls: ['./line-chart.component.scss'],
 })
 export class ChartComponent implements OnInit, OnChanges {
   Highcharts: typeof Highcharts = Highcharts;
@@ -31,8 +31,8 @@ export class ChartComponent implements OnInit, OnChanges {
   @Input() title: string = '';
   @Input() subtitle: string = '';
   @Input() chamados: {
-    id: string;
-    data: string;
+    callId: string;
+    date: string;
     companyId: string;
     companyName: string;
   }[] = [];
@@ -41,22 +41,22 @@ export class ChartComponent implements OnInit, OnChanges {
   private colorMap: Map<string, string> = new Map();
   private translateService = inject(TranslateService);
 
-  ngOnInit(): void {
-    this.setupReactivity();
+  constructor() {
+
+  }
+
+  private readonly languageEffect = effect(() => {
+    const _ = this.translateService.selectedLanguage();
     this.buildChartOptions();
+  });
+
+  ngOnInit(): void {
+
   }
 
   ngOnChanges(): void {
     this.colorMap.clear();
     this.buildChartOptions();
-  }
-
-  private setupReactivity() {
-    // Reage a mudanças de idioma
-    effect(() => {
-      const _ = this.translateService.selectedLanguage(); // dispara reação
-      this.buildChartOptions();
-    });
   }
 
   chartCallback: Highcharts.ChartCallbackFunction = (chart) => {
@@ -79,7 +79,7 @@ export class ChartComponent implements OnInit, OnChanges {
 
     const years = new Set<number>();
     for (const chamado of chamadosFiltrados) {
-      const [day, month, year] = chamado.data.split('/').map(Number);
+      const [day, month, year] = chamado.date.split('/').map(Number);
       if (day && month && year) years.add(year);
     }
 
@@ -87,8 +87,8 @@ export class ChartComponent implements OnInit, OnChanges {
     const categories = this.generateCategories(sortedYears);
 
     for (const chamado of chamadosFiltrados) {
-      const { companyId, companyName, data } = chamado;
-      const [day, month, year] = data.split('/').map(Number);
+      const { companyId, companyName, date } = chamado;
+      const [day, month, year] = date.split('/').map(Number);
       if (!day || !month || !year) continue;
 
       if (!companyMap.has(companyId)) {
@@ -98,9 +98,9 @@ export class ChartComponent implements OnInit, OnChanges {
         });
       }
 
-      const date = new Date(year, month - 1, day);
+      const dateX = new Date(year, month - 1, day);
       const yearIndex = sortedYears.indexOf(year);
-      const categoryIndex = yearIndex * 12 + date.getMonth();
+      const categoryIndex = yearIndex * 12 + dateX.getMonth();
 
       const empresa = companyMap.get(companyId);
       if (empresa && categoryIndex < empresa.data.length) {
@@ -236,7 +236,7 @@ export class ChartComponent implements OnInit, OnChanges {
     }
 
     return this.chamados.filter(chamado => {
-      const [d, m, y] = chamado.data.split('/').map(Number);
+      const [d, m, y] = chamado.date.split('/').map(Number);
       if (isNaN(d)) return false;
       return new Date(y, m - 1, d) >= dataLimite;
     });

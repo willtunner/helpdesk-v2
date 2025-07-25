@@ -1,7 +1,10 @@
-import { Component, Input, OnInit, SimpleChanges } from '@angular/core';
+import { Component, DestroyRef, effect, inject, Input, OnInit, SimpleChanges } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HighchartsChartModule } from 'highcharts-angular';
 import * as Highcharts from 'highcharts';
+import { TranslateService } from '../../../services/translate.service';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-pie-chart',
@@ -18,17 +21,29 @@ export class PieChartComponent implements OnInit {
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {};
 
+  private translateService = inject(TranslateService);
+  private destroyRef = inject(DestroyRef);
+
+  constructor() {
+    effect(() => {
+      const traducoes = this.translateService.translations();
+      const chamadosText = traducoes['chart.calls'] || 'Chamados';
+      this.buildChart(chamadosText);
+    });
+  }
+
   ngOnInit() {
-    this.buildChart();
+    this.translateService.load(['chart.calls']);
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['data'] || changes['title'] || changes['subtitle']) {
-      this.buildChart();
+      const currentText = this.translateService.instant('chart.calls') || 'Chamados';
+      this.buildChart(currentText);
     }
   }
 
-  private buildChart() {
+  private buildChart(chamadosText: string = 'Chamados') {
     this.chartOptions = {
       chart: {
         type: 'pie',
@@ -39,17 +54,17 @@ export class PieChartComponent implements OnInit {
       title: {
         text: this.title,
         align: 'center',
-        y: 40, // ajustado
+        y: 40,
         style: { fontSize: '18px' }
       },
       subtitle: {
         text: this.subtitle,
         align: 'center',
-        y: 30, // ajustado
+        y: 30,
         style: { fontSize: '14px', color: '#666' }
       },
       tooltip: {
-        pointFormat: '<b>{point.y} chamados</b>'
+        pointFormat: `<b>{point.y} ${chamadosText}</b>`
       },
       plotOptions: {
         pie: {
@@ -65,11 +80,12 @@ export class PieChartComponent implements OnInit {
       series: [
         {
           type: 'pie',
-          name: 'Chamados',
+          name: chamadosText,
           data: this.data
         }
       ]
     };
   }
+
   
 }

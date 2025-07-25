@@ -122,7 +122,7 @@ export class ClientHomeComponent implements OnInit {
             return of([]);
           })
         ),
-        simplified: this.callService.getSimplifiedCallsByCompanyId(helpDeskCompanyId).pipe(
+        simplified: this.callService.getSimplifiedCallsFiltered(null, helpDeskCompanyId).pipe(
           take(1),
           catchError(err => {
             this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar dados para os gráficos');
