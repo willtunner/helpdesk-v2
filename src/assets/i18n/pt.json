@@ -106,7 +106,8 @@
     "ADD": "CADASTRAR",
     "FIND": "BUSCAR",
     "PDF": "PDF",
-    "CANCEL": "CANCELAR"
+    "CANCEL": "CANCELAR",
+    "LOGIN": "ENTRAR"
   },
   "inputs": {
     "client-modal": {
@@ -116,7 +117,7 @@
     },
     "call-modal": {
       "search-label": "Buscar Llamado",
-      "search-placeholder": "Ingrese título, operador o conexión...",
+      "search-placeholder": "Pesquise título, operador ou conexão..",
       "found-calls-title": "Chamados Encontrados:"
     }
   },

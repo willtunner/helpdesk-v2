@@ -23,6 +23,7 @@ $print-dark: #7d3c98;
 
 $add-color: #0817a0;
 $add-dark: #0a042e;
+$login-color: #3f51b5;
 
 /* Estilo base compartilhado por todos os botões */
 
@@ -194,6 +195,15 @@ $pdf-color: #e74c3c;
 .pdf {
   background-color: $pdf-color;
   box-shadow: 0 0 20px 0 rgba($pdf-color, 0.55);
+
+  &.success {
+    background-color: $green;
+  }
+}
+
+.button.login {
+  background-color: $login-color;
+  box-shadow: 0 0 20px 0 rgba($login-color, 0.55);
 
   &.success {
     background-color: $green;

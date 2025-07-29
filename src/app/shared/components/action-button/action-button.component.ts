@@ -4,7 +4,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 
-type ButtonType = 'save' | 'edit' | 'delete' | 'clear' | 'print' | 'find' | 'add' | 'pdf' | 'cancel';
+type ButtonType = 'save' | 'edit' | 'delete' | 'clear' | 'print' | 'find' | 'add' | 'pdf' | 'cancel' | 'login';
+
 
 @Component({
   selector: 'app-dynamic-button',
@@ -52,6 +53,7 @@ export class DynamicButtonComponent implements OnDestroy {
       find: { labelKey: 'BUTTON.FIND', icon: 'search', cssClass: 'find' },
       pdf: { labelKey: 'BUTTON.PDF', icon: 'picture_as_pdf', cssClass: 'pdf' },
       cancel: { labelKey: 'BUTTON.CANCEL', icon: 'cancel', cssClass: 'cancel' },
+      login: { labelKey: 'BUTTON.LOGIN', icon: 'chat', cssClass: 'login' },
     };
 
     return map[this.type] ?? map['save'];

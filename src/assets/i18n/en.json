@@ -105,7 +105,8 @@
     "ADD": "REGISTER",
     "FIND": "SEARCH",
     "PDF": "PDF",
-    "CANCEL": "CANCEL"
+    "CANCEL": "CANCEL",
+    "LOGIN": "LOGIN"
   },
   "inputs": {
     "client-modal": {
