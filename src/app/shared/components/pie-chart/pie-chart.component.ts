@@ -3,11 +3,11 @@ import { CommonModule } from '@angular/common';
 import { HighchartsChartModule } from 'highcharts-angular';
 import * as Highcharts from 'highcharts';
 import { TranslateService } from '../../../services/translate.service';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
-import { TagDetailModalComponent } from '../../../pages/home/detail-modal/tag-detail-modal.component';
 import { Call } from '../../../models/models';
 import { MatDialog } from '@angular/material/dialog';
+import { CallService } from '../../../services/call.service';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { CallModalComponent } from '../../../pages/home/call-modal/call-modal.component';
 
 @Component({
   selector: 'app-pie-chart',
@@ -28,7 +28,7 @@ export class PieChartComponent implements OnInit {
   private translateService = inject(TranslateService);
   private destroyRef = inject(DestroyRef);
 
-  constructor(public dialog: MatDialog,) {
+  constructor(public dialog: MatDialog, private callService: CallService) {
     effect(() => {
       const traducoes = this.translateService.translations();
       const chamadosText = traducoes['chart.calls'] || 'Chamados';
@@ -82,7 +82,7 @@ export class PieChartComponent implements OnInit {
           point: {
             events: {
               click: (event) => {
-                this.openTagModal(event.point );
+                this.openCallModal(event.point);
               }
             }
           }
@@ -98,27 +98,37 @@ export class PieChartComponent implements OnInit {
     };
   }
 
-  private openTagModal(point: Highcharts.Point): void {
-    
+  private openCallModal(point: any): void {
     const tagName = point.name;
     const count = point.y;
   
-    // Recuperar os chamados da tag clicada
-    const calls = this.callsByTag[tagName] || [];
+    const callIds: string[] =
+      Array.isArray(point.calls)
+        ? point.calls.map((c: any) => c.callId).filter((id: any) => typeof id === 'string')
+        : [];
   
-    const dialogRef = this.dialog.open(TagDetailModalComponent, {
-      width: '600px',
-      data: {
-        tagName,
-        count,
-        calls
+    if (callIds.length === 0) {
+      console.warn('Nenhum callId válido encontrado em point.calls');
+      return;
+    }
+  
+    this.callService.getCallsByIds(callIds).pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe({
+      next: (calls: Call[]) => {
+        console.log("")
+        this.dialog.open(CallModalComponent, {
+          width: '600px',
+          data: { tagName, count, calls }
+        });
+      },
+      error: (err) => {
+        console.error('Erro ao abrir modal com chamados:', err);
       }
     });
-  
-    dialogRef.afterClosed().subscribe(result => {
-      console.log('Modal de tag fechado', result);
-    });
   }
+  
+  
 
   
 }

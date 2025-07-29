@@ -13,6 +13,7 @@ const PATH_CALLS = 'calls';
 const PATH_COMPANIES = 'company';
 const PATH_CLIENTS = 'clients';
 const PATH_HELPCOMPANIES = 'helpCompanies';
+const PATH_OPERATOR = 'users';
 
 @Injectable({
   providedIn: 'root'
@@ -23,6 +24,7 @@ export class CallService {
   private _collectionClients = collection(this._firestore, PATH_CLIENTS);
   private _collectionCompanies = collection(this._firestore, PATH_COMPANIES);
   private _collectionHelpCompanies = collection(this._firestore, PATH_HELPCOMPANIES);
+  private _collectionOperator = collection(this._firestore, PATH_OPERATOR);
 
   constructor(
     private messageService: SendNotificationService,
@@ -150,82 +152,90 @@ export class CallService {
     );
   }
 
-  getCallsByIds(ids: string | string[]): Observable<Call | Call[]> {
-    // Se for um único ID
-    if (typeof ids === 'string') {
-      const callRef = doc(this._firestore, PATH_CALLS, ids);
+  getCallsByIds(ids: string[]): Observable<Call[]> {
+    if (!Array.isArray(ids) || ids.length === 0) {
+      return of([]);
+    }
+  
+    const uniqueIds = [...new Set(ids)];
+  
+    const callRequests$ = uniqueIds.map(id => {
+      const callRef = doc(this._firestore, PATH_CALLS, id);
+  
       return from(getDoc(callRef)).pipe(
-        map(callSnap => {
+        switchMap(callSnap => {
           if (!callSnap.exists()) {
-            throw new Error(`Chamado com ID ${ids} não encontrado`);
+            console.warn(`Chamado com ID ${id} não encontrado`);
+            return of(null);
           }
+  
           const callData = callSnap.data() as any;
-          return {
+  
+          const callBase: Call = {
             id: callSnap.id,
             ...callData,
             created: callData.created?.toDate?.() || new Date(),
             updated: callData.updated?.toDate?.() || new Date(),
-            finalized: callData.finalized?.toDate?.() || null
-          } as Call;
+            finalized: callData.finalized?.toDate?.() || null,
+            client: {} as User,
+            operator: {} as User,
+            company: {} as Company
+          };
+  
+          // Referências relacionadas
+          const companyRef = doc(this._firestore, PATH_COMPANIES, callData.companyId);
+          const clientRef = doc(this._firestore, PATH_CLIENTS, callData.clientId);
+          const operatorRef = doc(this._firestore, PATH_OPERATOR, callData.operatorId);
+  
+          return forkJoin([
+            from(getDoc(clientRef)),
+            from(getDoc(companyRef)),
+            from(getDoc(operatorRef))
+          ]).pipe(
+            map(([clientSnap, companySnap, operatorSnap]) => {
+              const client = clientSnap.exists() ? { id: clientSnap.id, ...clientSnap.data() } as User : null;
+              const company = companySnap.exists() ? { id: companySnap.id, ...companySnap.data() } as Company : null;
+              const operator = operatorSnap.exists() ? { id: operatorSnap.id, ...operatorSnap.data() } as User : null;
+  
+              // Logs conforme solicitado
+              // console.log(`Cliente (${callBase.id}):`, client);
+              // console.log(`Empresa (${callBase.id}):`, company);
+              // console.log(`Operador (${callBase.id}):`, operator);
+  
+              return {
+                ...callBase,
+                client: client ?? null,
+                company: company ?? null,
+                operator: operator ?? null
+              };
+            })
+          );
         }),
         catchError(error => {
-          console.error(`Erro ao buscar chamado ${ids}:`, error);
-          this.messageService.customNotification(
-            NotificationType.ERROR,
-            `Erro ao buscar chamado`
-          );
-          return throwError(() => error);
+          console.error(`Erro ao buscar chamado ${id}:`, error);
+          return of(null);
         })
       );
-    }
-
-    // Se for uma lista de IDs
-    if (Array.isArray(ids)) {
-      if (ids.length === 0) return of([]);
-
-      // Remove IDs duplicados
-      const uniqueIds = [...new Set(ids)];
-
-      // Cria um array de observables para cada ID
-      const calls$ = uniqueIds.map(id => {
-        const callRef = doc(this._firestore, PATH_CALLS, id);
-        return from(getDoc(callRef)).pipe(
-          map(callSnap => {
-            if (!callSnap.exists()) {
-              console.warn(`Chamado com ID ${id} não encontrado`);
-              return null;
-            }
-            const callData = callSnap.data() as any;
-            return {
-              id: callSnap.id,
-              ...callData,
-              created: callData.created?.toDate?.() || new Date(),
-              updated: callData.updated?.toDate?.() || new Date(),
-              finalized: callData.finalized?.toDate?.() || null
-            } as Call;
-          }),
-          catchError(error => {
-            console.error(`Erro ao buscar chamado ${id}:`, error);
-            return of(null); // Retorna null para chamados com erro
-          })
+    });
+  
+    return forkJoin(callRequests$).pipe(
+      map(calls => calls.filter((call): call is Call => call !== null) as Call[]),
+      catchError(error => {
+        console.error('Erro ao buscar chamados por IDs:', error);
+        this.messageService.customNotification(
+          NotificationType.ERROR,
+          'Erro ao buscar lista de chamados'
         );
-      });
-
-      return forkJoin(calls$).pipe(
-        map(calls => calls.filter(call => call !== null) as Call[]), // Filtra nulos
-        catchError(error => {
-          console.error('Erro ao buscar lista de chamados:', error);
-          this.messageService.customNotification(
-            NotificationType.ERROR,
-            'Erro ao buscar lista de chamados'
-          );
-          return of([]);
-        })
-      );
-    }
-
-    return throwError(() => new Error('Tipo de parâmetro inválido'));
+        return of([]);
+      })
+    );
   }
+  
+  
+  
+
+  
+
 
 
 }

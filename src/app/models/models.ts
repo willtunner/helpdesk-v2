@@ -23,9 +23,9 @@ export interface Company {
      created: Date;
      updated: Date;
      companyId: string;
-     company?: Company | null;
+     company: Company | null;
      clientId: string;
-     client: User;
+     client: User | null;
      title: string;
      description: string;
      resolution: string;
@@ -34,7 +34,7 @@ export interface Company {
      closed: boolean;
      finalized: Date;
      operatorId: string;
-     operator?: User;
+     operator: User | null;
      helpDeskCompanyId?: string;
   }
 
@@ -75,7 +75,7 @@ export interface Company {
     helpDeskCompanyId?: string;
     helpDeskCompany?: HelpDeskCompany | null;
     companyId?: string;
-    company?: Company;
+    company?: Company | null;
     occurrency?: string;
   }
 

@@ -34,6 +34,7 @@ export class CallModalComponent {
   ) {
     this.calls = data.calls ?? [];
     this.type = data.type;
+    console.log("calls Modal", data.calls);
   }
 
   close(): void {

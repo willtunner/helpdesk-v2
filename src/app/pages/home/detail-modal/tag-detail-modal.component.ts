@@ -23,7 +23,6 @@ export class TagDetailModalComponent implements OnInit {
 
   constructor(
     private companyService: CompanyService,
-    private operatorsService: OperatorsService,
     public dialogRef: MatDialogRef<TagDetailModalComponent>,
     private dialog: MatDialog,
     @Inject(MAT_DIALOG_DATA) public data: { tagName: string; count: number; month?: string; calls?: Call[] }

@@ -19,18 +19,25 @@
   </div>
 
   <div *ngIf="hasCalls; else noCalls" class="modal-list">
-    <h3>{{ 'inputs.call-modal.found-calls-title' | translate }} <span class="highlight-count">{{ calls.length }}</span></h3>
+    <h5>{{ 'inputs.call-modal.found-calls-title' | translate }} <span class="highlight-count">{{ calls.length }}</span></h5>
 
     <div class="modal-item" *ngFor="let call of calls" tabindex="0">
-      <div class="call-title"><strong>{{ call.title }}</strong></div>
-
+      <!-- Linha com título e status -->
+      <div class="call-header-row">
+        <div class="call-title"><strong>{{ call.title }}</strong></div>
+        <div class="call-status" [ngClass]="call.closed ? 'status-closed' : 'status-open'">
+          {{ call.closed ? 'Fechado' : 'Aberto' }}
+        </div>
+      </div>
+    
+      <!-- Metadados -->
       <div class="call-meta">
-        <span><strong>Cliente:</strong> {{ call.client.name || '-' }}</span>
+        <span><strong>Cliente:</strong> {{ call.client?.name || '-' }}</span>
         <span><strong>Operador:</strong> {{ call.operator?.name || '-' }}</span>
-        <span><strong>Status:</strong> {{ call.closed ? 'Fechado' : 'Aberto' }}</span>
         <span><strong>Conexão:</strong> {{ call.connection || '-' }}</span>
       </div>
-
+    
+      <!-- Tags -->
       <div class="keywords" *ngIf="call.tags?.length">
         <span class="keyword" *ngFor="let tag of call.tags">{{ tag }}</span>
       </div>
