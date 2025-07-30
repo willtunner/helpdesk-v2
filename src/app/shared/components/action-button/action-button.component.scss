@@ -25,6 +25,8 @@ $add-color: #0817a0;
 $add-dark: #0a042e;
 $login-color: #3f51b5;
 
+$logout-hover-color: #c0392b;
+
 /* Estilo base compartilhado por todos os botões */
 
 .button {
@@ -91,8 +93,10 @@ $login-color: #3f51b5;
       left: -72%;
       opacity: 0;
     }
+
     .icon {
       width: 100%;
+
       mat-icon {
         font-size: 28px;
         /* Aumentado no hover/success */
@@ -108,6 +112,7 @@ $login-color: #3f51b5;
   &:hover {
     opacity: 0.9;
   }
+
   &:active {
     opacity: 1;
   }
@@ -118,6 +123,7 @@ $login-color: #3f51b5;
 .button.save {
   background-color: $save-color;
   box-shadow: 0 0 20px 0 rgba($save-color, 0.55);
+
   &.success {
     background-color: $green;
   }
@@ -126,6 +132,7 @@ $login-color: #3f51b5;
 .button.edit {
   background-color: $edit-color;
   box-shadow: 0 0 20px 0 rgba($edit-color, 0.55);
+
   &.success {
     background-color: $green;
   }
@@ -143,6 +150,7 @@ $login-color: #3f51b5;
 .button.delete {
   background-color: $delete-color;
   box-shadow: 0 0 20px 0 rgba($delete-color, 0.55);
+
   &.success {
     background-color: $green;
   }
@@ -151,6 +159,7 @@ $login-color: #3f51b5;
 .button.print {
   background-color: $print-color;
   box-shadow: 0 0 20px 0 rgba($print-color, 0.55);
+
   &.success {
     background-color: $green;
   }
@@ -160,6 +169,7 @@ $login-color: #3f51b5;
   background-color: $add-color;
   width: 150px;
   box-shadow: 0 0 20px 0 rgba($add-color, 0.55);
+
   &.success {
     background-color: $green;
   }
@@ -171,6 +181,7 @@ $login-color: #3f51b5;
 }
 
 $pdf-color: #e74c3c;
+
 .pdf {
   background-color: $pdf-color;
   box-shadow: 0 0 20px 0 rgba($pdf-color, 0.55);
@@ -181,6 +192,7 @@ $pdf-color: #e74c3c;
 }
 
 $find-color: #1abc9c;
+
 .find {
   background-color: $find-color;
   box-shadow: 0 0 20px 0 rgba($find-color, 0.55);
@@ -192,6 +204,7 @@ $find-color: #1abc9c;
 
 
 $pdf-color: #e74c3c;
+
 .pdf {
   background-color: $pdf-color;
   box-shadow: 0 0 20px 0 rgba($pdf-color, 0.55);
@@ -202,11 +215,21 @@ $pdf-color: #e74c3c;
 }
 
 .button.login {
-  background-color: $login-color;
+  background-color: $login-color; // azul
   box-shadow: 0 0 20px 0 rgba($login-color, 0.55);
+  color: white;
 
   &.success {
     background-color: $green;
   }
 }
 
+.button.logout {
+  background-color: $delete-color; // vermelho padrão
+  box-shadow: 0 0 20px 0 rgba($delete-color, 0.55);
+  color: white;
+
+  &.success {
+    background-color: $green;
+  }
+}

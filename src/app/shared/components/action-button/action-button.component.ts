@@ -22,6 +22,9 @@ export class DynamicButtonComponent implements OnDestroy {
 
   @Output() clicked = new EventEmitter<void>();
 
+  isLogin: boolean = false;
+  hovered: boolean = false;
+
   private langChangeSub: Subscription;
 
   constructor(
@@ -39,25 +42,56 @@ export class DynamicButtonComponent implements OnDestroy {
   }
 
   emit() {
-    if (!this.disabled) this.clicked.emit();
+    if (this.type === 'login') {
+      this.isLogin = !this.isLogin;
+    }
+    if (!this.disabled) {
+      this.clicked.emit();
+    }
+  }
+
+  onMouseEnter() {
+    if (this.type === 'login') {
+      this.hovered = true;
+    }
+  }
+
+  onMouseLeave() {
+    if (this.type === 'login') {
+      this.hovered = false;
+    }
   }
 
   get config() {
+    if (this.type === 'login') {
+      const isLoggedIn = this.isLogin;
+      const isHovering = this.hovered;
+  
+      return {
+        labelKey: isLoggedIn ? 'BUTTON.LOGOUT' : 'BUTTON.LOGIN',
+        icon: isLoggedIn ? 'speaker_notes_off' : 'speaker_notes',
+        cssClass: isLoggedIn
+          ? (isHovering ? 'login' : 'logout') // Sair: vermelho, hover: azul
+          : (isHovering ? 'logout' : 'login'), // Entrar: azul, hover: vermelho
+      };
+    }
+  
     const map: Record<ButtonType, { labelKey: string; icon: string; cssClass: string }> = {
       save: { labelKey: 'BUTTON.SAVE', icon: 'save', cssClass: 'save' },
       edit: { labelKey: 'BUTTON.EDIT', icon: 'edit', cssClass: 'edit' },
       delete: { labelKey: 'BUTTON.DELETE', icon: 'delete_forever', cssClass: 'delete' },
       clear: { labelKey: 'BUTTON.CLEAR', icon: 'clear', cssClass: 'clear' },
       print: { labelKey: 'BUTTON.PRINT', icon: 'print', cssClass: 'print' },
-      add: { labelKey: 'BUTTON.ADD', icon: 'add_ad', cssClass: 'add' },
+      add: { labelKey: 'BUTTON.ADD', icon: 'add', cssClass: 'add' },
       find: { labelKey: 'BUTTON.FIND', icon: 'search', cssClass: 'find' },
       pdf: { labelKey: 'BUTTON.PDF', icon: 'picture_as_pdf', cssClass: 'pdf' },
       cancel: { labelKey: 'BUTTON.CANCEL', icon: 'cancel', cssClass: 'cancel' },
-      login: { labelKey: 'BUTTON.LOGIN', icon: 'chat', cssClass: 'login' },
+      login: { labelKey: 'BUTTON.LOGIN', icon: 'login', cssClass: 'login' },
     };
-
+  
     return map[this.type] ?? map['save'];
   }
+  
 
   get cssClass() {
     return `button ${this.config.cssClass} ${this.success ? 'success' : ''}`;

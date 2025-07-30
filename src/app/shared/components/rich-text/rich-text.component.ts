@@ -32,7 +32,7 @@ import { MatIconModule } from '@angular/material/icon';
 })
 export class RichTextEditorComponent implements ControlValueAccessor {
   @Input() placeholder: string = 'Digite seu texto aqui...';
-  @Input() label: string = 'Editor de Texto Rico';
+  @Input() label: string = 'Editor de Texto';
   @Input() height: string = '300px';
   @Output() contentChanged = new EventEmitter<string>();
 

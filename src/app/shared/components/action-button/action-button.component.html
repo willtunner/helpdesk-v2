@@ -1,7 +1,8 @@
-<button [class]="cssClass" (click)="emit()" [disabled]="disabled">
-    <span>{{ label || config.labelKey | translate }}</span>
-    <div class="icon">
-      <mat-icon class="sidenav-link-icon large-icon">{{ iconName }}</mat-icon>
-    </div>
-  </button>
-  
+<button [class]="cssClass" (click)="emit()" [disabled]="disabled" 
+  (mouseenter)="onMouseEnter()"
+  (mouseleave)="onMouseLeave()">
+  <span>{{ label || config.labelKey | translate }}</span>
+  <div class="icon">
+    <mat-icon class="sidenav-link-icon large-icon">{{ iconName }}</mat-icon>
+  </div>
+</button>

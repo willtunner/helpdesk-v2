@@ -1,12 +1,17 @@
 .chat-container {
   display: flex;
-  // height: 100vh;
+  height: 94vh;
   padding: 8px;
   gap: 12px;
   background-color: #f4f6f8;
   font-size: 12px;
   box-sizing: border-box;
   overflow: hidden;
+  max-width: 1135px;
+
+  @media (max-height: 610px) {
+    height: 84vh;
+  }
 }
 
 .card-board-chat {
@@ -49,18 +54,15 @@ mat-card-title {
     overflow-y: auto;
   }
 
-
+  img {
+    width: 40px;
+    border-radius: 50%;
+  }
 
   .user-info {
     display: flex;
     align-items: center;
     gap: 8px;
-
-    .avatar {
-      width: 30px;
-      height: 30px;
-      border-radius: 50%;
-    }
 
     .status {
       width: 10px;
@@ -86,7 +88,6 @@ mat-card-title {
   flex-direction: column;
   gap: 16px;
   overflow: hidden;
-  height: 480px;
 
   mat-card {
     background-color: #fdfdfd;
@@ -113,7 +114,7 @@ mat-card-title {
       justify-content: center;
       gap: 8px;
       padding: 6px;
-      width: 130px;
+      width: 110px;
       height: 50px;
       background-color: #e3f2fd;
       border-radius: 8px;

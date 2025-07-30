@@ -1,0 +1,11 @@
+::ng-deep .mat-internal-form-field > label {
+    color: #222!important;
+  }
+
+  ::ng-deep mat-radio-button.radio-btn.mat-accent .mat-radio-outer-circle {
+    border-color: #222 !important;
+  }
+  
+  ::ng-deep mat-radio-button.radio-btn.mat-accent .mat-radio-inner-circle {
+    background-color: #222 !important;
+  }

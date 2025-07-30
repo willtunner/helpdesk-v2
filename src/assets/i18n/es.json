@@ -106,7 +106,8 @@
     "FIND": "BUSCAR",
     "PDF": "PDF",
     "CANCEL": "CANCELAR",
-    "LOGIN": "ENGAJAR"
+    "LOGIN": "ENGAJAR",
+    "LOGOUT": "SALIR"
   },
   "inputs": {
     "client-modal": {

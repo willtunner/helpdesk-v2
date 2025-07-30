@@ -1,6 +1,6 @@
 import { inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Company } from '../models/models';
+import { Company, User } from '../models/models';
 import { environment } from '../environments/environment';
 import { addDoc, collection, doc, Firestore, updateDoc, 
   query, where, getDocs, orderBy } from '@angular/fire/firestore';
@@ -82,6 +82,25 @@ export class CompanyService {
         NotificationType.ERROR,
         'Erro ao buscar empresa pelo ID'
       );
+      throw error;
+    }
+  }
+
+  async fetchClientsByCompanyId(companyId: string): Promise<User[]> {
+    try {
+      const clientsCollection = collection(this._firestore, 'clients');
+      const clientsQuery = query(clientsCollection, where('companyId', '==', companyId));
+      const querySnapshot = await getDocs(clientsQuery);
+      return querySnapshot.docs.map((doc) => {
+        const data = doc.data(); // Obtem os dados do documento
+        return {
+          id: doc.id,
+          ...data, // Garante que as propriedades sejam mescladas
+        } as any as User;
+      });
+    } catch (error) {
+      console.error('Erro ao buscar clientes pelo companyId:', error);
+      this.messageService.customNotification(NotificationType.ERROR,'Erro ao buscar clientes pelo companyId');
       throw error;
     }
   }

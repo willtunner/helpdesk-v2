@@ -1,1 +1,55 @@
-<p>calls works!</p>
+<div class="container">
+    <h1>Chamados:</h1>
+    <div class="main-top" style="display: flex;justify-content: space-between;">
+        <div class="companies">
+            <app-dynamic-select [label]="'Empresa'" [options]="companies" [valueKey]="'id'" [labelKey]="'name'"
+                [(model)]="selectedCompany" [type]="'company'" (onChange)="onCompanyChange($event)"
+                (openModal)="openCompanyModal()">
+            </app-dynamic-select>
+        </div>
+        <div class="clients">
+            <app-dynamic-select [label]="'Cliente'" [options]="clients" [valueKey]="'id'" [labelKey]="'nome'"
+                [(model)]="selectedClient" [type]="'client'" (openModal)="abrirModalCliente()">
+            </app-dynamic-select>
+        </div>
+        <div class="conexao">
+            <app-custom-input label="Conexão" [control]="getControl('conexao')" size="pequeno">
+            </app-custom-input>
+        </div>
+
+        <div class="title">
+            <app-custom-input label="Titulo" [control]="getControl('title')" size="grande">
+            </app-custom-input>
+        </div>
+    </div>
+
+    <div class="base" style="display: flex; flex-direction: column; gap: 2px;">
+
+        <app-custom-input [control]="getControl('description')" type="text-area" label="Descrição do problema"
+            placeholder="Digite a descrição aqui" size="full-width">
+        </app-custom-input>
+
+        <form [formGroup]="form">
+            <app-rich-text-editor formControlName="resolution" placeholder="Digite sua observação aqui...">
+            </app-rich-text-editor>
+        </form>
+
+        <div class="tags">
+            <app-tags [tags]="selectedCall?.tags!" (tagsChanged)="onTagsChanged($event)"></app-tags>
+            <!-- Radio Buttons -->
+            <div class="form-radio">
+                <mat-radio-group formControlName="closed" aria-label="closed">
+                    <mat-radio-button [value]="false" class="radio-btn">Aberto</mat-radio-button>
+                    <mat-radio-button [value]="true" class="radio-btn">Fechado</mat-radio-button>
+                </mat-radio-group>
+            </div>
+        </div>
+
+        <div class="buttons">
+            <app-dynamic-button type="save" (clicked)="submit()" [success]="saveSuccess"></app-dynamic-button>
+            <app-dynamic-button type="edit" (clicked)="onEdit()"></app-dynamic-button>
+            <app-dynamic-button type="delete" (clicked)="onDelete()" [success]="deleteSuccess"></app-dynamic-button>
+            <app-dynamic-button type="print" (clicked)="onPrint()"></app-dynamic-button>
+        </div>
+    </div>
+</div>

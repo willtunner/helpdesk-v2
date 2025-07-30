@@ -9,7 +9,7 @@
         <span class="status" [class.online]="isOnline"></span>
         <span>{{ operator.name }}</span>
       </div>
-      <app-dynamic-button type="login" [label]="'Entrar'" (clicked)="onLogin()" class="btn-login"></app-dynamic-button>
+      <app-dynamic-button type="login" (clicked)="onLogin()" class="btn-login"></app-dynamic-button>
     </mat-card>
 
     <!-- Fila de Espera -->

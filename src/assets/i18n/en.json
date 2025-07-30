@@ -106,7 +106,8 @@
     "FIND": "SEARCH",
     "PDF": "PDF",
     "CANCEL": "CANCEL",
-    "LOGIN": "LOGIN"
+    "LOGIN": "LOGIN",
+    "LOGOUT": "LOGOUT"
   },
   "inputs": {
     "client-modal": {

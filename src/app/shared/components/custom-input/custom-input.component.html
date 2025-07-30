@@ -2,23 +2,12 @@
   <mat-label>{{ label | translate }}</mat-label>
 
   <!-- Input do tipo texto, telefone, CPF, CNPJ, etc. -->
-  <ng-container *ngIf="type !== 'date'">
-    <input
-      matInput
-      [type]="inputType"
-      [formControl]="formControl"
-      [placeholder]="placeholder | translate"
-      [mask]="mask"
+  <ng-container *ngIf="type !== 'date' && type !== 'text-area'">
+    <input matInput [type]="inputType" [formControl]="formControl" [placeholder]="placeholder | translate" [mask]="mask"
       [dropSpecialCharacters]="false" />
 
     <!-- Botão de busca (CEP, CNPJ, etc.) -->
-    <button
-      *ngIf="isSearchable"
-      mat-icon-button
-      matSuffix
-      (click)="search()"
-      type="button"
-      aria-label="Buscar"
+    <button *ngIf="isSearchable" mat-icon-button matSuffix (click)="search()" type="button" aria-label="Buscar"
       class="search-button">
       <mat-icon *ngIf="!loading">search</mat-icon>
       <mat-spinner *ngIf="loading" diameter="20" strokeWidth="3" color="primary"></mat-spinner>
@@ -27,14 +16,16 @@
 
   <!-- Input do tipo data -->
   <ng-container *ngIf="type === 'date'">
-    <input
-      matInput
-      [matDatepicker]="picker"
-      [formControl]="formControl"
-      [placeholder]="placeholder || 'Selecione a data'"
-      [value]="control.value | date:'dd/MM/yyyy'" />
+    <input matInput [matDatepicker]="picker" [formControl]="formControl"
+      [placeholder]="placeholder || 'Selecione a data'" [value]="control.value | date:'dd/MM/yyyy'" />
     <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
     <mat-datepicker #picker></mat-datepicker>
+  </ng-container>
+
+  <!-- Novo tipo: text-area -->
+  <ng-container *ngIf="type === 'text-area'">
+    <textarea matInput [formControl]="formControl" [placeholder]="placeholder | translate" rows="5"
+      class="custom-textarea"></textarea>
   </ng-container>
 
   <!-- Mensagens de erro -->
@@ -42,13 +33,15 @@
     <ng-container *ngIf="control.errors?.['required']">{{ 'erros.required' | translate }}</ng-container>
     <ng-container *ngIf="control.errors?.['email']">{{ 'erros.invalid_email' | translate }}</ng-container>
     <ng-container *ngIf="control.errors?.['pattern']">{{ 'erros.invalid_format' | translate }}</ng-container>
-    <ng-container *ngIf="control.errors?.['passwordsMismatch']">{{ 'erros.passwords_mismatch' | translate }}</ng-container>
+    <ng-container *ngIf="control.errors?.['passwordsMismatch']">{{ 'erros.passwords_mismatch' | translate
+      }}</ng-container>
     <ng-container *ngIf="control.errors?.['mask']">{{ 'erros.invalid_mask' | translate }}</ng-container>
     <ng-container *ngIf="control.errors?.['cpf']">{{ 'erros.invalid_cpf' | translate }}</ng-container>
     <ng-container *ngIf="control.errors?.['cnpj']">{{ 'erros.invalid_cnpj' | translate }}</ng-container>
-    <ng-container *ngIf="type === 'email' && control.errors?.['emailExists']">{{ 'erros.email_exist' | translate }}</ng-container>
+    <ng-container *ngIf="type === 'email' && control.errors?.['emailExists']">{{ 'erros.email_exist' | translate
+      }}</ng-container>
   </mat-error>
-  
+
 
   <!-- Dica para campo de e-mail válido -->
   <mat-hint *ngIf="type === 'email' && !control.errors && control.touched && control.value && control.dirty">

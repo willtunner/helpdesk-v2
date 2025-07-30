@@ -56,8 +56,7 @@ export class CustomInputComponent implements OnInit {
     if (!this.control || !(this.control instanceof FormControl)) {
       console.warn('O parâmetro "control" não é um FormControl. Algumas funcionalidades podem não funcionar corretamente.');
     }
-
-    // Define máscara e tipo de input com base no "type"
+  
     switch (this.type) {
       case 'telefone':
         this.mask = '(00) 00000-0000';
@@ -81,12 +80,17 @@ export class CustomInputComponent implements OnInit {
         this.inputType = 'text';
         this.isSearchable = true;
         break;
+      case 'text-area':
+        this.inputType = 'textarea'; // usado apenas para lógica, não define HTML
+        this.mask = null;
+        break;
       default:
         this.inputType = this.type !== 'date' ? this.type : 'text';
         this.mask = null;
         break;
     }
   }
+  
 
   getSizeClass(): string {
     switch (this.size) {

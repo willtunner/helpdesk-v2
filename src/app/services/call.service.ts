@@ -233,7 +233,26 @@ export class CallService {
   
   
   
+  async saveCallWithGeneratedId(call: Omit<Call, 'id'>): Promise<void> {
+    console.log('Salvando chamada:', call);
+    try {
+      // Define os timestamps antes de salvar
+      call.created = new Date();
+      call.updated = new Date();
 
+      const docRef = await addDoc(this._collectionCalls, call); // Salva o documento sem ID
+      await updateDoc(docRef, { id: docRef.id }); // Atualiza o campo ID com o gerado pelo Firestore
+
+      this.messageService.customNotification(
+        NotificationType.SUCCESS,
+        `Call salva com ID: ${docRef}`,
+        5000
+      );
+    } catch (error) {
+      console.error('Erro ao salvar a chamada:', error);
+      throw error;
+    }
+  }
   
 
 

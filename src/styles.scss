@@ -212,6 +212,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
 }
 
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  overflow-x: auto;
+}
 
 
 
