@@ -26,6 +26,7 @@ export class ChartComponent implements OnInit, OnChanges {
   chartOptions: Highcharts.Options = {};
   chartInstance!: Highcharts.Chart;
   selectedToggle: string = 'ano';
+  todasFechadas: boolean = false;
 
   @Input() type: ChartType = ChartType.COLUMN;
   @Input() title: string = '';
@@ -52,6 +53,16 @@ export class ChartComponent implements OnInit, OnChanges {
 
   ngOnInit(): void {
 
+  }
+
+  alternarSeries() {
+    if (!this.chartInstance) return;
+  
+    this.todasFechadas = !this.todasFechadas;
+  
+    this.chartInstance.series.forEach(serie => {
+      this.todasFechadas ? serie.hide() : serie.show();
+    });
   }
 
   ngOnChanges(): void {

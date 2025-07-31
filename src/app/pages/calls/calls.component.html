@@ -1,55 +1,69 @@
 <div class="container">
     <h1>Chamados:</h1>
-    <div class="main-top" style="display: flex;justify-content: space-between;">
+  
+    <form [formGroup]="form">
+      <div class="main-top" style="display: flex; justify-content: space-between;">
+        <!-- Empresa -->
         <div class="companies">
-            <app-dynamic-select [label]="'Empresa'" [options]="companies" [valueKey]="'id'" [labelKey]="'name'"
-                [(model)]="selectedCompany" [type]="'company'" (onChange)="onCompanyChange($event)"
-                (openModal)="openCompanyModal()">
-            </app-dynamic-select>
+          <app-dynamic-select [label]="'Empresa'" [options]="companies" [valueKey]="'id'" [labelKey]="'name'"
+            [(model)]="selectedCompany" [type]="'company'" (onChange)="onCompanyChange($event)"
+            (openModal)="openCompanyModal()" [formControl]="getControl('companyId')">
+          </app-dynamic-select>
         </div>
+  
+        <!-- Cliente -->
         <div class="clients">
-            <app-dynamic-select [label]="'Cliente'" [options]="clients" [valueKey]="'id'" [labelKey]="'nome'"
-                [(model)]="selectedClient" [type]="'client'" (openModal)="abrirModalCliente()">
-            </app-dynamic-select>
+          <app-dynamic-select [label]="'Cliente'" [options]="clients" [valueKey]="'id'" [labelKey]="'name'"
+            [(model)]="selectedClient" [type]="'client'" (openModal)="abrirModalCliente()"
+            [formControl]="getControl('clientId')">
+          </app-dynamic-select>
         </div>
+  
+        <!-- Conexão -->
         <div class="conexao">
-            <app-custom-input label="Conexão" [control]="getControl('conexao')" size="pequeno">
-            </app-custom-input>
+          <app-custom-input label="Conexão" [control]="getControl('connection')" size="pequeno">
+          </app-custom-input>
         </div>
-
+  
+        <!-- Título -->
         <div class="title">
-            <app-custom-input label="Titulo" [control]="getControl('title')" size="grande">
-            </app-custom-input>
+          <app-custom-input label="Título" [control]="getControl('title')" size="grande">
+          </app-custom-input>
         </div>
-    </div>
-
-    <div class="base" style="display: flex; flex-direction: column; gap: 2px;">
-
+      </div>
+  
+      <!-- Descrição -->
+      <div class="base" style="display: flex; flex-direction: column; gap: 2px;">
         <app-custom-input [control]="getControl('description')" type="text-area" label="Descrição do problema"
-            placeholder="Digite a descrição aqui" size="full-width">
+          placeholder="Digite a descrição aqui" size="full-width">
         </app-custom-input>
-
-        <form [formGroup]="form">
-            <app-rich-text-editor formControlName="resolution" placeholder="Digite sua observação aqui...">
-            </app-rich-text-editor>
-        </form>
-
-        <div class="tags">
-            <app-tags [tags]="selectedCall?.tags!" (tagsChanged)="onTagsChanged($event)"></app-tags>
-            <!-- Radio Buttons -->
-            <div class="form-radio">
-                <mat-radio-group formControlName="closed" aria-label="closed">
-                    <mat-radio-button [value]="false" class="radio-btn">Aberto</mat-radio-button>
-                    <mat-radio-button [value]="true" class="radio-btn">Fechado</mat-radio-button>
-                </mat-radio-group>
-            </div>
+  
+        <!-- Observação -->
+        <app-rich-text-editor placeholder="Digite sua observação aqui...">
+        </app-rich-text-editor>
+  
+        <!-- Tags e Radio -->
+        <div class="tags" style="margin-top: 10px;">
+          <app-tags [tags]="selectedCall?.tags!" (tagsChanged)="onTagsChanged($event)">
+          </app-tags>
+  
+          <!-- Status Aberto/Fechado -->
+          <div class="form-radio">
+            <mat-radio-group [formControl]="getControl('closed')" aria-label="closed">
+              <mat-radio-button [value]="false" class="radio-btn">Aberto</mat-radio-button>
+              <mat-radio-button [value]="true" class="radio-btn">Fechado</mat-radio-button>
+            </mat-radio-group>
+          </div>
         </div>
-
-        <div class="buttons">
-            <app-dynamic-button type="save" (clicked)="submit()" [success]="saveSuccess"></app-dynamic-button>
-            <app-dynamic-button type="edit" (clicked)="onEdit()"></app-dynamic-button>
-            <app-dynamic-button type="delete" (clicked)="onDelete()" [success]="deleteSuccess"></app-dynamic-button>
-            <app-dynamic-button type="print" (clicked)="onPrint()"></app-dynamic-button>
-        </div>
-    </div>
-</div>
+      </div>
+      
+      <!-- Botões (coloque DENTRO do form se fazem parte do envio) -->
+      <div class="buttons" style="margin-top: 20px;">
+        <app-dynamic-button type="save" (clicked)="submit()" [success]="saveSuccess"></app-dynamic-button>
+        <app-dynamic-button type="edit" (clicked)="onEdit()"></app-dynamic-button>
+        <app-dynamic-button type="delete" (clicked)="onDelete()" [success]="deleteSuccess"></app-dynamic-button>
+        <app-dynamic-button type="print" (clicked)="onPrint()"></app-dynamic-button>
+      </div>
+    </form>
+  </div>
+  

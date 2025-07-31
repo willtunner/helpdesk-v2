@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input } from '@angular/core';
+import { Component, forwardRef, Input, OnInit } from '@angular/core';
 import { DynamicSelectComponent } from '../../shared/components/dynamic-select/dynamic-select.component';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -6,9 +6,11 @@ import { CustomInputComponent } from '../../shared/components/custom-input/custo
 import { RichTextEditorComponent } from '../../shared/components/rich-text/rich-text.component';
 import { TagsComponent } from '../../shared/components/tags/tags.component';
 import { MatRadioModule } from '@angular/material/radio';
-import { Call } from '../../models/models';
+import { Call, Company, User } from '../../models/models';
 import { CallService } from '../../services/call.service';
 import { DynamicButtonComponent } from '../../shared/components/action-button/action-button.component';
+import { CompanyService } from '../../services/company.service';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-calls',
@@ -33,8 +35,8 @@ import { DynamicButtonComponent } from '../../shared/components/action-button/ac
       }
     ]
 })
-export class CallsComponent {
-  companies = [{ id: 1, name: 'Acme Corp' }, { id: 2, name: 'Globex' }];
+export class CallsComponent implements OnInit {
+  // companies = [{ id: 1, name: 'Acme Corp' }, { id: 2, name: 'Globex' }];
   clients = [{ id: 'c1', name: 'Fulano' }, { id: 'c2', name: 'Beltrano' }];
   selectedCompany: string | null = null;
   selectedClient: string | null = null;
@@ -42,9 +44,16 @@ export class CallsComponent {
   isSaveOrEditSuccess = false;
   saveSuccess = false;
   deleteSuccess = false;
+  companies: Company[] = [];
+  operator!: User;
   @Input() selectedCall: Call | null = null;
 
-  constructor(private fb: FormBuilder, private callServ: CallService) {
+  constructor(
+    private fb: FormBuilder, 
+    private callServ: CallService,
+    private companyServ: CompanyService,
+    private snackBar: MatSnackBar,
+  ) {
     this.form = this.fb.group({
       companyId: [null, Validators.required],
       clientId: [null, Validators.required],
@@ -54,16 +63,34 @@ export class CallsComponent {
       resolution: ['', Validators.required],
       tags: ['', Validators.required],
       closed: [false],
-      // operatorId: [this.operator?.id],
+      operatorId: [this.operator?.id],
     });
   }
 
+  ngOnInit(): void {
+    if (this.selectedCall) {
+      this.form.patchValue({
+        companyId: this.selectedCall.companyId,
+        clientId: this.selectedCall.clientId,
+        connection: this.selectedCall.connection,
+        title: this.selectedCall.title,
+        description: this.selectedCall.description,
+        resolution: this.selectedCall.resolution,
+        tags: this.selectedCall.tags,
+        closed: this.selectedCall.closed,
+        operatorId: this.selectedCall.operatorId,
+      });
+    }
+    this.loadCompanies();
+  }
+
+
   onCompanyChange(companyId: string) {
-    // Lógica da empresa
+    this.form.patchValue({ companyId: companyId });
   }
 
   onClientChange(clientId: string) {
-    // Lógica do cliente
+    this.form.patchValue({ clientId: clientId });
   }
 
   openCompanyModal() {
@@ -77,6 +104,7 @@ export class CallsComponent {
   }
 
   submit() {
+    console.log('Formulário enviado:', this.form.value);
     if (this.form.valid) {
       console.log('Formulário enviado:', this.form.value);
       // Mostrar o conteúdo HTML no console
@@ -124,20 +152,29 @@ export class CallsComponent {
 
   onSubmit() {
 
-    if (this.form.invalid) {
-      return;
-    }
-
-    const formData = this.form.value;
-
-    this.callServ
-      .saveCallWithGeneratedId(formData)
-      .then((res: any) => {
-        this.onClear();
-      })
-      .catch((error) => {
-        console.error('Erro ao salvar a call:', error);
+    if (this.form.valid) {
+      console.log('Formulário enviado:', this.form.value);
+    } else {
+      this.form.markAllAsTouched();
+      this.snackBar.open('Preencha todos os campos obrigatórios.', 'Fechar', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
       });
+    }
+    // if (this.form.invalid) {
+    //   return;
+    // }
+
+    // const formData = this.form.value;
+
+    // this.callServ
+    //   .saveCallWithGeneratedId(formData)
+    //   .then((res: any) => {
+    //     this.onClear();
+    //   })
+    //   .catch((error) => {
+    //     console.error('Erro ao salvar a call:', error);
+    //   });
   }
 
   onClear() {
@@ -149,5 +186,23 @@ export class CallsComponent {
   onEdit(){}
   onDelete(){}
   onPrint(){}
+
+  loadCompanies(): void {
+    this.companyServ.getCompanyByFirebase().subscribe((companies: Company[]) => {
+      this.companies = companies;
+
+      // Reaplica a lógica de filtragem ao carregar as empresas
+      const companyId = this.form.get('companyId')?.value;
+      if (companyId) {
+        this.onCompanyChange(companyId);
+      }
+    }, error => {
+      console.error('Erro ao carregar empresas:', error);
+      this.snackBar.open('Erro ao carregar empresas.', 'Fechar', {
+        duration: 3000,
+        panelClass: ['error-snackbar']
+      });
+    });
+  }
 
 }

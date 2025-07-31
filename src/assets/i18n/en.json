@@ -5,7 +5,7 @@
       "client": "Clients",
       "ticket-open": "Open Tickets",
       "ticket-closed": "Closed Tickets",
-      "ticket-answered": "Answered Tickets",
+      "ticket-answered": "All Tickets",
       "monthly": "Monthly",
       "yearly": "Annual",
       "daily": "Daily",
@@ -17,6 +17,7 @@
   "charts": {
     "title": "Charts",
     "closeAll": "Close All",
+    "openAll": "Open All",
     "pieChart": {
       "title": "Tickets by Company",
       "description": "This is a pie chart example showing ticket distribution by company."

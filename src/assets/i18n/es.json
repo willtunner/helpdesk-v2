@@ -5,7 +5,7 @@
       "client": "Clientes",
       "ticket-open": "Tickets Abiertos",
       "ticket-closed": "Tickets Cerrados",
-      "ticket-answered": "Tickets Respondidos",
+      "ticket-answered": "Todos los Llamados",
       "monthly": "Mensual",
       "yearly": "Anual",
       "daily": "Diario",
@@ -17,6 +17,7 @@
   "charts": {
     "title": "Gráficos",
     "closeAll": "Cerrar Todos",
+    "openAll": "Abrir Todos",
     "pieChart": {
       "title": "Tickets por Empresa",
       "description": "Este es un gráfico circular de ejemplo que muestra la distribución de tickets por empresa."

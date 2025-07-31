@@ -5,7 +5,7 @@
       "client": "Clientes",
       "ticket-open": "Chamados Abertos",
       "ticket-closed": "Chamados Fechados",
-      "ticket-answered": "Chamados Res..",
+      "ticket-answered": "Todos os Chamados",
       "monthly": "Mensal",
       "yearly": "Anual",
       "daily": "Diário",
@@ -17,6 +17,7 @@
   "charts": {
     "title": "Gráficos",
     "closeAll": "Fechar Todos",
+    "openAll": "Abrir Todos",
     "pieChart": {
       "title": "Chamados por Empresa",
       "description": "Este é um exemplo de gráfico de pizza que mostra a distribuição de chamados por empresa."

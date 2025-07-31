@@ -3,10 +3,12 @@ import { HttpClient } from '@angular/common/http';
 import { Company, User } from '../models/models';
 import { environment } from '../environments/environment';
 import { addDoc, collection, doc, Firestore, updateDoc, 
-  query, where, getDocs, orderBy } from '@angular/fire/firestore';
+  query, where, getDocs, orderBy, 
+  collectionData} from '@angular/fire/firestore';
 import { SendNotificationService } from './send-notification.service';
 import { NotificationType } from '../enums/notificationType.enum';
 import { DateTimeFormatPipe } from '../pipes/dateTimeFormatTimeStamp.pipe';
+import { Observable } from 'rxjs';
 
 const PATH = 'company';
 
@@ -103,6 +105,11 @@ export class CompanyService {
       this.messageService.customNotification(NotificationType.ERROR,'Erro ao buscar clientes pelo companyId');
       throw error;
     }
+  }
+
+  getCompanyByFirebase(): Observable<Company[]> {
+    const orderedQuery = query(this._collection, orderBy('name', 'asc'));
+    return collectionData(orderedQuery, { idField: 'id' }) as Observable<Company[]>;
   }
 
 
