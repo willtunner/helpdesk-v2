@@ -1,6 +1,6 @@
 // rich-text-editor.component.ts
 import { Component, forwardRef, Input, Output, EventEmitter } from '@angular/core';
-import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule } from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule, ReactiveFormsModule, FormControl } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -14,6 +14,7 @@ import { MatIconModule } from '@angular/material/icon';
   imports: [
     CommonModule,
     FormsModule,
+    ReactiveFormsModule,
     QuillModule,
     MatFormFieldModule,
     MatInputModule,
@@ -34,10 +35,12 @@ export class RichTextEditorComponent implements ControlValueAccessor {
   @Input() placeholder: string = 'Digite seu texto aqui...';
   @Input() label: string = 'Editor de Texto';
   @Input() height: string = '300px';
+  @Input() control!: FormControl;
   @Output() contentChanged = new EventEmitter<string>();
 
   editorContent: string = '';
   showPreview = false;
+  isDisabled = false;
 
   quillModules = {
     toolbar: [
@@ -75,5 +78,17 @@ export class RichTextEditorComponent implements ControlValueAccessor {
 
   togglePreview(): void {
     this.showPreview = !this.showPreview;
+  }
+
+  onEditorChanged(event: any): void {
+    const content = event.html || '';
+    this.editorContent = content;
+    this.onChange(content);
+    this.onTouched();
+    this.contentChanged.emit(content);
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    this.isDisabled = isDisabled;
   }
 }

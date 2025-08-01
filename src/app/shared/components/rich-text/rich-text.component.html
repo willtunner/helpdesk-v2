@@ -11,14 +11,15 @@
   
     <div *ngIf="!showPreview; else previewTemplate">
       <quill-editor 
-        class="quill-editor" 
-        [(ngModel)]="editorContent" 
-        (ngModelChange)="onContentChange($event)"
-        [modules]="quillModules"
-        [placeholder]="placeholder"
-        [style.height]="height"
-        format="html">
-      </quill-editor>
+      class="quill-editor"
+      [modules]="quillModules"
+      [placeholder]="placeholder"
+      [style.height]="height"
+      [format]="'html'"
+      [readOnly]="isDisabled"
+      [formControl]="control">
+      (onContentChanged)="onEditorChanged($event)">
+    </quill-editor>
     </div>
   
     <ng-template #previewTemplate>

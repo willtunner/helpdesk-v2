@@ -1,9 +1,9 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -24,8 +24,16 @@ import { MatTooltipModule } from '@angular/material/tooltip';
   ],
   templateUrl: './dynamic-select.component.html',
   styleUrls: ['./dynamic-select.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => DynamicSelectComponent),
+      multi: true
+    }
+  ]
 })
-export class DynamicSelectComponent {
+export class DynamicSelectComponent implements ControlValueAccessor {
+
   @Input() label = 'Selecionar';
   @Input() placeholder = '';
   @Input() model: any;
@@ -66,6 +74,7 @@ export class DynamicSelectComponent {
     this.model = value;
     this.modelChange.emit(value);
     this.onChange.emit(value);
+    this.onChangeFn(value); // importante!
   }
 
   handleButtonClick() {
@@ -75,6 +84,25 @@ export class DynamicSelectComponent {
     } else {
       this.openModal.emit();
     }
+  }
+
+  onChangeFn: any = () => { };
+  onTouchedFn: any = () => { };
+
+  writeValue(value: any): void {
+    this.model = value;
+  }
+
+  registerOnChange(fn: any): void {
+    this.onChangeFn = fn;
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouchedFn = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    this.disabled = isDisabled;
   }
 
 
