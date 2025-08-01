@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, OnInit } from '@angular/core';
+import { Component, forwardRef, HostListener, Input, OnInit } from '@angular/core';
 import { DynamicSelectComponent } from '../../shared/components/dynamic-select/dynamic-select.component';
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -11,6 +11,7 @@ import { CallService } from '../../services/call.service';
 import { DynamicButtonComponent } from '../../shared/components/action-button/action-button.component';
 import { CompanyService } from '../../services/company.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { SessionService } from '../../services/session.service';
 
 @Component({
   selector: 'app-calls',
@@ -53,7 +54,15 @@ export class CallsComponent implements OnInit {
     private callServ: CallService,
     private companyServ: CompanyService,
     private snackBar: MatSnackBar,
+    private sessionService: SessionService, // Assuming you have a session service to get the user session
   ) {
+    const user = this.sessionService.getSession();
+    if (user) {
+      if (user?.roles.includes('OPERATOR')) {
+        this.operator = user;
+      }
+    }
+
     this.form = this.fb.group({
       companyId: [null, Validators.required],
       clientId: [null, Validators.required],
@@ -67,7 +76,15 @@ export class CallsComponent implements OnInit {
     });
   }
 
+  isNarrow = false;
+
+@HostListener('window:resize', ['$event'])
+onResize() {
+  this.isNarrow = window.innerWidth < 970;
+}
+
   ngOnInit(): void {
+    this.onResize();
     if (this.selectedCall) {
       this.form.patchValue({
         companyId: this.selectedCall.companyId,
