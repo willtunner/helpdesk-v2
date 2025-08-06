@@ -4,43 +4,72 @@ import { BehaviorSubject, debounceTime, distinctUntilChanged, from, Observable, 
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TagService } from '../../../services/tag.service';
+import { MatError } from '@angular/material/form-field';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-tags',
   templateUrl: './tags.component.html',
-  styleUrls: ['./tags.component.css'],
+  styleUrls: ['./tags.component.scss'],
   standalone: true,
-  imports: [CommonModule, MatIconModule, ReactiveFormsModule],
+  imports: [CommonModule, MatIconModule, ReactiveFormsModule, MatError, TranslateModule],
 })
 export class TagsComponent implements OnInit {
   @Input() tags: string[] | null = null;
-  tagInput = new FormControl('', { nonNullable: true });
+  @Input() control!: FormControl<string[]>;
+  
   tagsSelecteds: { name: string; color: string; isHovered?: boolean }[] = [];
   suggestedTags$: Observable<string[]>;
   private suggestionsSubject = new BehaviorSubject<string[]>([]);
   successMessage: string | null = null;
   showNoTagMessage: boolean = false;
-  showAllTags: boolean = false; // Controla o toggle de todas as tags
-  @Output() tagsChanged = new EventEmitter<string>();
+  showAllTags: boolean = false;
+  @Output() tagsChanged = new EventEmitter<string[]>();
+  
+  // Input temporário para o campo de texto
+  inputControl = new FormControl('');
 
   constructor(private tagService: TagService) {
     this.suggestedTags$ = this.suggestionsSubject.asObservable();
-    this.setupTagSuggestions();
   }
 
   ngOnInit() {
-    // Converte tudo para maiúsculas enquanto o usuário digita
-    this.tagInput.valueChanges.subscribe(value => {
-      const upperValue = value.toUpperCase();
-      if (value !== upperValue) {
-        this.tagInput.setValue(upperValue, { emitEvent: false });
-      }
+    if (!this.control) return;
+
+    // Inicializa com os valores existentes no controle
+    if (this.control.value && this.control.value.length > 0) {
+      this.populateSelectedTags(this.control.value);
+    }
+
+    // Observa mudanças no input de texto (não no controle principal)
+    this.inputControl.valueChanges.pipe(
+      debounceTime(300),
+      distinctUntilChanged(),
+      switchMap((value) => {
+        if (!value) return of([]);
+        if (this.showAllTags) {
+          return from(this.tagService.getAllTags());
+        }
+        if (value.length >= 3) {
+          return this.searchTags(value);
+        }
+        this.showNoTagMessage = false;
+        return of([]);
+      })
+    ).subscribe(tags => {
+      this.suggestionsSubject.next(tags);
+      this.showNoTagMessage = tags.length === 0 && 
+        (this.showAllTags || (this.inputControl.value?.length ?? 0) >= 3);
     });
   }
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['tags'] && this.tags) {
       this.populateSelectedTags(this.tags);
+    }
+  
+    if (changes['control'] && this.control && this.control.value) {
+      this.populateSelectedTags(this.control.value);
     }
   }
 
@@ -61,36 +90,11 @@ export class TagsComponent implements OnInit {
     return '#' + ('000000' + color).slice(-6);
   }
 
-  private setupTagSuggestions(): void {
-    this.tagInput.valueChanges.pipe(
-      debounceTime(300),
-      distinctUntilChanged(),
-      switchMap((value) => {
-        if (this.showAllTags) {
-          // Mostra todas as tags quando o toggle está ativo
-          return from(this.tagService.getAllTags());
-        }
-        if (value && value.length >= 3) {
-          // Busca automática por 3 caracteres
-          return this.searchTags(value);
-        }
-        this.showNoTagMessage = false;
-        return of([]);
-      })
-    ).subscribe(tags => {
-      this.suggestionsSubject.next(tags);
-      this.showNoTagMessage = tags.length === 0 && (this.showAllTags || this.tagInput.value.length >= 3);
-    });
-  }
-
-  private searchTags(value: string): Observable<string[]> {
-    return from(this.tagService.searchTags(value.toUpperCase()));
-  }
-
   async onEnter(event: Event): Promise<void> {
     event.preventDefault();
-    const name = this.tagInput.value.trim();
-    if (name && !this.tagsSelecteds.some((tag) => tag.name === name)) {
+    const name = this.inputControl.value?.trim().toUpperCase();
+    
+    if (name && !this.tagsSelecteds.some(tag => tag.name === name)) {
       const exists = await this.tagExists(name);
       if (exists) {
         this.addToSelected(name);
@@ -100,8 +104,9 @@ export class TagsComponent implements OnInit {
         await this.addTag(name);
       }
     }
-    this.tagInput.setValue('');
-    this.hideSuggestions(); // Fecha as sugestões
+    
+    this.inputControl.setValue('');
+    this.hideSuggestions();
   }
 
   onKeydown(event: KeyboardEvent): void {
@@ -119,8 +124,7 @@ export class TagsComponent implements OnInit {
         this.showNoTagMessage = tags.length === 0;
       });
     } else {
-      // Restaura a busca automática com base no input atual
-      this.tagInput.updateValueAndValidity({ emitEvent: true });
+      this.inputControl.updateValueAndValidity({ emitEvent: true });
     }
   }
 
@@ -133,7 +137,7 @@ export class TagsComponent implements OnInit {
     if (this.showAllTags && tagContainer && suggestions && 
         !tagContainer.contains(target) && !suggestions.contains(target)) {
       this.showAllTags = false;
-      this.tagInput.updateValueAndValidity({ emitEvent: true }); // Restaura a busca automática
+      this.inputControl.updateValueAndValidity({ emitEvent: true });
     }
   }
 
@@ -154,22 +158,23 @@ export class TagsComponent implements OnInit {
   }
 
   selectTag(name: string): void {
-    if (!this.tagsSelecteds.some((tag) => tag.name === name)) {
+    if (!this.tagsSelecteds.some(tag => tag.name === name)) {
       this.addToSelected(name);
       this.emitTags();
     }
-    this.tagInput.setValue('');
-    this.hideSuggestions(); // Fecha as sugestões ao selecionar
+    this.inputControl.setValue('');
+    this.hideSuggestions();
   }
 
   private hideSuggestions(): void {
     this.showAllTags = false;
-    this.suggestionsSubject.next([]); // Limpa as sugestões
+    this.suggestionsSubject.next([]);
     this.showNoTagMessage = false;
   }
 
   private addToSelected(name: string): void {
     this.tagsSelecteds.push({ name, color: this.getRandomColor() });
+    this.emitTags();
   }
 
   private async tagExists(name: string): Promise<boolean> {
@@ -183,7 +188,30 @@ export class TagsComponent implements OnInit {
   }
 
   emitTags(): void {
-    const tagsString = this.tagsSelecteds.map((tag) => tag.name).join(', ');
-    this.tagsChanged.emit(tagsString);
+    const tagsArray = this.tagsSelecteds.map(tag => tag.name);
+    this.control.setValue(tagsArray);
+    this.control.markAsDirty();
+    this.control.updateValueAndValidity();
+    this.tagsChanged.emit(tagsArray);
+  }
+
+  get showError(): boolean {
+    if (!this.control) return false;
+    
+    const isInvalid = this.control.invalid && (this.control.touched || this.control.dirty);
+    const isEmptyArray = Array.isArray(this.control.value) && this.control.value.length === 0;
+    
+    return isInvalid || (isEmptyArray && (this.control.touched || this.control.dirty));
+  }
+
+  onBlur(): void {
+    if (this.control) {
+      this.control.markAsTouched();
+      this.control.updateValueAndValidity();
+    }
+  }
+
+  private searchTags(value: string): Observable<string[]> {
+    return from(this.tagService.searchTags(value.toUpperCase()));
   }
 }

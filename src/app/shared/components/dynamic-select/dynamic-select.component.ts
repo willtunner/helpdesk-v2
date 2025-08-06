@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
-import { ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule } from '@angular/forms';
+import { ControlValueAccessor, FormControl, FormsModule, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
@@ -37,6 +37,7 @@ export class DynamicSelectComponent implements ControlValueAccessor {
   @Input() label = 'Selecionar';
   @Input() placeholder = '';
   @Input() model: any;
+  @Input() formControl!: FormControl;
   @Output() modelChange = new EventEmitter<any>();
 
   @Output() onChange = new EventEmitter<any>();
@@ -91,6 +92,11 @@ export class DynamicSelectComponent implements ControlValueAccessor {
 
   writeValue(value: any): void {
     this.model = value;
+    this.onChangeFn(value); // <== importante para notificar Angular
+  }
+
+  get isRequired(): boolean {
+    return this.formControl?.hasValidator?.(Validators.required) ?? false;
   }
 
   registerOnChange(fn: any): void {

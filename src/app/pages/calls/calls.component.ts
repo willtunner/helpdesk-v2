@@ -12,16 +12,17 @@ import { DynamicButtonComponent } from '../../shared/components/action-button/ac
 import { CompanyService } from '../../services/company.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SessionService } from '../../services/session.service';
+import { ClientService } from '../../services/client.service';
 
 @Component({
   selector: 'app-calls',
   standalone: true,
   imports: [
-    DynamicSelectComponent, 
-    CommonModule, 
-    CustomInputComponent, 
-    RichTextEditorComponent, 
-    ReactiveFormsModule, 
+    DynamicSelectComponent,
+    CommonModule,
+    CustomInputComponent,
+    RichTextEditorComponent,
+    ReactiveFormsModule,
     TagsComponent,
     MatRadioModule,
     DynamicButtonComponent
@@ -29,18 +30,19 @@ import { SessionService } from '../../services/session.service';
   templateUrl: './calls.component.html',
   styleUrl: './calls.component.scss',
   providers: [
-      {
-        provide: NG_VALUE_ACCESSOR,
-        useExisting: forwardRef(() => RichTextEditorComponent),
-        multi: true
-      }
-    ]
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => RichTextEditorComponent),
+      multi: true
+    }
+  ]
 })
 export class CallsComponent implements OnInit {
   // companies = [{ id: 1, name: 'Acme Corp' }, { id: 2, name: 'Globex' }];
-  clients = [{ id: 'c1', name: 'Fulano' }, { id: 'c2', name: 'Beltrano' }];
+  clients: User[] = [];
   selectedCompany: string | null = null;
   selectedClient: string | null = null;
+  // tagControl!: FormControl;
   form!: FormGroup;
   isSaveOrEditSuccess = false;
   saveSuccess = false;
@@ -50,11 +52,12 @@ export class CallsComponent implements OnInit {
   @Input() selectedCall: Call | null = null;
 
   constructor(
-    private fb: FormBuilder, 
+    private fb: FormBuilder,
     private callServ: CallService,
     private companyServ: CompanyService,
     private snackBar: MatSnackBar,
-    private sessionService: SessionService, // Assuming you have a session service to get the user session
+    private clientServ: ClientService,
+    private sessionService: SessionService,
   ) {
     const user = this.sessionService.getSession();
     if (user) {
@@ -66,22 +69,26 @@ export class CallsComponent implements OnInit {
     this.form = this.fb.group({
       companyId: [null, Validators.required],
       clientId: [null, Validators.required],
-      connection: [''],
+      connection: ['', Validators.required],
       title: ['', Validators.required],
       description: ['', Validators.required],
       resolution: ['', Validators.required],
-      tags: ['', Validators.required],
+      tags: [[], Validators.required],
       closed: [false],
       operatorId: [this.operator?.id],
     });
+
+    // this.tagControl = this.form.get('tags') as FormControl;
   }
+
+
 
   isNarrow = false;
 
-@HostListener('window:resize', ['$event'])
-onResize() {
-  this.isNarrow = window.innerWidth < 970;
-}
+  @HostListener('window:resize', ['$event'])
+  onResize() {
+    this.isNarrow = window.innerWidth <= 840;
+  }
 
   ngOnInit(): void {
     this.onResize();
@@ -99,16 +106,39 @@ onResize() {
       });
     }
     this.loadCompanies();
-  }
 
+    console.log('Width Page:', this.isNarrow);
+  }
 
   onCompanyChange(companyId: string) {
-    this.form.patchValue({ companyId: companyId });
+    this.form.patchValue({ companyId });
+
+    this.clientServ.getClientsByCompanyId(companyId)
+      .then(clients => {
+        console.log('Clientes encontrados:', clients);
+        this.clients = clients; // atualiza o select de clientes
+        this.form.patchValue({ clientId: null }); // limpa seleção anterior
+      })
+      .catch(err => {
+        console.error('Erro ao buscar clientes:', err);
+        this.snackBar.open('Erro ao buscar clientes.', 'Fechar', {
+          duration: 3000,
+          panelClass: ['error-snackbar']
+        });
+      });
   }
+
 
   onClientChange(clientId: string) {
     this.form.patchValue({ clientId: clientId });
   }
+
+  onClientSelected(clientId: string): void {
+    const selected = this.clients.find(c => c.id === clientId);
+    console.log('Cliente selecionado:', selected);
+    this.onClientChange(clientId); // já atualiza o form.control
+  }
+
 
   openCompanyModal() {
     // Lógica da empresa
@@ -132,14 +162,9 @@ onResize() {
     }
   }
 
-  onTagsChanged(tags: string): void {
-    const tagArray = tags
-      .split(',')
-      .map(tag => tag.trim())
-      .filter(tag => tag !== '');
-
+  onTagsChanged(tags: string[]): void {
     this.form.patchValue({
-      tags: tagArray
+      tags: tags
     });
   }
 
@@ -200,9 +225,9 @@ onResize() {
     window.location.reload();
   }
 
-  onEdit(){}
-  onDelete(){}
-  onPrint(){}
+  onEdit() { }
+  onDelete() { }
+  onPrint() { }
 
   loadCompanies(): void {
     this.companyServ.getCompanyByFirebase().subscribe((companies: Company[]) => {

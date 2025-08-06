@@ -1,0 +1,168 @@
+.canvas {
+    height: 100vh;
+    background: var(--yinColor);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+  
+  .container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+    width: 90vw;
+    max-width: 1400px;
+  }
+  
+  /* === CARD BASE === */
+  .card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr;
+    grid-template-rows: 180px auto;
+    grid-template-areas: 'image' 'text';
+    border-radius: var(--borderRadius);
+    background: var(--yinColor);
+    text-align: center;
+    font-size: 12px;
+    transform-style: preserve-3d;
+    perspective: 1000px;
+    flex: 1 1 calc(22% - 20px); /* ligeiramente menor que 25% */
+    max-width: calc(22% - 20px);
+    transition: transform 0.3s ease;
+  }
+  
+  .card:hover {
+    transform: scale(1.03);
+  }
+  
+  /* === EFEITO RGB === */
+  .rgb::after {
+    position: absolute;
+    content: '';
+    background: linear-gradient(
+        45deg,
+        #ff0000 0%,
+        #ff9a00 10%,
+        #d0de21 20%,
+        #4fdc4a 30%,
+        #3fdad8 40%,
+        #2fc9e2 50%,
+        #1c7fee 60%,
+        #5f15f2 70%,
+        #ba0cf8 80%,
+        #fb07d9 90%,
+        #ff0000 100%
+      )
+      repeat 0% 0% / 300% 100%;
+    inset: -3px;
+    animation: rgb 8s linear infinite;
+    border-radius: var(--borderRadius);
+    filter: blur(8px);
+    z-index: -1;
+    transform: translateZ(-1px);
+  }
+  
+  .rgb:nth-child(2)::after { animation-delay: 2s; }
+  .rgb:nth-child(3)::after { animation-delay: 4s; }
+  .rgb:nth-child(4)::after { animation-delay: 6s; }
+  
+  @keyframes rgb {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+  }
+  
+  /* === IMAGENS === */
+  .card-image {
+    grid-area: image;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    border-top-left-radius: var(--borderRadius);
+    border-top-right-radius: var(--borderRadius);
+    height: 100%;
+  }
+  
+  /* === TIPOS DE CARD === */
+  .painting .card-image {
+    background-image: url('../../../../assets/images/art.jpg');
+  }
+  .painting .card-title {
+    color: var(--rColor);
+  }
+  
+  .code .card-image {
+    background-image: url('../../../../assets/images/code.jpg');
+  }
+  .code .card-title {
+    color: var(--gColor);
+  }
+  
+  .music .card-image {
+    background-image: url('../../../../assets/images/ian-anderson.jpg');
+  }
+  .music .card-title {
+    color: var(--bColor);
+  }
+  
+  .maths .card-image {
+    background-image: url('../../../../assets/images/math.jpg');
+  }
+  .maths .card-title {
+    color: var(--yangColor);
+  }
+  
+  /* === CONTEÚDO === */
+  .card-description {
+    grid-area: text;
+    margin: 20px;
+    transform: translateZ(30px);
+    background-color: #4b4b4b;
+    border-radius: 10px;
+    color: #fff;
+    padding: 15px;
+  }
+  
+  .card-title {
+    font-size: 1.6em;
+    margin-bottom: 10px;
+  }
+  
+  /* === RESPONSIVIDADE === */
+  
+  /* 3 colunas em telas médias (ex: laptops/tablets em paisagem) */
+  @media (max-width: 1200px) {
+    .card {
+      flex: 1 1 calc(30% - 20px);
+      max-width: calc(30% - 20px);
+    }
+  }
+  
+  /* 2 colunas para tablets */
+  @media (max-width: 800px) {
+    .card {
+      flex: 1 1 calc(45% - 20px);
+      max-width: calc(45% - 20px);
+    }
+  }
+  
+  /* 1 coluna para celulares */
+  @media (max-width: 500px) {
+    .card {
+      flex: 1 1 100%;
+      max-width: 100%;
+    }
+  
+    .card-title {
+      font-size: 1.3em;
+    }
+  
+    .card-description {
+      margin: 15px;
+      padding: 10px;
+    }
+  }
+  

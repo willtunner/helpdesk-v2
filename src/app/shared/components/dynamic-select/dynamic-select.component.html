@@ -1,28 +1,25 @@
 <div class="select-container">
-  <mat-form-field [ngClass]="[getSizeClass()]" appearance="outline" class="custom-field full-width">
+  <mat-form-field [ngClass]="[getSizeClass()]" [appearance]="'outline'" class="custom-field full-width"
+    floatLabel="always"
+    [color]="formControl.invalid && (formControl.touched || formControl.dirty) ? 'warn' : undefined">
     <mat-label>{{ label }}</mat-label>
-    <mat-select
-      [ngModel]="model"
-      (ngModelChange)="onSelectionChange($event)"
-      [disabled]="disabled"
-      [placeholder]="placeholder"
-    >
+
+    <mat-select [ngModel]="model" (ngModelChange)="onSelectionChange($event)" [disabled]="disabled"
+      [placeholder]="placeholder" [required]="isRequired">
       <mat-option *ngIf="showDefaultOption" [value]="''">{{ defaultOptionLabel }}</mat-option>
       <mat-option *ngFor="let option of options" [value]="option[valueKey] ?? option">
         {{ option[labelKey] ?? option }}
       </mat-option>
     </mat-select>
-    <mat-error *ngIf="errorMessage">{{ errorMessage }}</mat-error>
+
+    <!-- ERRO -->
+    <mat-error *ngIf="formControl.invalid && (formControl.touched || formControl.dirty)">
+      {{ errorMessage || 'Campo obrigatório' }}
+    </mat-error>
   </mat-form-field>
 
-  <button
-    *ngIf="type !== 'sector'"
-    mat-icon-button
-    [color]="getButtonColor()"
-    (click)="handleButtonClick()"
-    [matTooltip]="model ? 'Desvincular' : 'Adicionar novo'"
-    class="action-button"
-  >
+  <button *ngIf="type !== 'sector'" mat-icon-button [color]="getButtonColor()" (click)="handleButtonClick()"
+    [matTooltip]="model ? 'Desvincular' : 'Adicionar novo'" class="action-button">
     <mat-icon>{{ getButtonIcon() }}</mat-icon>
   </button>
 </div>

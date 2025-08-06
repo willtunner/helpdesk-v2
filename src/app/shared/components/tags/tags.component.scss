@@ -93,4 +93,24 @@
     background: #f00;
     color: #fff;
   }
+
+  .tag-input-container {
+    &.mat-form-field-invalid {
+      .tag-wrapper {
+        border-color: #f44336; /* Vermelho do Material */
+        
+        input {
+          &::placeholder {
+            color: #f44336;
+          }
+        }
+      }
+    }
+  }
+  
+  .error-state {
+    border: 1px solid #f44336;
+    border-radius: 4px;
+    padding: 0.5em;
+  }
   

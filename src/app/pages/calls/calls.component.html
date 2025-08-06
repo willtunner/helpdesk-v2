@@ -7,7 +7,7 @@
       <div class="companies">
         <app-dynamic-select [label]="'Empresa'" [options]="companies" [valueKey]="'id'" [labelKey]="'name'"
           [type]="'company'" (onChange)="onCompanyChange($event)" (openModal)="openCompanyModal()"
-          [formControl]="getControl('companyId')">
+          [formControl]="getControl('companyId')" [errorMessage]="'Empresa é obrigatória'">
         </app-dynamic-select>
       </div>
 
@@ -15,18 +15,28 @@
       <div class="clients">
         <app-dynamic-select [label]="'Cliente'" [options]="clients" [valueKey]="'id'" [labelKey]="'name'"
           [(model)]="selectedClient" [type]="'client'" (openModal)="abrirModalCliente()"
-          [formControl]="getControl('clientId')">
+          [formControl]="getControl('clientId')" (modelChange)="onClientSelected($event)">
         </app-dynamic-select>
       </div>
 
       <!-- Conexão -->
-      <div class="conexao">
-        <app-custom-input label="Conexão" [control]="getControl('connection')"  size="medio">
+      @if (!isNarrow) {
+      <div class="conexao" [ngClass]="{ 'mobile': isNarrow }">
+        <app-custom-input label="Conexão" [control]="getControl('connection')" size="medio">
         </app-custom-input>
       </div>
-
-
+      }
     </div>
+
+    <!-- Conexão -->
+    @if (isNarrow) {
+    <div class="conexao" [ngClass]="{ 'mobile': isNarrow }">
+      <app-custom-input label="Conexão" [control]="getControl('connection')" size="full-width">
+      </app-custom-input>
+    </div>
+    }
+
+
 
     <!-- Título -->
     <div class="title">
@@ -46,9 +56,8 @@
 
       <!-- Tags e Radio -->
       <div class="tags" style="margin-top: 10px;">
-        <app-tags [tags]="selectedCall?.tags!" (tagsChanged)="onTagsChanged($event)">
+        <app-tags [tags]="selectedCall?.tags!" [control]="getControl('tags')" (tagsChanged)="onTagsChanged($event)">
         </app-tags>
-
         <!-- Status Aberto/Fechado -->
         <div class="form-radio">
           <mat-radio-group [formControl]="getControl('closed')" aria-label="closed">

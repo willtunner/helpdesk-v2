@@ -1,26 +1,40 @@
-<div class="tag-input-container">
-  <div class="tag-wrapper">
+<div class="tag-input-container" [class.mat-form-field-invalid]="showError">
+  <div class="tag-wrapper" [class.error-state]="showError">
     <ng-container *ngFor="let tag of tagsSelecteds; let i = index">
-      <div class="tag" [ngStyle]="{ backgroundColor: tag.color }" (mouseenter)="tag.isHovered = true"
-        (mouseleave)="tag.isHovered = false">
+      <div class="tag" [ngStyle]="{ backgroundColor: tag.color }" 
+           (mouseenter)="tag.isHovered = true"
+           (mouseleave)="tag.isHovered = false">
         {{ tag.name }}
         <span class="remove-icon" *ngIf="tag.isHovered" (click)="removeTag(i)">
           ✖
         </span>
       </div>
     </ng-container>
-    <input [formControl]="tagInput" (keydown.enter)="onEnter($event)" (keydown)="onKeydown($event)"
+    <input 
+      [formControl]="inputControl" 
+      (keydown.enter)="onEnter($event)" 
+      (keydown)="onKeydown($event)"
+      (blur)="onBlur()"
       placeholder="Digite 3 caracteres ou ctrl + espaço para buscar todas" />
   </div>
+  
   <ul class="suggestions" *ngIf="(suggestedTags$ | async) as suggestedTags">
     <li *ngFor="let tag of suggestedTags" (click)="selectTag(tag)" class="suggestion-item">
       {{ tag }}
     </li>
   </ul>
+  
   <div *ngIf="successMessage" class="success-message">
     {{ successMessage }}
   </div>
+  
   <div *ngIf="showNoTagMessage && (suggestedTags$ | async)?.length === 0" class="error-message">
     Tag inexistente, pressione enter para cadastrar nova tag
   </div>
+  
+  <mat-error *ngIf="showError">
+    <ng-container *ngIf="control.errors?.['required']">
+      {{ 'erros.required' | translate }}
+    </ng-container>
+  </mat-error>
 </div>

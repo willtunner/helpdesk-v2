@@ -14,6 +14,7 @@ import { DeveloperAreaComponent } from './pages/developer-area/developer-area.co
 import { RestrictedAreaComponent } from './pages/restricted-area/restricted-area.component';
 import { ProfileSettingsComponent } from './pages/profile-settings/profile-settings.component';
 import { TutorialsComponent } from './pages/tutorials/tutorials.component';
+import { TiltCardsComponent } from './shared/components/tilt-cards/tilt-cards.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -31,5 +32,6 @@ export const routes: Routes = [
   { path: 'restricted-area', component: RestrictedAreaComponent, canActivate: [authGuard] },
   { path: 'profile-settings', component: ProfileSettingsComponent, canActivate: [authGuard] },
   { path: 'exemples', component: ExemplesComponent, canActivate: [authGuard] },
+  { path: 'cards', component: TiltCardsComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'login' }
 ];
