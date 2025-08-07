@@ -25,18 +25,25 @@
 
 
 
-<div class="chart-container" *ngIf="!isLoading" >
-  <app-chart [type]="ChartType.BAR" [title]="'charts.barChart.title' | translate" [chamados]="simplifiedCalls"></app-chart>
+<div class="chart-container" *ngIf="!isLoading">
+  <!-- <app-chart [type]="ChartType.BAR" [title]="'charts.barChart.title' | translate" [chamados]="simplifiedCalls"></app-chart> -->
+  <app-chart [type]="ChartType.LINE" [title]="'charts.lineChart.title' | translate"
+    [chamados]="simplifiedCalls"></app-chart>
 
   <app-pie-chart [title]="'charts.pieChart.title' | translate" [data]="pieChartData">
   </app-pie-chart>
 
 
-  <app-chart [type]="ChartType.LINE" [title]="'charts.lineChart.title' | translate"
-    [chamados]="simplifiedCalls"></app-chart>
+  <!-- <app-chart [type]="ChartType.LINE" [title]="'charts.lineChart.title' | translate"
+    [chamados]="simplifiedCalls"></app-chart> -->
 
-  <app-chart [type]="ChartType.COLUMN" [title]="'charts.columnChart.title' | translate"
-    [chamados]="simplifiedCalls"></app-chart>
+  <!-- <app-chart [type]="ChartType.COLUMN" [title]="'charts.columnChart.title' | translate"
+    [chamados]="simplifiedCalls"></app-chart> -->
+  <app-column-tag-chart [title]="'Chamados por Tags'" [subtitle]="'Distribuição de chamados por tipo de problema'"
+    [yAxisTitle]="'Quantidade de Chamados'" [height]="500" [fetchData]="true" [serviceMethod]="getChartData">
+  </app-column-tag-chart>
 </div>
+
+
 
 <!-- <pre>{{ simplifiedCalls | json }}</pre> -->

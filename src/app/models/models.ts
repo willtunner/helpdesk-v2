@@ -152,3 +152,9 @@ export interface Company {
     companyName: string;
   }
 
+  export interface ChartData {
+    name: string;
+    y: number;
+    color?: string;
+  }
+

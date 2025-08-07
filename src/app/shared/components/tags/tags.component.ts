@@ -6,6 +6,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { TagService } from '../../../services/tag.service';
 import { MatError } from '@angular/material/form-field';
 import { TranslateModule } from '@ngx-translate/core';
+import { UtilService } from '../../../services/util.service';
 
 @Component({
   selector: 'app-tags',
@@ -29,7 +30,7 @@ export class TagsComponent implements OnInit {
   // Input temporário para o campo de texto
   inputControl = new FormControl('');
 
-  constructor(private tagService: TagService) {
+  constructor(private tagService: TagService, private utilService: UtilService) {
     this.suggestedTags$ = this.suggestionsSubject.asObservable();
   }
 
@@ -142,7 +143,7 @@ export class TagsComponent implements OnInit {
   }
 
   async addTag(name: string): Promise<void> {
-    const newTag = { name, color: this.getRandomColor(), isHovered: false };
+    const newTag = { name, color: this.utilService.getRandomColor(), isHovered: false };
     const success = await this.tagService.addTagToFirestore(name);
     if (success) {
       this.tagsSelecteds.push(newTag);
@@ -150,11 +151,6 @@ export class TagsComponent implements OnInit {
       this.successMessage = 'Tag salva com sucesso!';
       setTimeout(() => (this.successMessage = null), 3000);
     }
-  }
-
-  private getRandomColor(): string {
-    const randomColor = Math.floor(Math.random() * 16777215).toString(16);
-    return `#${randomColor.padStart(6, '0')}`;
   }
 
   selectTag(name: string): void {
@@ -173,7 +169,7 @@ export class TagsComponent implements OnInit {
   }
 
   private addToSelected(name: string): void {
-    this.tagsSelecteds.push({ name, color: this.getRandomColor() });
+    this.tagsSelecteds.push({ name, color: this.utilService.getRandomColor() });
     this.emitTags();
   }
 

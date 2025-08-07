@@ -26,6 +26,9 @@ import { NotificationType } from '../../../enums/notificationType.enum';
 import { MatDialog } from '@angular/material/dialog';
 import { ClientsModalComponent } from '../clients-modal/clients-modal.component';
 import { CallModalComponent } from '../call-modal/call-modal.component';
+import { UtilService } from '../../../services/util.service';
+import { TagService } from '../../../services/tag.service';
+import { ColumnTagChartComponent } from '../../../shared/components/column-tag-chart/column-tag-chart.component';
 
 @Component({
   selector: 'app-operator-home',
@@ -40,7 +43,8 @@ import { CallModalComponent } from '../call-modal/call-modal.component';
     PieChartComponent,
     DashboardCardComponent,
     TranslateModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    ColumnTagChartComponent
   ],
   templateUrl: './operator-home.component.html',
   styleUrls: ['./operator-home.component.scss']
@@ -69,9 +73,14 @@ export class OperatorHomeComponent implements OnInit {
     private cdr: ChangeDetectorRef,
     private messageService: SendNotificationService,
     private dialog: MatDialog,
-    private injector: Injector
+    private utilService: UtilService,
+    private tagService: TagService,
   ) {
     const session = this.auth.currentUser();
+
+    this.getChartData = this.getChartData.bind(this);
+
+
     if (session) {
       this.user = session;
       console.log('Sessão carregada:', this.user);
@@ -85,6 +94,8 @@ export class OperatorHomeComponent implements OnInit {
       }
     }
   }
+
+  
 
   async ngOnInit(): Promise<void> {
     this.translateService.load([
@@ -216,6 +227,33 @@ export class OperatorHomeComponent implements OnInit {
     calls
   }));
 }
+
+async getChartData(): Promise<any[]> {
+  try {
+    const tags = await this.tagService.getAllTagsByCall();
+    
+    const tagsDataPromises = tags.map(async (tag) => {
+      const { count } = await this.tagService.getCallsByTag(tag);
+      return {
+        name: tag,
+        y: count,
+        color: this.getRandomColor() // Agora this está corretamente referenciado
+      };
+    });
+
+    return await Promise.all(tagsDataPromises);
+  } catch (error) {
+    console.error('Error fetching chart data:', error);
+    return [];
+  }
+}
+
+private getRandomColor(): string {
+  return this.utilService.getRandomColor(); // Usando o serviço UtilService
+  // Ou se preferir manter local:
+  // return '#' + Math.floor(Math.random()*16777215).toString(16);
+}
+
 
   
 }

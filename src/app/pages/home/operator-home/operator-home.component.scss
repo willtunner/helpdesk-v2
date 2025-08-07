@@ -23,3 +23,28 @@
   height: 300px;
   flex-direction: column;
 }
+
+.chart-container2 {
+  max-width: 1030px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(480px, 1fr));
+  gap: 10px;
+  box-sizing: border-box;
+}
+
+/* Novo estilo para o gráfico de largura total */
+.full-width-chart {
+  grid-column: 1 / -1; /* Ocupa todas as colunas */
+  width: 100%;
+}
+
+/* Garante que o highcharts-chart dentro do componente ocupe 100% */
+app-column-tag-chart {
+  display: block;
+  width: 100%;
+  
+  highcharts-chart {
+    display: block;
+    width: 100%;
+  }
+}
