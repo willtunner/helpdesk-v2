@@ -21,6 +21,38 @@
   }
 }
 
+// @keyframes shake {
+//   0%, 100% {
+//     transform: rotate(0deg);
+//   }
+//   25% {
+//     transform: rotate(-15deg);
+//   }
+//   50% {
+//     transform: rotate(15deg);
+//   }
+//   75% {
+//     transform: rotate(-10deg);
+//   }
+// }
+
+/* Versão alternativa com mais oscilações */
+@keyframes shake {
+  0%, 100% { transform: rotate(0deg); }
+  20% { transform: rotate(-10deg); }
+  40% { transform: rotate(10deg); }
+  60% { transform: rotate(-7deg); }
+  80% { transform: rotate(7deg); }
+}
+
+/* Versão suave */
+// @keyframes shake {
+//   0%, 100% { transform: rotate(0deg); }
+//   25% { transform: rotate(-8deg); }
+//   50% { transform: rotate(8deg); }
+//   75% { transform: rotate(-5deg); }
+// }
+
 .top-content {
   display: flex;
   align-items: center;
@@ -38,6 +70,8 @@
 
   .icon {
     font-size: 24px;
+    transform-origin: center bottom;
+    transition: transform 0.2s ease;
   }
 }
 
