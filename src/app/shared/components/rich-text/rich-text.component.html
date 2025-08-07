@@ -1,28 +1,34 @@
-<!-- rich-text-editor.component.html -->
-<div class="rich-text-container">
-    <!-- <label *ngIf="label" class="editor-label">{{ label }}</label> -->
-    
-    <div class="editor-controls">
-      <button mat-button (click)="togglePreview()" class="preview-btn">
-        <mat-icon>{{ showPreview ? 'visibility_off' : 'visibility' }}</mat-icon>
-        {{ showPreview ? 'Ocultar Preview' : 'Mostrar Preview' }}
-      </button>
-    </div>
-  
-    <div *ngIf="!showPreview; else previewTemplate">
-      <quill-editor 
-      class="quill-editor"
-      [modules]="quillModules"
-      [placeholder]="placeholder"
-      [style.height]="height"
-      [format]="'html'"
-      [readOnly]="isDisabled"
-      [formControl]="control">
-      (onContentChanged)="onEditorChanged($event)">
-    </quill-editor>
-    </div>
-  
-    <ng-template #previewTemplate>
-      <div class="preview-content ql-editor" [innerHTML]="editorContent"></div>
-    </ng-template>
+<div class="rich-text-container" [class.mat-form-field-invalid]="showError">
+  <div class="editor-controls">
+    <button mat-button (click)="togglePreview()" class="preview-btn">
+      <mat-icon>{{ showPreview ? 'visibility_off' : 'visibility' }}</mat-icon>
+      {{ showPreview ? 'Ocultar Preview' : 'Mostrar Preview' }}
+    </button>
   </div>
+
+  <div *ngIf="!showPreview; else previewTemplate">
+    <div class="editor-wrapper" [class.error-state]="showError">
+      <quill-editor 
+        class="quill-editor"
+        [modules]="quillModules"
+        [placeholder]="placeholder"
+        [style.height]="height"
+        [format]="'html'"
+        [readOnly]="isDisabled"
+        [(ngModel)]="editorContent"
+        (onContentChanged)="onEditorChanged($event)"
+        (blur)="onBlur()">
+      </quill-editor>
+    </div>
+  </div>
+
+  <ng-template #previewTemplate>
+    <div class="preview-content ql-editor" [innerHTML]="editorContent"></div>
+  </ng-template>
+
+  <mat-error *ngIf="showError">
+    <ng-container *ngIf="control.hasError('required')">
+      Campo obrigatório
+    </ng-container>
+  </mat-error>
+</div>

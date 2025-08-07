@@ -51,7 +51,9 @@
       </app-custom-input>
 
       <!-- Observação -->
-      <app-rich-text-editor placeholder="Digite sua observação aqui..." [control]="getControl('resolution')">
+      <app-rich-text-editor 
+        placeholder="Digite sua observação aqui..." 
+        [control]="getControl('resolution')">
       </app-rich-text-editor>
 
       <!-- Tags e Radio -->
@@ -70,7 +72,7 @@
 
     <!-- Botões (coloque DENTRO do form se fazem parte do envio) -->
     <div class="buttons" style="margin-top: 20px;">
-      <app-dynamic-button type="save" (clicked)="submit()" [success]="saveSuccess"></app-dynamic-button>
+      <app-dynamic-button type="save" (clicked)="onSubmit()" [success]="saveSuccess"></app-dynamic-button>
       <app-dynamic-button type="edit" (clicked)="onEdit()"></app-dynamic-button>
       <app-dynamic-button type="delete" (clicked)="onDelete()" [success]="deleteSuccess"></app-dynamic-button>
       <app-dynamic-button type="print" (clicked)="onPrint()"></app-dynamic-button>

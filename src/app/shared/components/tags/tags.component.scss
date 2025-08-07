@@ -114,3 +114,24 @@
     padding: 0.5em;
   }
   
+  /* Adicione no final do seu arquivo CSS do tags */
+
+/* Estilo para o mat-error - igual ao custom input */
+::ng-deep .tag-input-container .mat-mdc-form-field-error {
+  color: #f44336 !important;
+  font-size: 12px !important;
+  font-weight: bold !important;
+  margin-top: 4px !important;
+}
+
+/* Estilo para o container quando há erro - similar ao custom input */
+::ng-deep .tag-input-container.mat-form-field-invalid .tag-wrapper {
+  border-color: #f44336 !important;
+}
+
+/* Remove margens extras do mat-error */
+::ng-deep .tag-input-container .mat-error {
+  margin: 0;
+  padding: 0;
+  line-height: 1.2;
+}

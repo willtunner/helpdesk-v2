@@ -32,7 +32,7 @@
     Tag inexistente, pressione enter para cadastrar nova tag
   </div>
   
-  <mat-error *ngIf="showError">
+  <mat-error *ngIf="showError" class="tag-input-container custom-field" [class.mat-form-field-invalid]="showError">
     <ng-container *ngIf="control.errors?.['required']">
       {{ 'erros.required' | translate }}
     </ng-container>

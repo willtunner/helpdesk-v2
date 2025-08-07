@@ -13,6 +13,8 @@ import { CompanyService } from '../../services/company.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SessionService } from '../../services/session.service';
 import { ClientService } from '../../services/client.service';
+import { SendNotificationService } from '../../services/send-notification.service';
+import { NotificationType } from '../../enums/notificationType.enum';
 
 @Component({
   selector: 'app-calls',
@@ -58,6 +60,7 @@ export class CallsComponent implements OnInit {
     private snackBar: MatSnackBar,
     private clientServ: ClientService,
     private sessionService: SessionService,
+    private messageService: SendNotificationService
   ) {
     const user = this.sessionService.getSession();
     if (user) {
@@ -69,7 +72,7 @@ export class CallsComponent implements OnInit {
     this.form = this.fb.group({
       companyId: [null, Validators.required],
       clientId: [null, Validators.required],
-      connection: ['', Validators.required],
+      connection: [''],
       title: ['', Validators.required],
       description: ['', Validators.required],
       resolution: ['', Validators.required],
@@ -77,8 +80,6 @@ export class CallsComponent implements OnInit {
       closed: [false],
       operatorId: [this.operator?.id],
     });
-
-    // this.tagControl = this.form.get('tags') as FormControl;
   }
 
 
@@ -121,10 +122,7 @@ export class CallsComponent implements OnInit {
       })
       .catch(err => {
         console.error('Erro ao buscar clientes:', err);
-        this.snackBar.open('Erro ao buscar clientes.', 'Fechar', {
-          duration: 3000,
-          panelClass: ['error-snackbar']
-        });
+        this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar clientes.');
       });
   }
 
@@ -178,7 +176,7 @@ export class CallsComponent implements OnInit {
       this.onSubmit();
     }
     this.isSaveOrEditSuccess = true;
-    setTimeout(() => this.isSaveOrEditSuccess = false, 2000); // Reseta após 2 segundos
+    setTimeout(() => this.isSaveOrEditSuccess = false, 2000);
   }
 
   updateCall() {
@@ -196,6 +194,16 @@ export class CallsComponent implements OnInit {
 
     if (this.form.valid) {
       console.log('Formulário enviado:', this.form.value);
+      const formData = this.form.value;
+
+      this.callServ
+        .saveCallWithGeneratedId(formData)
+        .then((res: any) => {
+          this.onClear();
+        })
+        .catch((error) => {
+          console.error('Erro ao salvar a call:', error);
+        });
     } else {
       this.form.markAllAsTouched();
       this.snackBar.open('Preencha todos os campos obrigatórios.', 'Fechar', {
@@ -207,16 +215,16 @@ export class CallsComponent implements OnInit {
     //   return;
     // }
 
-    // const formData = this.form.value;
+    const formData = this.form.value;
 
-    // this.callServ
-    //   .saveCallWithGeneratedId(formData)
-    //   .then((res: any) => {
-    //     this.onClear();
-    //   })
-    //   .catch((error) => {
-    //     console.error('Erro ao salvar a call:', error);
-    //   });
+    this.callServ
+      .saveCallWithGeneratedId(formData)
+      .then((res: any) => {
+        this.onClear();
+      })
+      .catch((error) => {
+        console.error('Erro ao salvar a call:', error);
+      });
   }
 
   onClear() {
