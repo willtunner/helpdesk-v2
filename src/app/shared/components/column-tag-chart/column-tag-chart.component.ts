@@ -158,7 +158,7 @@ export class ColumnTagChartComponent {
     const calls = this.callsByTag[tagName] || [];
 
     const dialogRef = this.dialog.open(CallModalComponent, {
-      width: '600px',
+      width: '900px',
       data: { tagName, count, calls }
     });
 
