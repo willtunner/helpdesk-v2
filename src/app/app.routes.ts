@@ -15,6 +15,7 @@ import { RestrictedAreaComponent } from './pages/restricted-area/restricted-area
 import { ProfileSettingsComponent } from './pages/profile-settings/profile-settings.component';
 import { TutorialsComponent } from './pages/tutorials/tutorials.component';
 import { TiltCardsComponent } from './shared/components/tilt-cards/tilt-cards.component';
+import { HolidayCalendarComponent } from './shared/components/holiday-calendar/holiday-calendar.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -33,5 +34,6 @@ export const routes: Routes = [
   { path: 'profile-settings', component: ProfileSettingsComponent, canActivate: [authGuard] },
   { path: 'exemples', component: ExemplesComponent, canActivate: [authGuard] },
   { path: 'cards', component: TiltCardsComponent, canActivate: [authGuard] },
+  { path: 'calendar', component: HolidayCalendarComponent, canActivate: [authGuard] },
   { path: '**', redirectTo: 'login' }
 ];
