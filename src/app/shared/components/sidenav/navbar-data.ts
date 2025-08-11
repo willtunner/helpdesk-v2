@@ -9,9 +9,11 @@ export const NAVBAR_DATA: INavbarData[] = [
   { routeLink: 'clients', icon: 'groups', label: 'sideNav.clients', allowedRoles: [UserType.OPERATOR, UserType.ADMIN, UserType.MASTER] },
   { routeLink: 'system-version', icon: 'system_update_alt', label: 'sideNav.system-version', allowedRoles: [UserType.MASTER] },
   { routeLink: 'chat', icon: 'forum', label: 'sideNav.chat', allowedRoles: [UserType.CLIENT, UserType.OPERATOR, UserType.ADMIN, UserType.MASTER] },
+  { routeLink: 'calendar', icon: 'calendar_month', label: 'sideNav.calendar', allowedRoles: [UserType.OPERATOR, UserType.ADMIN, UserType.MASTER] },
   { routeLink: 'tutorials', icon: 'books_movies_and_music', label: 'sideNav.video-docs', allowedRoles: [UserType.CLIENT, UserType.OPERATOR, UserType.ADMIN, UserType.MASTER] },
   { routeLink: 'developer-area', icon: 'code', label: 'sideNav.developer-area', allowedRoles: [UserType.MASTER] },
   { routeLink: 'restricted-area', icon: 'developer_mode', label: 'sideNav.restricted-area', allowedRoles: [UserType.MASTER] },
   { routeLink: 'profile-settings', icon: 'settings', label: 'sideNav.settings', allowedRoles: [UserType.CLIENT, UserType.OPERATOR, UserType.ADMIN, UserType.MASTER] },
-  { routeLink: 'exit', icon: 'logout', label: 'sideNav.logout', allowedRoles: [UserType.CLIENT, UserType.OPERATOR, UserType.ADMIN, UserType.MASTER] }
+  { routeLink: 'exit', icon: 'logout', label: 'sideNav.logout', allowedRoles: [UserType.CLIENT, UserType.OPERATOR, UserType.ADMIN, UserType.MASTER] },
+  
 ];

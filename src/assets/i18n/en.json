@@ -58,7 +58,8 @@
     "logout": "Log Out",
     "video-docs": "Video Docs",
     "developer-area": "Development",
-    "restricted-area": "Restricted Area"
+    "restricted-area": "Restricted Area",
+    "calendar": "Planner"
   },
   "table": {
     "name": "Name",
@@ -138,5 +139,39 @@
       "empty": "0 of {{length}}",
       "full": "{{start}} – {{end}} of {{length}}"
     }
+  },
+  "calendar": {
+    "calendar-title": "Holiday Calendar",
+    "calendar-subtitle": "Click on a day to add an event",
+    "year": "Year",
+    "loading-calendar": "Loading calendar...",
+    "scheduled-events": "Scheduled Events",
+    "months": [
+      "January",
+      "February",
+      "March",
+      "April",
+      "May",
+      "June",
+      "July",
+      "August",
+      "September",
+      "October",
+      "November",
+      "December"
+    ],
+    "weekdays": [
+      "Sun",
+      "Mon",
+      "Tue",
+      "Wed",
+      "Thu",
+      "Fri",
+      "Sat"
+    ],
+    "today": "Today!",
+    "events": "{count, plural, =1 {1 Event} other {{count} Events}}",
+    "day-format": "{{month}}/{{day}}/{{year}}",
+    "holiday": "{{holiday}}"
   }
 }

@@ -1,27 +1,37 @@
-<h2 mat-dialog-title>
+<div class="dialog-container">
+  <h2 mat-dialog-title class="dialog-title">
     {{ data.isEditing ? 'Editar Evento' : 'Novo Evento' }} - {{ data.date | date:'dd/MM/yyyy' }}
   </h2>
-  
-  <mat-dialog-content [formGroup]="data.form">
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Título do Evento</mat-label>
-      <input matInput formControlName="title" required maxlength="50">
-      <mat-hint align="end">{{ data.form.get('title')?.value?.length || 0 }}/50</mat-hint>
-      <mat-error *ngIf="data.form.get('title')?.hasError('required')">
-        Título é obrigatório
-      </mat-error>
-    </mat-form-field>
 
-    <mat-form-field appearance="outline" class="full-width">
-      <mat-label>Descrição</mat-label>
-      <textarea matInput formControlName="description" rows="3" maxlength="200"></textarea>
-      <mat-hint align="end">{{ data.form.get('description')?.value?.length || 0 }}/200</mat-hint>
-    </mat-form-field>
+  <mat-dialog-content>
+    <!-- Campo de Título -->
+    @if (data.form.get('title')) {
+      <app-custom-input 
+        [label]="'Título do Evento'" 
+        [control]="data.form.get('title')!" 
+        type="text" 
+        size="full-width"
+        [cssClass]="'mb-4'">
+        <mat-hint align="end">{{ data.form.get('title')?.value?.length || 0 }}/50</mat-hint>
+      </app-custom-input>
+    }
+
+    <!-- Campo de Descrição -->
+    @if (data.form.get('description')) {
+      <app-custom-input 
+        [label]="'Descrição'" 
+        [control]="data.form.get('description')!" 
+        type="text-area" 
+        size="full-width">
+        <mat-hint align="end">{{ data.form.get('description')?.value?.length || 0 }}/200</mat-hint>
+      </app-custom-input>
+    }
   </mat-dialog-content>
-  
-  <mat-dialog-actions align="end">
-    <button mat-button (click)="onCancel()">Cancelar</button>
-    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!data.form.valid">
+
+  <mat-dialog-actions align="end" class="dialog-actions">
+    <button mat-button (click)="onCancel()" class="cancel-btn">Cancelar</button>
+    <button mat-raised-button color="primary" (click)="onSave()" [disabled]="!data.form.valid" class="save-btn">
       {{ data.isEditing ? 'Atualizar' : 'Salvar' }}
     </button>
   </mat-dialog-actions>
+</div>

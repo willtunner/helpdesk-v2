@@ -1,4 +1,77 @@
-.full-width {
-    width: 100%;
-    margin-bottom: 20px;
+/* Estilos para o container principal do diálogo */
+::ng-deep .mat-mdc-dialog-container .mdc-dialog__surface {
+  background-color: #f5f5f5 !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15) !important;
+}
+
+.dialog-container {
+  padding: 24px;
+  color: #000000; /* Texto preto */
+
+  .dialog-title {
+    color: #000000; /* Título preto */
+    font-size: 1.25rem;
+    font-weight: 500;
+    margin-bottom: 16px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #e0e0e0;
   }
+
+  /* Estilos para o conteúdo do diálogo */
+  mat-dialog-content {
+    padding: 16px 0;
+    color: #000000; /* Texto preto */
+
+    /* Ajustes para os campos customizados */
+    ::ng-deep .custom-field {
+      background-color: #ffffff; /* Fundo branco para os inputs */
+      border-radius: 4px;
+      
+      .mat-mdc-text-field-wrapper {
+        background-color: transparent;
+      }
+      
+      .mat-mdc-form-field-label {
+        color: #616161 !important; /* Cor do label */
+      }
+      
+      .mat-mdc-input-element {
+        color: #000000 !important; /* Texto digitado preto */
+      }
+    }
+  }
+
+  /* Estilos para a área de ações */
+  .dialog-actions {
+    padding-top: 16px;
+    margin-top: 16px;
+    border-top: 1px solid #e0e0e0;
+
+    .cancel-btn {
+      margin-right: 8px;
+      color: #616161; /* Cinza escuro */
+    }
+
+    .save-btn {
+      background-color: #3f51b5; /* Azul Material */
+      color: white;
+    }
+  }
+}
+
+/* Ajustes para mobile */
+@media (max-width: 600px) {
+  .dialog-container {
+    padding: 16px;
+    
+    .dialog-title {
+      font-size: 1.1rem;
+    }
+  }
+}
+
+/* Classes auxiliares */
+.mb-4 {
+  margin-bottom: 1rem !important;
+}

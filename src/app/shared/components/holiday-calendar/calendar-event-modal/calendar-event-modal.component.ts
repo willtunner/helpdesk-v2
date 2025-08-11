@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject, inject } from '@angular/core';
-import { FormGroup, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { MatButtonModule } from '@angular/material/button';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { CustomInputComponent } from '../../custom-input/custom-input.component';
 
 @Component({
   selector: 'app-calendar-event-modal',
@@ -15,10 +16,12 @@ import { MatInputModule } from '@angular/material/input';
     MatInputModule,
     MatButtonModule,
     ReactiveFormsModule,
-    CommonModule
+    CommonModule,
+    FormsModule,
+    CustomInputComponent
   ],
   templateUrl: './calendar-event-modal.component.html',
-  styleUrl: './calendar-event-modal.component.scss'
+  styleUrls: ['./calendar-event-modal.component.scss']
 })
 export class CalendarEventModalComponent {
   dialogRef = inject(MatDialogRef<CalendarEventModalComponent>);
@@ -30,10 +33,20 @@ export class CalendarEventModalComponent {
       isEditing: boolean;
       date: Date;
     }
-  ) {}
+  ) {
+    if (!this.data.form) {
+      const fb = inject(FormBuilder);
+      this.data.form = fb.group({
+        title: ['', Validators.required],
+        description: ['', Validators.required]
+      });
+    }
+  }
 
   onSave(): void {
-    this.dialogRef.close(true);
+    if (this.data.form.valid) {
+      this.dialogRef.close(true);
+    }
   }
 
   onCancel(): void {

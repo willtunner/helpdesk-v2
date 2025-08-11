@@ -58,7 +58,8 @@
     "logout": "Sair",
     "video-docs": "Vídeo Docs",
     "developer-area": "Desenvolvimento",
-    "restricted-area": "Área Restrita"
+    "restricted-area": "Área Restrita",
+    "calendar": "Agenda"
   },
   "table": {
     "name": "Nome",
@@ -139,5 +140,39 @@
       "empty": "0 de {{length}}",
       "full": "{{start}} – {{end}} de {{length}}"
     }
+  },
+  "calendar": {
+    "calendar-title": "Calendário de Feriados",
+    "calendar-subtitle": "Clique em um dia para adicionar um evento",
+    "year": "Ano",
+    "loading-calendar": "Carregando calendário...",
+    "scheduled-events": "Eventos Agendados",
+    "months": [
+      "Janeiro",
+      "Fevereiro",
+      "Março",
+      "Abril",
+      "Maio",
+      "Junho",
+      "Julho",
+      "Agosto",
+      "Setembro",
+      "Outubro",
+      "Novembro",
+      "Dezembro"
+    ],
+    "weekdays": [
+      "Dom",
+      "Seg",
+      "Ter",
+      "Qua",
+      "Qui",
+      "Sex",
+      "Sáb"
+    ],
+    "today": "Hoje!",
+    "events": "{count, plural, =1 {1 Evento} other {{count} Eventos}}",
+    "day-format": "{{day}}/{{month}}/{{year}}",
+    "holiday": "{{holiday}}"
   }
 }

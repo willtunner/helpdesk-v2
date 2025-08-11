@@ -1,26 +1,21 @@
 <mat-card class="calendar-card">
-    <mat-card-header>
-        <mat-card-title>Calendário de Feriados</mat-card-title>
-        <mat-card-subtitle>Clique em um dia para adicionar um evento</mat-card-subtitle>
+    <mat-card-header class="calendar-header">
+        <mat-card-title class="calendar-title"> 
+            <mat-icon class="title-icon">calendar_today</mat-icon>
+            {{ 'calendar.calendar-title' | translate }} 
+        </mat-card-title>
+        <mat-card-subtitle class="calendar-subtitle">
+            {{ 'calendar.calendar-subtitle' | translate }}
+        </mat-card-subtitle>
     </mat-card-header>
 
     <mat-card-content>
         <div class="controls">
-            <mat-form-field>
-                <mat-label>Ano</mat-label>
-                <mat-select [formControl]="yearControl">
+            <mat-form-field appearance="outline" class="year-select">
+                <mat-label>{{ 'calendar.year' | translate }}</mat-label>
+                <mat-select [formControl]="yearControl" panelClass="year-select-panel">
                     <mat-option *ngFor="let year of yearRange" [value]="year">
                         {{ year }}
-                    </mat-option>
-                </mat-select>
-            </mat-form-field>
-
-            <mat-form-field>
-                <mat-label>Estado</mat-label>
-                <mat-select [formControl]="stateControl">
-                    <mat-option value="">Todos (Feriados Nacionais)</mat-option>
-                    <mat-option *ngFor="let state of states" [value]="state.value">
-                        {{ state.label }}
                     </mat-option>
                 </mat-select>
             </mat-form-field>
@@ -28,7 +23,7 @@
 
         <div *ngIf="loading" class="loading">
             <mat-spinner diameter="40"></mat-spinner>
-            <span>Carregando feriados...</span>
+            <span> {{ 'calendar.loading-calendar' | translate }} </span>
         </div>
 
         <div *ngIf="error" class="error">
@@ -37,70 +32,88 @@
         </div>
 
         <div class="calendar-container">
-            <div *ngFor="let month of [0,1,2,3,4,5,6,7,8,9,10,11]" class="month-container">
+            <div *ngFor="let month of months" class="month-container">
                 <h3>{{ getMonthName(month) }} {{ yearControl.value }}</h3>
                 <table class="calendar-table">
                     <thead>
                         <tr>
-                            <th *ngFor="let day of ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb']">{{ day }}</th>
+                            <th *ngFor="let day of [0,1,2,3,4,5,6]">
+                                {{ 'calendar.weekdays.' + day | translate }}
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let week of getWeeksInMonth(yearControl.value ?? currentYear, month)">
-                            <td *ngFor="let day of week" 
-                            [class.holiday]="day.getTime() !== 0 && isHoliday(day)"
-                            [class.has-event]="day.getTime() !== 0 && getEventsForDate(day).length > 0"
-                            (dblclick)="onDayClick(day)">
-                        
-                            <div class="day-cell">
-                                <span *ngIf="day.getTime() !== 0">{{ day.getDate() }}</span>
-                                
-                                <!-- Ícone de feriado centralizado acima -->
-                                <mat-icon *ngIf="day.getTime() !== 0 && isHoliday(day)" class="holiday-icon">
-                                    celebration
-                                </mat-icon>
-                                
-                                <!-- Ícone de evento centralizado abaixo -->
-                                <mat-icon *ngIf="day.getTime() !== 0 && getEventsForDate(day).length > 0" class="event-icon">
-                                    event_available
-                                </mat-icon>
-                                
-                                <!-- Tooltip -->
-                                <div class="custom-tooltip" *ngIf="day.getTime() !== 0">
-                                    {{ getHolidayTooltip(day) }}
-                                  </div>
-                            </div>
-                        </td>
+                            <td *ngFor="let day of week" [class.holiday]="day.getTime() !== 0 && isHoliday(day)"
+                                [class.has-event]="day.getTime() !== 0 && getEventsForDate(day).length > 0"
+                                [class.today]="day.getTime() !== 0 && isToday(day)" (dblclick)="onDayClick(day)">
+                                <div class="day-cell" [attr.aria-label]="getHolidayTooltip(day)">
+                                    <span *ngIf="day.getTime() !== 0">{{ day.getDate() }}</span>
+
+                                    <mat-icon *ngIf="day.getTime() !== 0 && isHoliday(day)" class="holiday-icon">
+                                        celebration
+                                    </mat-icon>
+
+                                    <mat-icon *ngIf="day.getTime() !== 0 && getEventsForDate(day).length > 0"
+                                        class="event-icon">
+                                        event_available
+                                    </mat-icon>
+
+                                    <div class="custom-tooltip" *ngIf="day.getTime() !== 0">
+                                        {{ getHolidayTooltip(day) }}
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
-                      </tbody>
-                      
+                    </tbody>
                 </table>
             </div>
         </div>
 
-
         <div class="events-section" *ngIf="events().length > 0">
-            <h3>Eventos Agendados</h3>
-            <mat-list>
-                <mat-list-item *ngFor="let event of sortedEvents()" class="event-list-item">
-                    <mat-icon matListIcon color="primary">event</mat-icon>
-                    <div mat-line class="event-date">{{ event.date | date:'dd/MM/yyyy' }}</div>
-                    <div mat-line class="event-title">{{ event.title }}</div>
+            <h3 class="section-title">
+                <mat-icon class="section-icon">event_available</mat-icon>
+                {{ 'calendar.scheduled-events' | translate }}
+            </h3>
 
-                    <button mat-icon-button [matMenuTriggerFor]="menu" class="event-menu">
-                        <mat-icon>more_vert</mat-icon>
-                    </button>
+            <mat-list class="event-list">
+                <mat-list-item *ngFor="let event of sortedEvents()" class="event-list-item"
+                    (dblclick)="openEventDialog(event.date, event)">
+                    <div class="event-content">
+                        <div class="event-icon-container">
+                            <mat-icon class="event-type-icon" [ngClass]="{'holiday-event': isHoliday(event.date)}">
+                                {{ isHoliday(event.date) ? 'celebration' : 'event' }}
+                            </mat-icon>
+                        </div>
 
-                    <mat-menu #menu="matMenu">
-                        <button mat-menu-item (click)="openEventDialog(event.date, event)">
-                            <mat-icon>edit</mat-icon>
-                            <span>Editar</span>
-                          </button>
-                        <button mat-menu-item (click)="deleteEvent(event)">
-                            <mat-icon>delete</mat-icon>
-                            <span>Excluir</span>
-                        </button>
-                    </mat-menu>
+                        <div class="event-details">
+                            <div class="event-header">
+                                <span class="event-date">
+                                    <mat-icon class="date-icon">calendar_today</mat-icon>
+                                    {{ event.date | date:'dd/MM/yyyy' }}
+                                </span>
+                                <span class="event-title" [matTooltip]="event.description" matTooltipPosition="right">
+                                    {{ event.title }}
+                                </span>
+                            </div>
+
+                            <div *ngIf="event.description" class="event-description">
+                                {{ event.description }}
+                            </div>
+                        </div>
+
+                        <div class="event-actions">
+                            <button mat-icon-button
+                                (click)="$event.stopPropagation(); openEventDialog(event.date, event)"
+                                matTooltip="Editar evento" class="edit-btn">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                            <button mat-icon-button (click)="$event.stopPropagation(); deleteEvent(event)"
+                                matTooltip="Excluir evento" class="delete-btn">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </div>
+                    </div>
                 </mat-list-item>
             </mat-list>
         </div>

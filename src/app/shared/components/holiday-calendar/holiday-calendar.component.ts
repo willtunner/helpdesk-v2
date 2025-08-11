@@ -18,6 +18,7 @@ import { MatMenuModule } from '@angular/material/menu';
 import { MatSnackBar, MatSnackBarModule } from '@angular/material/snack-bar';
 import { FormsModule } from '@angular/forms';
 import { CalendarEventModalComponent } from './calendar-event-modal/calendar-event-modal.component';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 interface Holiday {
   date: string;
@@ -52,7 +53,8 @@ interface CalendarEvent {
     MatListModule,
     MatMenuModule,
     FormsModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    TranslateModule
   ],
   templateUrl: './holiday-calendar.component.html',
   styleUrls: ['./holiday-calendar.component.scss']
@@ -62,6 +64,7 @@ export class HolidayCalendarComponent implements OnInit {
   private dialog = inject(MatDialog);
   private fb = inject(FormBuilder);
   private snackBar = inject(MatSnackBar);
+  private translateService = inject(TranslateService);
 
   currentYear = new Date().getFullYear();
   yearControl = new FormControl(this.currentYear);
@@ -78,19 +81,14 @@ export class HolidayCalendarComponent implements OnInit {
   editingEvent: CalendarEvent | null = null;
   eventForm: FormGroup;
 
-  states = [
-    { value: 'AC', label: 'Acre' }, { value: 'AL', label: 'Alagoas' }, { value: 'AP', label: 'Amapá' },
-    { value: 'AM', label: 'Amazonas' }, { value: 'BA', label: 'Bahia' }, { value: 'CE', label: 'Ceará' },
-    { value: 'DF', label: 'Distrito Federal' }, { value: 'ES', label: 'Espírito Santo' }, { value: 'GO', label: 'Goiás' },
-    { value: 'MA', label: 'Maranhão' }, { value: 'MT', label: 'Mato Grosso' }, { value: 'MS', label: 'Mato Grosso do Sul' },
-    { value: 'MG', label: 'Minas Gerais' }, { value: 'PA', label: 'Pará' }, { value: 'PB', label: 'Paraíba' },
-    { value: 'PR', label: 'Paraná' }, { value: 'PE', label: 'Pernambuco' }, { value: 'PI', label: 'Piauí' },
-    { value: 'RJ', label: 'Rio de Janeiro' }, { value: 'RN', label: 'Rio Grande do Norte' }, { value: 'RS', label: 'Rio Grande do Sul' },
-    { value: 'RO', label: 'Rondônia' }, { value: 'RR', label: 'Roraima' }, { value: 'SC', label: 'Santa Catarina' },
-    { value: 'SP', label: 'São Paulo' }, { value: 'SE', label: 'Sergipe' }, { value: 'TO', label: 'Tocantins' }
-  ];
 
   private apiKey = '21075|Wiu4ByEDG4xvXHH8Lfnbm2GILonpwEiu';
+
+  // meses usado no template
+  months = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11];
+  // Data "hoje" calculada uma vez ao inicializar (pode recalcular se quiser)
+  private today = new Date();
+  private todayStr = this.today.toDateString();
 
   constructor() {
     this.eventForm = this.fb.group({
@@ -105,6 +103,12 @@ export class HolidayCalendarComponent implements OnInit {
 
     this.yearControl.valueChanges.subscribe(() => this.fetchHolidays());
     this.stateControl.valueChanges.subscribe(() => this.fetchHolidays());
+  }
+
+  // --- isToday: compara apenas a string de data local (toDateString)
+  isToday(date: Date): boolean {
+    if (!date || date.getTime() === 0) return false;
+    return date.toDateString() === this.todayStr;
   }
 
   private loadEventsFromStorage(): void {
@@ -152,7 +156,7 @@ export class HolidayCalendarComponent implements OnInit {
 
   openEventDialog(date: Date, eventToEdit?: CalendarEvent): void {
     this.selectedDate = date;
-  
+
     if (eventToEdit) {
       this.editingEvent = eventToEdit;
       this.eventForm.reset();
@@ -164,17 +168,17 @@ export class HolidayCalendarComponent implements OnInit {
       this.editingEvent = null;
       this.eventForm.reset();
     }
-  
+
     const dialogRef = this.dialog.open(CalendarEventModalComponent, {
       width: '500px',
       data: { form: this.eventForm, isEditing: !!this.editingEvent, date }
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) this.saveEvent();
     });
   }
-  
+
 
   private findEventByDate(date: Date): CalendarEvent | undefined {
     return this.events().find(e => e.date.toDateString() === date.toDateString());
@@ -219,30 +223,41 @@ export class HolidayCalendarComponent implements OnInit {
     return this.events().filter(e => e.date.toDateString() === date.toDateString());
   }
 
+  // tooltip: se for hoje, mostra "Dia de hoje!" com prioridade
   getHolidayTooltip(date: Date): string {
-    if (date.getTime() === 0) return '';
+    if (!date || date.getTime() === 0) return '';
     
-    const holiday = this.getHolidayName(date);
-    const events = this.getEventsForDate(date);
-    const day = date.getDate();
-    const month = date.getMonth() + 1;
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
     const year = date.getFullYear();
     const monthName = this.getMonthName(date.getMonth());
     
-    if (holiday) {
-        return `Dia ${day}/${month}/${year}\nFeriado: ${holiday}`;
+    if (this.isToday(date)) {
+      return this.translateService.instant('calendar.today') + `\n${day}/${month}/${year}`;
     }
     
+    const holiday = this.getHolidayName(date);
+    if (holiday) {
+      const dateText = this.translateService.instant('calendar.day-format', { day, month, year });
+      const holidayText = this.translateService.instant('calendar.holiday', { holiday });
+      return `${dateText}\n${holidayText}`;
+    }
+    
+    const events = this.getEventsForDate(date);
     if (events.length > 0) {
-        const eventsText = events.length === 1 
-            ? `1 Evento:\n${events[0].title}`
-            : `${events.length} Eventos:\n${events.map(e => `• ${e.title}`).join('\n')}`;
-        return `Dia ${day}/${month}/${year}\n${eventsText}`;
+      const dateText = this.translateService.instant('calendar.day-format', { day, month, year });
+      
+      // Plural manual simples para evitar o erro do ICU
+      const countText = events.length === 1 ? '1 Evento' : `${events.length} Eventos`;
+      
+      const eventsText = `${countText}:\n` + events.map(e => `• ${e.title}`).join('\n');
+      
+      return `${dateText}\n${eventsText}`;
     }
     
     return `${day} de ${monthName} de ${year}`;
-}
-
+  }
+  
   getHolidayName(date: Date): string | null {
     const dateStr = date.toISOString().split('T')[0];
     return this.holidays.find(h => h.date === dateStr)?.name || null;
@@ -269,10 +284,7 @@ export class HolidayCalendarComponent implements OnInit {
   }
 
   getMonthName(month: number): string {
-    return [
-      'Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho',
-      'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'
-    ][month];
+    return this.translateService.instant(`calendar.months.${month}`);
   }
 
   isHoliday(date: Date): boolean {
@@ -286,20 +298,22 @@ export class HolidayCalendarComponent implements OnInit {
 
   onDayClick(day: Date): void {
     if (day.getTime() === 0) return;
-  
+
     // Sempre abre modal para cadastrar novo evento
     this.selectedDate = day;
     this.editingEvent = null;   // Força modo "novo evento"
     this.eventForm.reset();
-  
+
     const dialogRef = this.dialog.open(CalendarEventModalComponent, {
       width: '500px',
       data: { form: this.eventForm, isEditing: false, date: day }
     });
-  
+
     dialogRef.afterClosed().subscribe(result => {
       if (result) this.saveEvent();
     });
   }
-  
+
+
+
 }

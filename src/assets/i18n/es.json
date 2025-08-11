@@ -58,7 +58,8 @@
     "logout": "Cerrar Sesión",
     "video-docs": "Documentos en Video",
     "developer-area": "Desarrollo",
-    "restricted-area": "Área Restringida"
+    "restricted-area": "Área Restringida",
+    "calendar": "Calendario"
   },
   "table": {
     "name": "Nombre",
@@ -138,5 +139,39 @@
       "empty": "0 de {{length}}",
       "full": "{{start}} – {{end}} de {{length}}"
     }
+  },
+  "calendar": {
+    "calendar-title": "Calendario de Festivos",
+    "calendar-subtitle": "Haz clic en un día para añadir un evento",
+    "year": "Año",
+    "loading-calendar": "Cargando calendario...",
+    "scheduled-events": "Eventos Programados",
+    "months": [
+      "Enero",
+      "Febrero",
+      "Marzo",
+      "Abril",
+      "Mayo",
+      "Junio",
+      "Julio",
+      "Agosto",
+      "Septiembre",
+      "Octubre",
+      "Noviembre",
+      "Diciembre"
+    ],
+    "weekdays": [
+      "Dom",
+      "Lun",
+      "Mar",
+      "Mié",
+      "Jue",
+      "Vie",
+      "Sáb"
+    ],
+    "today": "¡Hoy!",
+    "events": "{count, plural, =1 {1 Evento} other {{count} Eventos}}",
+    "day-format": "{{day}}/{{month}}/{{year}}",
+    "holiday": "{{holiday}}"
   }
 }
