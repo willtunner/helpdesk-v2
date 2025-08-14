@@ -1,12 +1,14 @@
+<h3>Chamados:</h3>
 <div class="container">
-  <h1>Chamados:</h1>
-
-  <form [formGroup]="form" style="max-width: 1100px;">
-    <div class="main-top" style="display: flex; justify-content: space-between;">
+  <div *ngIf="loading" class="loading-overlay">
+    <mat-spinner></mat-spinner>
+  </div>
+  <form [formGroup]="form" style="max-width: 900px;">
+    <div class="main-top">
       <!-- Empresa -->
       <div class="companies">
         <app-dynamic-select [label]="'Empresa'" [options]="companies" [valueKey]="'id'" [labelKey]="'name'"
-          [type]="'company'" (onChange)="onCompanyChange($event)" (openModal)="openCompanyModal()"
+          [type]="'company'" (onChange)="onCompanyChange($event)" 
           [formControl]="getControl('companyId')" [errorMessage]="'Empresa é obrigatória'">
         </app-dynamic-select>
       </div>
@@ -14,7 +16,7 @@
       <!-- Cliente -->
       <div class="clients">
         <app-dynamic-select [label]="'Cliente'" [options]="clients" [valueKey]="'id'" [labelKey]="'name'"
-          [(model)]="selectedClient" [type]="'client'" (openModal)="abrirModalCliente()"
+          [type]="'client'" 
           [formControl]="getControl('clientId')" (modelChange)="onClientSelected($event)">
         </app-dynamic-select>
       </div>
@@ -35,8 +37,6 @@
       </app-custom-input>
     </div>
     }
-
-
 
     <!-- Título -->
     <div class="title">
@@ -70,12 +70,16 @@
       </div>
     </div>
 
-    <!-- Botões (coloque DENTRO do form se fazem parte do envio) -->
+    <!-- Botões -->
     <div class="buttons" style="margin-top: 20px;">
-      <app-dynamic-button type="save" (clicked)="onSubmit()" [success]="saveSuccess"></app-dynamic-button>
-      <app-dynamic-button type="edit" (clicked)="onEdit()"></app-dynamic-button>
-      <app-dynamic-button type="delete" (clicked)="onDelete()" [success]="deleteSuccess"></app-dynamic-button>
-      <app-dynamic-button type="print" (clicked)="onPrint()"></app-dynamic-button>
+      <app-dynamic-button type="save" (click)="onSubmit()" [success]="saveSuccess"></app-dynamic-button>
+      <app-dynamic-button type="edit" (click)="handleSaveOrEdit($event)"></app-dynamic-button>
+      <app-dynamic-button type="delete" (click)="onDelete()"></app-dynamic-button>
     </div>
   </form>
+</div>
+
+<div class="call-list" style="margin-top: 20px;">
+  <h3>Lista de chamados:</h3>
+  <app-calls-list (callSelected)="handleSelectedCall($event)"></app-calls-list>
 </div>

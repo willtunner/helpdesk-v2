@@ -1,64 +1,74 @@
-::ng-deep .mat-internal-form-field > label {
-    color: #222!important;
-  }
+::ng-deep .mat-internal-form-field>label {
+  color: #222 !important;
+}
 
-  ::ng-deep mat-radio-button.radio-btn.mat-accent .mat-radio-outer-circle {
-    border-color: #222 !important;
-  }
-  
-  ::ng-deep mat-radio-button.radio-btn.mat-accent .mat-radio-inner-circle {
-    background-color: #222 !important;
-  }
+::ng-deep mat-radio-button.radio-btn.mat-accent .mat-radio-outer-circle {
+  border-color: #222 !important;
+}
 
-  .top-section {
+::ng-deep mat-radio-button.radio-btn.mat-accent .mat-radio-inner-circle {
+  background-color: #222 !important;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  background-color: #f5f5f5;
+  padding: 15px;
+  border-radius: 10px;
+
+  .main-top {
     display: flex;
-    flex-direction: column;
-  
-    .main-top {
-      display: flex;
-      justify-content: space-between;
-      flex-wrap: wrap;
-    }
-  
-    .companies, .clients, .conexao {
-      flex: 1;
-      min-width: 200px;
-      margin-right: 10px;
-    }
-  
-    .conexao {
-      order: 0; // padrão
-    }
-  
-    .title {
-      margin-top: 10px;
-    }
-  
-    @media (max-width: 969px) {
-      .main-top {
-        flex-wrap: wrap;
-        gap: 10px;
-      }
-  
-      .companies,
-      .clients {
-        width: 48%;
-      }
-  
-      .conexao {
-        width: 100%;
-        order: 2; // desce abaixo dos dois primeiros
-      }
-  
-      .title {
-        order: 3;
-      }
-    }
+    justify-content: space-between;
+    margin-top: 5px;
+    padding-top: 10px;
   }
 
-  .container {
-    background-color: #f5f5f5;
-    padding: 15px;
-    border-radius: 15px;
+  .companies,
+  .clients,
+  .conexao {
+    min-width: 200px;
   }
-  
+
+  .conexao {
+    order: 0; // padrão
+  }
+
+  .title {
+    margin-top: 10px;
+  }
+
+  @media (max-width: 969px) {
+    .main-top {
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .companies,
+    .clients {
+      width: 48%;
+    }
+
+    .conexao {
+      width: 100%;
+      order: 2; // desce abaixo dos dois primeiros
+    }
+
+    .title {
+      order: 3;
+    }
+  }
+}
+
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(255, 255, 255, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}

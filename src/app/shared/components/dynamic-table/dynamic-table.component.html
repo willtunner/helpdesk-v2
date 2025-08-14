@@ -21,7 +21,7 @@
       </ng-container>
 
       <tr mat-header-row *matHeaderRowDef="displayedColumns" class="header-row"></tr>
-      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="body-row"></tr>
+      <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="body-row" (click)="rowClick.emit(row)"></tr>
     </table>
 
     <!-- Paginator dentro da mesma área scrollável -->

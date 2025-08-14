@@ -1,57 +1,63 @@
-import { Component, forwardRef, HostListener, Input, OnInit } from '@angular/core';
-import { DynamicSelectComponent } from '../../shared/components/dynamic-select/dynamic-select.component';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { MatRadioModule } from '@angular/material/radio';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { ActivatedRoute } from '@angular/router';
+import { switchMap } from 'rxjs/operators';
+import { of } from 'rxjs';
+
+// Componentes customizados
+import { DynamicSelectComponent } from '../../shared/components/dynamic-select/dynamic-select.component';
 import { CustomInputComponent } from '../../shared/components/custom-input/custom-input.component';
 import { RichTextEditorComponent } from '../../shared/components/rich-text/rich-text.component';
 import { TagsComponent } from '../../shared/components/tags/tags.component';
-import { MatRadioModule } from '@angular/material/radio';
-import { Call, Company, User } from '../../models/models';
-import { CallService } from '../../services/call.service';
 import { DynamicButtonComponent } from '../../shared/components/action-button/action-button.component';
+import { CallsListComponent } from './calls-list/calls-list.component';
+
+// Serviços e modelos
+import { CallService } from '../../services/call.service';
 import { CompanyService } from '../../services/company.service';
-import { MatSnackBar } from '@angular/material/snack-bar';
-import { SessionService } from '../../services/session.service';
 import { ClientService } from '../../services/client.service';
+import { SessionService } from '../../services/session.service';
 import { SendNotificationService } from '../../services/send-notification.service';
+import { Call, Company, User } from '../../models/models';
 import { NotificationType } from '../../enums/notificationType.enum';
 
 @Component({
   selector: 'app-calls',
   standalone: true,
   imports: [
-    DynamicSelectComponent,
     CommonModule,
+    ReactiveFormsModule,
+    MatRadioModule,
+    MatProgressSpinnerModule,
+    
+    // Componentes customizados
+    DynamicSelectComponent,
     CustomInputComponent,
     RichTextEditorComponent,
-    ReactiveFormsModule,
     TagsComponent,
-    MatRadioModule,
-    DynamicButtonComponent
+    DynamicButtonComponent,
+    CallsListComponent
   ],
   templateUrl: './calls.component.html',
-  styleUrl: './calls.component.scss',
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => RichTextEditorComponent),
-      multi: true
-    }
-  ]
+  styleUrls: ['./calls.component.scss']
 })
+
 export class CallsComponent implements OnInit {
-  // companies = [{ id: 1, name: 'Acme Corp' }, { id: 2, name: 'Globex' }];
-  clients: User[] = [];
-  selectedCompany: string | null = null;
-  selectedClient: string | null = null;
-  // tagControl!: FormControl;
+  // Propriedades do componente
   form!: FormGroup;
+  companies: Company[] = [];
+  clients: User[] = [];
+  operator!: User;
+  selectedCall: Call | null = null;
+  loading = false;
+  isNarrow = false;
   isSaveOrEditSuccess = false;
   saveSuccess = false;
   deleteSuccess = false;
-  companies: Company[] = [];
-  operator!: User;
-  @Input() selectedCall: Call | null = null;
 
   constructor(
     private fb: FormBuilder,
@@ -60,16 +66,23 @@ export class CallsComponent implements OnInit {
     private snackBar: MatSnackBar,
     private clientServ: ClientService,
     private sessionService: SessionService,
-    private messageService: SendNotificationService
+    private messageService: SendNotificationService,
+    private route: ActivatedRoute
   ) {
-    const user = this.sessionService.getSession();
-    if (user) {
-      if (user?.roles.includes('OPERATOR')) {
-        this.operator = user;
-      }
-    }
+    this.initializeForm();
+    this.loadOperator();
+  }
 
+  ngOnInit(): void {
+    this.onResize();
+    this.loadCompanies();
+    this.setupRouteListener();
+  }
+
+  // Métodos privados
+  private initializeForm(): void {
     this.form = this.fb.group({
+      operatorId: [''],
       companyId: [null, Validators.required],
       clientId: [null, Validators.required],
       connection: [''],
@@ -77,182 +90,174 @@ export class CallsComponent implements OnInit {
       description: ['', Validators.required],
       resolution: ['', Validators.required],
       tags: [[], Validators.required],
-      closed: [false],
-      operatorId: [this.operator?.id],
+      closed: [false]
     });
   }
 
+  private loadOperator(): void {
+    const user = this.sessionService.getSession();
+    if (user?.roles.includes('OPERATOR')) {
+      this.operator = user;
+      this.form.patchValue({ operatorId: this.operator.id });
+    }
+  }
 
+  private setupRouteListener(): void {
+    this.route.params.pipe(
+      switchMap(params => {
+        const callId = params['id'];
+        if (callId) {
+          this.loading = true;
+          return this.callServ.getCallById(callId);
+        }
+        return of(null);
+      })
+    ).subscribe({
+      next: (call) => this.handleCallResponse(call),
+      error: (err) => this.handleCallError(err)
+    });
+  }
 
-  isNarrow = false;
+  private handleCallResponse(call: Call | null): void {
+    if (call) {
+      this.selectedCall = call;
+      this.patchFormWithCallData();
+    }
+    this.loading = false;
+  }
 
+  private handleCallError(err: any): void {
+    console.error('Erro ao carregar chamado:', err);
+    this.loading = false;
+    this.messageService.customNotification(
+      NotificationType.ERROR,
+      'Erro ao carregar chamado'
+    );
+  }
+
+  private async patchFormWithCallData(): Promise<void> {
+    if (!this.selectedCall) return;
+
+    this.form.patchValue({
+      companyId: this.selectedCall.companyId,
+      clientId: this.selectedCall.clientId,
+      connection: this.selectedCall.connection,
+      title: this.selectedCall.title,
+      description: this.selectedCall.description,
+      resolution: this.selectedCall.resolution,
+      tags: this.selectedCall.tags || [],
+      closed: this.selectedCall.closed || false,
+      operatorId: this.selectedCall.operatorId || this.operator?.id,
+    });
+
+    if (this.selectedCall.companyId) {
+      await this.loadClientsForCompany(this.selectedCall.companyId);
+      this.form.get('clientId')?.setValue(this.selectedCall.clientId);
+    }
+  }
+
+  private async loadClientsForCompany(companyId: string): Promise<void> {
+    try {
+      this.clients = await this.clientServ.getClientsByCompanyId(companyId);
+    } catch (error) {
+      console.error('Erro ao carregar clientes:', error);
+    }
+  }
+
+  // Métodos públicos
   @HostListener('window:resize', ['$event'])
   onResize() {
     this.isNarrow = window.innerWidth <= 840;
   }
 
-  ngOnInit(): void {
-    this.onResize();
-    if (this.selectedCall) {
-      this.form.patchValue({
-        companyId: this.selectedCall.companyId,
-        clientId: this.selectedCall.clientId,
-        connection: this.selectedCall.connection,
-        title: this.selectedCall.title,
-        description: this.selectedCall.description,
-        resolution: this.selectedCall.resolution,
-        tags: this.selectedCall.tags,
-        closed: this.selectedCall.closed,
-        operatorId: this.selectedCall.operatorId,
-      });
-    }
-    this.loadCompanies();
-
-    console.log('Width Page:', this.isNarrow);
+  async onCompanyChange(companyId: string): Promise<void> {
+    this.form.patchValue({ companyId, clientId: null });
+    await this.loadClientsForCompany(companyId);
   }
 
-  onCompanyChange(companyId: string) {
-    this.form.patchValue({ companyId });
-
-    this.clientServ.getClientsByCompanyId(companyId)
-      .then(clients => {
-        console.log('Clientes encontrados:', clients);
-        this.clients = clients; // atualiza o select de clientes
-        this.form.patchValue({ clientId: null }); // limpa seleção anterior
-      })
-      .catch(err => {
-        console.error('Erro ao buscar clientes:', err);
-        this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar clientes.');
-      });
-  }
-
-
-  onClientChange(clientId: string) {
-    this.form.patchValue({ clientId: clientId });
+  onClientChange(clientId: string): void {
+    this.form.patchValue({ clientId });
   }
 
   onClientSelected(clientId: string): void {
-    const selected = this.clients.find(c => c.id === clientId);
-    console.log('Cliente selecionado:', selected);
-    this.onClientChange(clientId); // já atualiza o form.control
+    this.onClientChange(clientId);
   }
-
-
-  openCompanyModal() {
-    // Lógica da empresa
-  }
-
-  abrirModalCliente() { }
 
   getControl(controlName: string): FormControl {
     return this.form.get(controlName) as FormControl;
   }
 
-  submit() {
-    console.log('Formulário enviado:', this.form.value);
-    if (this.form.valid) {
-      console.log('Formulário enviado:', this.form.value);
-      // Mostrar o conteúdo HTML no console
-      console.log('Conteúdo da descrição (HTML):', this.form.get('descricao')?.value);
-      console.log('Termos aceitos (HTML):', this.form.get('termos')?.value);
-    } else {
-      this.form.markAllAsTouched();
-    }
-  }
-
   onTagsChanged(tags: string[]): void {
-    this.form.patchValue({
-      tags: tags
-    });
+    this.form.patchValue({ tags });
   }
 
   handleSaveOrEdit(event: Event): void {
-    if (this.form.invalid) {
-      return;
-    }
-    if (this.selectedCall) {
-      this.updateCall();
-    } else {
-      this.onSubmit();
-    }
+    if (this.form.invalid) return;
+    
+    this.selectedCall ? this.updateCall() : this.onSubmit();
     this.isSaveOrEditSuccess = true;
     setTimeout(() => this.isSaveOrEditSuccess = false, 2000);
   }
 
-  updateCall() {
-    if (this.form.invalid) {
-      return;
-    }
-
-    const formData = this.form.value;
-    formData.id = this.selectedCall?.id;
-
-    console.log('Atualizar', this.selectedCall);
+  updateCall(): void {
+    if (this.form.invalid) return;
+    
+    const formData = { ...this.form.value, id: this.selectedCall?.id };
+    console.log('Atualizar chamado:', formData);
+    // Implementar lógica de atualização
   }
 
-  onSubmit() {
-
-    if (this.form.valid) {
-      console.log('Formulário enviado:', this.form.value);
-      const formData = this.form.value;
-
-      this.callServ
-        .saveCallWithGeneratedId(formData)
-        .then((res: any) => {
-          this.onClear();
-        })
-        .catch((error) => {
-          console.error('Erro ao salvar a call:', error);
-        });
-    } else {
+  onSubmit(): void {
+    if (this.form.invalid) {
       this.form.markAllAsTouched();
       this.snackBar.open('Preencha todos os campos obrigatórios.', 'Fechar', {
         duration: 3000,
         panelClass: ['error-snackbar']
       });
+      return;
     }
-    // if (this.form.invalid) {
-    //   return;
-    // }
 
-    const formData = this.form.value;
-
-    this.callServ
-      .saveCallWithGeneratedId(formData)
-      .then((res: any) => {
-        this.onClear();
-      })
-      .catch((error) => {
-        console.error('Erro ao salvar a call:', error);
-      });
+    this.callServ.saveCallWithGeneratedId(this.form.value)
+      .then(() => this.onClear())
+      .catch(error => console.error('Erro ao salvar chamado:', error));
   }
 
-  onClear() {
+  onClear(): void {
     this.selectedCall = null;
-    this.form.reset();
-    window.location.reload();
+    this.form.reset({ operatorId: this.operator?.id });
   }
-
-  onEdit() { }
-  onDelete() { }
-  onPrint() { }
 
   loadCompanies(): void {
-    this.companyServ.getCompanyByFirebase().subscribe((companies: Company[]) => {
-      this.companies = companies;
-
-      // Reaplica a lógica de filtragem ao carregar as empresas
-      const companyId = this.form.get('companyId')?.value;
-      if (companyId) {
-        this.onCompanyChange(companyId);
-      }
-    }, error => {
-      console.error('Erro ao carregar empresas:', error);
-      this.snackBar.open('Erro ao carregar empresas.', 'Fechar', {
-        duration: 3000,
-        panelClass: ['error-snackbar']
-      });
+    this.companyServ.getCompanyByFirebase().subscribe({
+      next: (companies) => {
+        this.companies = companies;
+        const companyId = this.form.get('companyId')?.value;
+        if (companyId) this.onCompanyChange(companyId);
+      },
+      error: (error) => this.handleCompaniesError(error)
     });
   }
 
+  private handleCompaniesError(error: any): void {
+    console.error('Erro ao carregar empresas:', error);
+    this.snackBar.open('Erro ao carregar empresas.', 'Fechar', {
+      duration: 3000,
+      panelClass: ['error-snackbar']
+    });
+  }
+
+  handleSelectedCall(call: Call): void {
+    this.selectedCall = call;
+    this.patchFormWithCallData();
+    // Opcional: rolar para o topo do formulário
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  // Métodos vazios (para implementação futura)
+  openCompanyModal(): void {}
+  abrirModalCliente(): void {}
+  onEdit(): void {}
+  onDelete(): void {}
+  onPrint(): void {}
+  submit(): void {}
 }

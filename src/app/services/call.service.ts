@@ -8,6 +8,9 @@ import { SessionService } from './session.service';
 import { AuthService } from './auth.service';
 import { NotificationType } from '../enums/notificationType.enum';
 import { formatDate } from '@angular/common';
+import { OperatorsService } from './operators.service';
+import { CompanyService } from './company.service';
+import { ClientService } from './client.service';
 
 const PATH_CALLS = 'calls';
 const PATH_COMPANIES = 'company';
@@ -29,37 +32,75 @@ export class CallService {
   constructor(
     private messageService: SendNotificationService,
     private sessionService: SessionService,
-    private authservice: AuthService
+    private authservice: AuthService,
+    private operatorsService: OperatorsService,
+    private companyService: CompanyService,
+    private clientService: ClientService
   ) { }
 
   // Retorna lista de chamados de uma helpCompany específica e operador opcional
   getCallsByHelpDeskCompany$(helpDeskCompanyId: string, operatorId?: string): Observable<Call[]> {
     const constraints = [
-      where('helpDeskCompanyId', '==', helpDeskCompanyId)
+        where('helpDeskCompanyId', '==', helpDeskCompanyId)
     ];
 
     if (operatorId) {
-      constraints.push(where('operatorId', '==', operatorId));
+        constraints.push(where('operatorId', '==', operatorId));
     }
 
     const q = query(this._collectionCalls, ...constraints);
 
     return collectionData(q, { idField: 'id' }).pipe(
-      map((calls: any[]) => {
-        return calls.map(call => ({
-          ...call,
-          created: (call.created as any)?.toDate?.() || new Date(),
-          updated: (call.updated as any)?.toDate?.() || new Date(),
-          finalized: (call.finalized as any)?.toDate?.() || null
-        }));
-      }),
-      catchError(error => {
-        console.error('Erro ao buscar chamadas:', error);
-        this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar chamadas');
-        return of([]);
-      })
+        switchMap((calls: any[]) => {
+            if (calls.length === 0) return of([]);
+            
+            // Para cada call, criamos um observable que busca os dados completos
+            const callsWithDetails$ = calls.map(call => {
+                // Converte as datas
+                const created = (call.created as any)?.toDate?.() || new Date();
+                const updated = (call.updated as any)?.toDate?.() || new Date();
+                const finalized = call.finalized ? (call.finalized as any)?.toDate?.() || null : null;
+
+                // Cria observables para cada entidade relacionada
+                const company$ = call.companyId 
+                    ? from(this.companyService.getCompanyById(call.companyId))
+                    : of(null);
+                
+                const operator$ = call.operatorId 
+                    ? from(this.operatorsService.getUserById(call.operatorId))
+                    : of(null);
+                
+                const client$ = call.clientId 
+                    ? from(this.clientService.getClientById(call.clientId))
+                    : of(null);
+
+                // Combina todos os observables
+                return forkJoin([company$, operator$, client$]).pipe(
+                    map(([company, operator, client]) => ({
+                        ...call,
+                        created,
+                        updated,
+                        finalized,
+                        company,
+                        operator,
+                        client
+                    } as Call))
+                );
+            });
+
+            // Combina todos os observables de calls
+            return forkJoin(callsWithDetails$);
+        }),
+        catchError(error => {
+            console.error('Erro ao buscar chamadas:', error);
+            this.messageService.customNotification(
+                NotificationType.ERROR, 
+                'Erro ao buscar chamadas'
+            );
+            return of([]);
+        })
     );
-  }
+}
 
   getCalls$(closed?: boolean, helpDeskCompanyId?: string): Observable<Call[]> {
     const constraints: any[] = [];
@@ -253,6 +294,64 @@ export class CallService {
       throw error;
     }
   }
+
+  // call.service.ts
+
+getCallById(id: string): Observable<Call> {
+  const callRef = doc(this._firestore, PATH_CALLS, id);
+
+  return from(getDoc(callRef)).pipe(
+    switchMap(callSnap => {
+      if (!callSnap.exists()) {
+        return throwError(() => new Error(`Chamado com ID ${id} não encontrado`));
+      }
+
+      const callData = callSnap.data() as any;
+      const callBase: Partial<Call> = {
+        id: callSnap.id,
+        ...callData,
+        created: callData.created?.toDate?.() || new Date(),
+        updated: callData.updated?.toDate?.() || new Date(),
+        finalized: callData.finalized?.toDate?.() || null
+      };
+
+      // Referências relacionadas
+      const companyRef = doc(this._firestore, PATH_COMPANIES, callData.companyId);
+      const clientRef = doc(this._firestore, PATH_CLIENTS, callData.clientId);
+      const operatorRef = doc(this._firestore, PATH_OPERATOR, callData.operatorId);
+
+      return forkJoin([
+        from(getDoc(clientRef)),
+        from(getDoc(companyRef)),
+        from(getDoc(operatorRef))
+      ]).pipe(
+        map(([clientSnap, companySnap, operatorSnap]) => {
+          const client = clientSnap.exists() ? 
+            { id: clientSnap.id, ...clientSnap.data() } as User : null;
+          const company = companySnap.exists() ? 
+            { id: companySnap.id, ...companySnap.data() } as Company : null;
+          const operator = operatorSnap.exists() ? 
+            { id: operatorSnap.id, ...operatorSnap.data() } as User : null;
+
+          return {
+            ...callBase,
+            client,
+            company,
+            operator
+          } as Call;
+        })
+      );
+    }),
+    catchError(error => {
+      console.error(`Erro ao buscar chamado ${id}:`, error);
+      this.messageService.customNotification(
+        NotificationType.ERROR,
+        'Erro ao buscar detalhes do chamado'
+      );
+      return throwError(() => error);
+    })
+  );
+}
   
 
 

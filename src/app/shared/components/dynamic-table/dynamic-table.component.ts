@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, Input, Output, signal, ViewChild } from '@angular/core';
+import { Component, EventEmitter, inject, Input, Output, signal, SimpleChanges, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
@@ -32,6 +32,7 @@ export class DynamicTableComponent {
   @Output() load = new EventEmitter<any>();
   @Output() print = new EventEmitter<any>();
   @Output() view = new EventEmitter<any>();
+  @Output() rowClick = new EventEmitter<any>();
 
   dataSource = new MatTableDataSource<any>([]);
   ngxTranslate = inject(NgxTranslateService);
@@ -40,6 +41,12 @@ export class DynamicTableComponent {
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['options']) {
+      // Lógica para atualizar as opções
+    }
   }
 
   @Input() set data(value: any[]) {

@@ -51,9 +51,34 @@
   display: flex;
   align-items: center;
   gap: 8px;
+  min-width: 200px; /* Largura mínima de 200px */
+  width: 100%; /* Ocupa toda a largura disponível */
+
+}
+
+.custom-field.full-width {
+  width: 100%;
+}
+
+/* Ajuste para o mat-form-field */
+::ng-deep .custom-field .mat-mdc-text-field-wrapper {
+  min-width: 200px !important;
+  width: 100% !important;
+}
+
+/* Ajuste para o mat-select */
+::ng-deep .custom-field .mat-mdc-select-trigger {
+  width: 100% !important;
+}
+
+/* Ajuste para o valor selecionado */
+::ng-deep .custom-field .mat-mdc-select-value-text {
+  width: 100% !important;
+  display: block !important;
 }
 
 .action-button {
+  margin-left: 8px;
   height: 40px;
   width: 40px;
   border-radius: 50%;

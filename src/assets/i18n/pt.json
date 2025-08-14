@@ -70,7 +70,17 @@
     "phone": "Telefone",
     "created": "Data de Criação",
     "versionServ": "Versão do Sistema",
-    "actions": "Ações"
+    "actions": "Ações",
+    "companies": "Empresa",
+    "tags": "Tags",
+    "description": "Descrição",
+    "title": "Título",
+    "operator": "Operador",
+    "clients": "Clientes",
+    "closed": "Fechado",
+    "resolution": "Resolução",
+    "status": "Status",
+    "createdAt": "Criado"
   },
   "erros": {
     "required": "Campo obrigatório.",
