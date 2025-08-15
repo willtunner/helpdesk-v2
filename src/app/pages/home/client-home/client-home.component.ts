@@ -18,6 +18,9 @@ import { catchError, forkJoin, of, take } from 'rxjs';
 import { CommonModule } from '@angular/common';
 import { ChartComponent } from '../../../shared/components/line-chart/line-chart.component';
 import { ChartType } from '../../../enums/chart-types.enum';
+import { ClientService } from '../../../services/client.service';
+import { MatIconModule } from '@angular/material/icon';
+import { DynamicTableComponent } from '../../../shared/components/dynamic-table/dynamic-table.component';
 
 @Component({
   selector: 'app-client-home',
@@ -26,7 +29,10 @@ import { ChartType } from '../../../enums/chart-types.enum';
     DashboardCardComponent,
     TranslateModule,
     CommonModule,
-    ChartComponent
+    ChartComponent,
+    MatIconModule,
+    DynamicTableComponent,
+    MatIconModule
   ],
   templateUrl: './client-home.component.html',
   styleUrl: './client-home.component.scss'
@@ -34,23 +40,21 @@ import { ChartType } from '../../../enums/chart-types.enum';
 export class ClientHomeComponent implements OnInit {
   user!: User;
   userRole: UserType | null = null;
-  ChartType = ChartType;
-  isLoading = true;
-  simplifiedCalls: SimplifiedCall[] = [];
-  countOpenCalls: number = 0;
-  countClosedCalls: number = 0;
-  countAllCalls: number = 0;
+  activeDropdown: number | null = null;
+  companies: Company[] = [];
+
+  headers = [
+    { key: 'name', label: 'table.name' },
+    { key: 'email', label: 'table.email' },
+    { key: 'phone', label: 'table.phone' },
+    { key: 'connection', label: 'table.connection' }
+  ];
 
   constructor(
     private auth: AuthService,
-    private helpCompanyService: HelpCompanyService,
-    private callService: CallService,
     private userService: UserService,
-    private translateService: TranslateService,
-    private companyService: CompanyService,
-    private cdr: ChangeDetectorRef,
-    private messageService: SendNotificationService,
-    private dialog: MatDialog
+    private clientService: ClientService,
+
   ) {
     const session = this.auth.currentUser();
 
@@ -64,97 +68,30 @@ export class ClientHomeComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
-    
-    if (this.user.helpDeskCompanyId) {
-      await this.loadAllData(this.user.helpDeskCompanyId);
-    } else {
-      console.warn('Usuário não está associado a uma empresa');
-      this.isLoading = false;
-    }
 
-    const role = this.userService.getEffectiveUserRole(this.user);
-    console.log('Função efetiva do usuário:', role);
-  }
-
-  openCallsModal(type: 'open' | 'closed' | 'all'): void {
-    let closed: boolean | undefined;
-
-    if (type === 'open') closed = false;
-    else if (type === 'closed') closed = true;
-
-    this.callService.getCalls$(closed, this.user.helpDeskCompanyId).pipe(take(1)).subscribe({
-      next: (calls: Call[]) => {
-        this.dialog.open(CallModalComponent, {
-          width: '1000px',
-          panelClass: 'custom-modal',
-          data: { calls, type }
-        });
-      },
-      error: (err) => {
-        this.messageService.customNotification(NotificationType.ERROR, 'Erro ao carregar chamados');
-        console.error(err);
-      }
+    this.clientService.getCompaniesWithClients(this.user.helpDeskCompanyId!).then(companies => {
+      console.log('Empresas com clientes:', companies);
+      this.companies = companies;
+      // companies será um array de Company, cada uma com seu array de clients
+    })
+    .catch(error => {
+      console.error('Erro:', error);
     });
   }
 
-  private async loadAllData(helpDeskCompanyId: string): Promise<void> {
-    try {
-      
-      forkJoin({
-        open: this.callService.getCalls$(false, helpDeskCompanyId).pipe(
-          take(1),
-          catchError(err => {
-            this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar chamados abertos');
-            return of([]);
-          })
-        ),
-        all: this.callService.getCalls$(undefined, helpDeskCompanyId).pipe(
-          take(1),
-          catchError(err => {
-            this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar todos os chamados');
-            return of([]);
-          })
-        ),
-        closed: this.callService.getCalls$(true, helpDeskCompanyId).pipe(
-          take(1),
-          catchError(err => {
-            this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar chamados fechados');
-            return of([]);
-          })
-        ),
-        simplified: this.callService.getSimplifiedCallsFiltered(null, helpDeskCompanyId).pipe(
-          take(1),
-          catchError(err => {
-            this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar dados para os gráficos');
-            return of([]);
-          })
-        )
-      }).subscribe({
-        next: ({ open, all, closed, simplified }) => {
-          this.simplifiedCalls = simplified;
-          this.countOpenCalls = open.length;
-          this.countAllCalls = all.length;
-          this.countClosedCalls = closed.length;
-
-          console.log('Chamadas simplificadas:', simplified);
-          console.log("abertos", open);
-          console.log("fechados", closed);
-          console.log("todos", all);
-        },
-        error: () => {
-          this.messageService.customNotification(NotificationType.ERROR, 'Erro geral ao carregar os dados de chamados');
-        },
-        complete: () => {
-          this.isLoading = false;
-          this.cdr.detectChanges();
-        }
-      });
-
-    } catch (error) {
-      this.messageService.customNotification(NotificationType.ERROR, 'Erro ao carregar dados da empresa');
-      console.error('Erro ao carregar dados:', error);
-      this.isLoading = false;
-      this.cdr.detectChanges();
-    }
+  toggleDropdown(index: number): void {
+    this.activeDropdown = this.activeDropdown === index ? null : index;
   }
+
+  updateDocument(event: any): void {
+    console.log('Editar documento:', event);
+    // Lógica para editar o documento
+  }
+
+  deleteDocument(event: any): void {
+    console.log('Deletar documento:', event);
+    // Lógica para deletar o documento
+  }
+  
+  
 }

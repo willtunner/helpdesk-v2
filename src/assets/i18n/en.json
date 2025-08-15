@@ -7,7 +7,7 @@
       "ticket-closed": "Closed Tickets",
       "ticket-answered": "All Tickets",
       "monthly": "Monthly",
-      "yearly": "Annual",
+      "yearly": "Yearly",
       "daily": "Daily",
       "weekly": "Weekly",
       "semi-annual": "Semi-Annual",
@@ -20,31 +20,31 @@
     "openAll": "Open All",
     "pieChart": {
       "title": "Tickets by Company",
-      "description": "This is a pie chart example showing ticket distribution by company."
+      "description": "This is an example of a pie chart showing the distribution of tickets by company."
     },
     "lineChart": {
       "title": "Tickets by Company (Line)",
-      "description": "This is a line chart example showing ticket distribution by company."
+      "description": "This is an example of a line chart showing the distribution of tickets by company."
     },
     "columnChart": {
       "title": "Tickets by Company (Column)",
-      "description": "This is a column chart example showing ticket distribution by company."
+      "description": "This is an example of a column chart showing the distribution of tickets by company."
     },
     "barChart": {
       "title": "Tickets by Company (Bar)",
-      "description": "This is a bar chart example showing ticket distribution by company."
+      "description": "This is an example of a bar chart showing the distribution of tickets by company."
     }
   },
   "chart": {
-    "callsByMonth": "Calls by Month",
+    "callsByMonth": "Tickets by Month",
     "period": "Period",
     "monthYear": "Month/Year",
-    "callCount": "Call Count",
+    "callCount": "Ticket Count",
     "noDataTitle": "No data available",
-    "noDataSubtitle": "There are no calls for the selected period",
-    "last30Days": "Last 30 Days",
-    "last6Months": "Last 6 Months",
-    "allAvailableData": "All Available Data",
+    "noDataSubtitle": "There are no tickets for the selected period",
+    "last30Days": "Last 30 days",
+    "last6Months": "Last 6 months",
+    "allAvailableData": "All available data",
     "calls": "Tickets"
   },
   "sideNav": {
@@ -55,42 +55,54 @@
     "system-version": "System Version",
     "chat": "Chat",
     "settings": "Settings",
-    "logout": "Log Out",
+    "logout": "Logout",
     "video-docs": "Video Docs",
     "developer-area": "Development",
     "restricted-area": "Restricted Area",
-    "calendar": "Planner"
+    "calendar": "Schedule"
   },
   "table": {
     "name": "Name",
-    "cnpj": "CNPJ",
+    "cnpj": "Tax ID",
     "email": "Email",
     "city": "City",
     "state": "State",
     "phone": "Phone",
     "created": "Creation Date",
     "versionServ": "System Version",
-    "actions": "Actions"
+    "actions": "Actions",
+    "companies": "Company",
+    "tags": "Tags",
+    "description": "Description",
+    "title": "Title",
+    "operator": "Operator",
+    "clients": "Clients",
+    "closed": "Closed",
+    "resolution": "Resolution",
+    "status": "Status",
+    "createdAt": "Created",
+    "connection": "Connection"
   },
-  "errors": {
+  "erros": {
     "required": "Required field.",
     "invalid_email": "Invalid email.",
     "invalid_format": "Invalid format.",
-    "passwords_mismatch": "Passwords don't match.",
+    "passwords_mismatch": "Passwords do not match.",
     "invalid_mask": "Incomplete or invalid number.",
-    "invalid_cpf": "Invalid CPF.",
-    "invalid_cnpj": "Invalid CNPJ.",
+    "invalid_cpf": "Invalid personal ID.",
+    "invalid_cnpj": "Invalid tax ID.",
     "email_exist": "Email already registered."
   },
   "fields": {
     "name": "Name",
     "email": "Email",
     "phone": "Phone",
-    "cnpj": "CNPJ",
+    "cnpj": "Tax ID",
     "state": "State",
     "city": "City",
     "address": "Address",
-    "zipcode": "Zip Code"
+    "zipcode": "ZIP Code",
+    "valid-mail": "Valid Email"
   },
   "roles": {
     "client": "Client",
@@ -104,7 +116,7 @@
     "DELETE": "DELETE",
     "CLEAR": "CLEAR",
     "PRINT": "PRINT",
-    "ADD": "REGISTER",
+    "ADD": "ADD",
     "FIND": "SEARCH",
     "PDF": "PDF",
     "CANCEL": "CANCEL",
@@ -114,19 +126,19 @@
   "inputs": {
     "client-modal": {
       "search-label": "Search Client",
-      "search-placeholder": "Enter name, email or CNPJ...",
+      "search-placeholder": "Enter name, email, or Tax ID...",
       "found-clients-title": "Clients Found:"
     },
     "call-modal": {
       "search-label": "Search Ticket",
-      "search-placeholder": "Enter title, operator or connection...",
-      "found-calls-title": "Calls Found:"
+      "search-placeholder": "Search by title, operator, or connection...",
+      "found-calls-title": "Tickets Found:"
     }
   },
   "titles-modals": {
-    "call-list": "All Calls",
-    "call-list-open": "Open Calls List",
-    "call-list-close": "Closed Calls List",
+    "call-list": "All Tickets",
+    "call-list-open": "List of All Open Tickets",
+    "call-list-close": "List of All Closed Tickets",
     "client-list": "Client List"
   },
   "paginator": {
@@ -142,7 +154,7 @@
   },
   "calendar": {
     "calendar-title": "Holiday Calendar",
-    "calendar-subtitle": "Click on a day to add an event",
+    "calendar-subtitle": "Click a day to add an event",
     "year": "Year",
     "loading-calendar": "Loading calendar...",
     "scheduled-events": "Scheduled Events",
@@ -171,7 +183,7 @@
     ],
     "today": "Today!",
     "events": "{count, plural, =1 {1 Event} other {{count} Events}}",
-    "day-format": "{{month}}/{{day}}/{{year}}",
+    "day-format": "{{day}}/{{month}}/{{year}}",
     "holiday": "{{holiday}}"
   }
 }

@@ -109,8 +109,5 @@ export class HomeComponent implements OnInit {
     return this.translate.instant(`roles.${this.userRole}`);
   }
 
-
-
-
 }
 

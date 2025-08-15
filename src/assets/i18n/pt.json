@@ -80,7 +80,8 @@
     "closed": "Fechado",
     "resolution": "Resolução",
     "status": "Status",
-    "createdAt": "Criado"
+    "createdAt": "Criado",
+    "connection": "Conexão"
   },
   "erros": {
     "required": "Campo obrigatório.",

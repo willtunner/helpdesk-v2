@@ -5,3 +5,68 @@
   padding: 15px;
   border-radius: 10px;
 }
+
+.container {
+  display: flex;
+  justify-content: space-around;
+  flex-wrap: wrap;
+  /* Permite que os elementos se reorganizem */
+}
+
+.form-call {
+  /* Estilos específicos para o formulário */
+}
+
+.list-calls {
+  /* Estilos específicos para a lista */
+}
+
+.base-div {
+  width: 600px;
+  height: 600px;
+  margin-top: 20px;
+  border-radius: 8px;
+  /* Bordas arredondadas */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  /* Sombra */
+}
+
+
+.clickable-row {
+  cursor: pointer;
+}
+
+.clickable-row:hover {
+  background-color: rgba(0, 0, 0, 0.04);
+}
+
+.dropdown-container {
+  margin-top: 2rem;
+}
+
+.dropdown {
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  margin-bottom: 1rem;
+}
+
+.dropdown-header {
+  background-color: #fff;
+  padding: 1rem;
+  font-weight: 500;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.dropdown-body {
+  padding: 1rem;
+}
+
+.header-drop-down {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  justify-content: space-between;
+}

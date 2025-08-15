@@ -3,9 +3,9 @@
     "welcome": "Bienvenido",
     "components": {
       "client": "Clientes",
-      "ticket-open": "Tickets Abiertos",
-      "ticket-closed": "Tickets Cerrados",
-      "ticket-answered": "Todos los Llamados",
+      "ticket-open": "Casos Abiertos",
+      "ticket-closed": "Casos Cerrados",
+      "ticket-answered": "Todos los Casos",
       "monthly": "Mensual",
       "yearly": "Anual",
       "daily": "Diario",
@@ -16,87 +16,99 @@
   },
   "charts": {
     "title": "Gráficos",
-    "closeAll": "Cerrar Todos",
-    "openAll": "Abrir Todos",
+    "closeAll": "Cerrar Todo",
+    "openAll": "Abrir Todo",
     "pieChart": {
-      "title": "Tickets por Empresa",
-      "description": "Este es un gráfico circular de ejemplo que muestra la distribución de tickets por empresa."
+      "title": "Casos por Empresa",
+      "description": "Este es un ejemplo de gráfico circular que muestra la distribución de casos por empresa."
     },
     "lineChart": {
-      "title": "Tickets por Empresa (Línea)",
-      "description": "Este es un gráfico de líneas de ejemplo que muestra la distribución de tickets por empresa."
+      "title": "Casos por Empresa (Línea)",
+      "description": "Este es un ejemplo de gráfico lineal que muestra la distribución de casos por empresa."
     },
     "columnChart": {
-      "title": "Tickets por Empresa (Columnas)",
-      "description": "Este es un gráfico de columnas de ejemplo que muestra la distribución de tickets por empresa."
+      "title": "Casos por Empresa (Columna)",
+      "description": "Este es un ejemplo de gráfico de columnas que muestra la distribución de casos por empresa."
     },
     "barChart": {
-      "title": "Tickets por Empresa (Barras)",
-      "description": "Este es un gráfico de barras de ejemplo que muestra la distribución de tickets por empresa."
+      "title": "Casos por Empresa (Barras)",
+      "description": "Este es un ejemplo de gráfico de barras que muestra la distribución de casos por empresa."
     }
   },
   "chart": {
-    "callsByMonth": "Llamados por mes",
+    "callsByMonth": "Casos por Mes",
     "period": "Período",
     "monthYear": "Mes/Año",
-    "callCount": "Cantidad de Llamados",
+    "callCount": "Cantidad de Casos",
     "noDataTitle": "No hay datos disponibles",
-    "noDataSubtitle": "No hay llamados para el período seleccionado",
+    "noDataSubtitle": "No hay casos para el período seleccionado",
     "last30Days": "Últimos 30 días",
     "last6Months": "Últimos 6 meses",
     "allAvailableData": "Todos los datos disponibles",
-    "calls": "Llamadas"
+    "calls": "Casos"
   },
   "sideNav": {
     "home": "Inicio",
     "clients": "Clientes",
-    "tickets": "Tickets",
+    "tickets": "Casos",
     "enterprises": "Empresas",
     "system-version": "Versión del Sistema",
     "chat": "Chat",
     "settings": "Configuraciones",
-    "logout": "Cerrar Sesión",
-    "video-docs": "Documentos en Video",
+    "logout": "Salir",
+    "video-docs": "Video Docs",
     "developer-area": "Desarrollo",
     "restricted-area": "Área Restringida",
-    "calendar": "Calendario"
+    "calendar": "Agenda"
   },
   "table": {
     "name": "Nombre",
-    "cnpj": "CNPJ",
-    "email": "Correo Electrónico",
+    "cnpj": "CIF",
+    "email": "Correo electrónico",
     "city": "Ciudad",
     "state": "Estado",
     "phone": "Teléfono",
     "created": "Fecha de Creación",
     "versionServ": "Versión del Sistema",
-    "actions": "Acciones"
+    "actions": "Acciones",
+    "companies": "Empresa",
+    "tags": "Etiquetas",
+    "description": "Descripción",
+    "title": "Título",
+    "operator": "Operador",
+    "clients": "Clientes",
+    "closed": "Cerrado",
+    "resolution": "Resolución",
+    "status": "Estado",
+    "createdAt": "Creado",
+    "connection": "Conexión"
   },
-  "errors": {
+  "erros": {
     "required": "Campo obligatorio.",
     "invalid_email": "Correo electrónico inválido.",
     "invalid_format": "Formato inválido.",
     "passwords_mismatch": "Las contraseñas no coinciden.",
     "invalid_mask": "Número incompleto o inválido.",
-    "invalid_cpf": "CPF inválido.",
-    "invalid_cnpj": "CNPJ inválido.",
+    "invalid_cpf": "NIF inválido.",
+    "invalid_cnpj": "CIF inválido.",
     "email_exist": "Correo electrónico ya registrado."
   },
   "fields": {
     "name": "Nombre",
     "email": "Correo electrónico",
     "phone": "Teléfono",
-    "cnpj": "CNPJ",
+    "cnpj": "CIF",
     "state": "Estado",
     "city": "Ciudad",
     "address": "Dirección",
-    "zipcode": "Código Postal"
+    "zipcode": "Código postal",
+    "valid-mail": "Correo válido"
   },
   "roles": {
     "client": "Cliente",
     "operator": "Operador",
     "admin": "Administrador",
-    "master": "Master"
+    "master": "Maestro"
   },
   "BUTTON": {
     "SAVE": "GUARDAR",
@@ -108,25 +120,25 @@
     "FIND": "BUSCAR",
     "PDF": "PDF",
     "CANCEL": "CANCELAR",
-    "LOGIN": "ENGAJAR",
+    "LOGIN": "ENTRAR",
     "LOGOUT": "SALIR"
   },
   "inputs": {
     "client-modal": {
       "search-label": "Buscar Cliente",
-      "search-placeholder": "Ingrese nombre, correo electrónico o CNPJ...",
+      "search-placeholder": "Escriba nombre, correo o CIF...",
       "found-clients-title": "Clientes Encontrados:"
     },
     "call-modal": {
-      "search-label": "Buscar Llamado",
-      "search-placeholder": "Ingrese título, operador o conexión...",
-      "found-calls-title": "Llamados Encontrados:"
+      "search-label": "Buscar Caso",
+      "search-placeholder": "Busque título, operador o conexión...",
+      "found-calls-title": "Casos Encontrados:"
     }
   },
   "titles-modals": {
-    "call-list": "Todos los Llamados",
-    "call-list-open": "Lista de Llamados Abiertos",
-    "call-list-close": "Lista de Llamados Cerrados",
+    "call-list": "Todos los Casos",
+    "call-list-open": "Lista de todos los Casos Abiertos",
+    "call-list-close": "Lista de todos los Casos Cerrados",
     "client-list": "Lista de Clientes"
   },
   "paginator": {
@@ -142,7 +154,7 @@
   },
   "calendar": {
     "calendar-title": "Calendario de Festivos",
-    "calendar-subtitle": "Haz clic en un día para añadir un evento",
+    "calendar-subtitle": "Haga clic en un día para agregar un evento",
     "year": "Año",
     "loading-calendar": "Cargando calendario...",
     "scheduled-events": "Eventos Programados",
