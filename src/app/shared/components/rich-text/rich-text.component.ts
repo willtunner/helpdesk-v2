@@ -1,4 +1,4 @@
-import { Component, forwardRef, Input, Output, EventEmitter } from '@angular/core';
+import { Component, forwardRef, Input, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { ControlValueAccessor, NG_VALUE_ACCESSOR, FormsModule, ReactiveFormsModule, FormControl, AbstractControl } from '@angular/forms';
 import { QuillModule } from 'ngx-quill';
 import { CommonModule } from '@angular/common';
@@ -7,6 +7,7 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { MatError } from '@angular/material/form-field';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-rich-text-editor',
@@ -32,16 +33,16 @@ import { MatError } from '@angular/material/form-field';
     }
   ]
 })
-export class RichTextEditorComponent implements ControlValueAccessor {
+export class RichTextEditorComponent implements ControlValueAccessor, OnDestroy {
   @Input() placeholder: string = 'Digite seu texto aqui...';
   @Input() label: string = 'Editor de Texto';
   @Input() height: string = '300px';
-  @Input() control!: FormControl;
   @Output() contentChanged = new EventEmitter<string>();
-
+  
   editorContent: string = '';
   showPreview = false;
   isDisabled = false;
+  private controlSubscription!: Subscription;
 
   quillModules = {
     toolbar: [
@@ -53,6 +54,31 @@ export class RichTextEditorComponent implements ControlValueAccessor {
       ['clean']
     ]
   };
+
+  private _control!: FormControl;
+  @Input() 
+  set control(ctrl: AbstractControl | null) {
+    if (this.controlSubscription) {
+      this.controlSubscription.unsubscribe();
+    }
+    
+    if (ctrl) {
+      this._control = ctrl as FormControl;
+      // Sincroniza o valor inicial
+      this.writeValue(this._control.value);
+      
+      // Observa mudanças externas ao controle
+      this.controlSubscription = this._control.valueChanges.subscribe(value => {
+        if (value !== this.editorContent) {
+          this.editorContent = value || '';
+        }
+      });
+    }
+  }
+  
+  get control(): FormControl {
+    return this._control;
+  }
 
   // ControlValueAccessor methods
   onChange: (value: string) => void = () => {};
@@ -73,7 +99,16 @@ export class RichTextEditorComponent implements ControlValueAccessor {
     this.onTouched = fn;
   }
 
-  onContentChange(content: string): void {
+  togglePreview(): void {
+    this.showPreview = !this.showPreview;
+  }
+
+  onEditorChanged(event: any): void {
+    const content = event.html || '';
+    this.updateContent(content);
+  }
+
+  private updateContent(content: string): void {
     this.editorContent = content;
     this.onChange(content);
     this.onTouched();
@@ -81,16 +116,7 @@ export class RichTextEditorComponent implements ControlValueAccessor {
     this.updateControlValue(content);
   }
 
-  togglePreview(): void {
-    this.showPreview = !this.showPreview;
-  }
-
-  onEditorChanged(event: any): void {
-    const content = event.html || '';
-    this.onContentChange(content);
-  }
-
-  setDisabledState?(isDisabled: boolean): void {
+  setDisabledState(isDisabled: boolean): void {
     this.isDisabled = isDisabled;
   }
 
@@ -102,7 +128,7 @@ export class RichTextEditorComponent implements ControlValueAccessor {
         this.control.markAsTouched();
         this.control.markAsDirty();
       } else {
-        this.control.setValue(content, { emitEvent: true });
+        this.control.setValue(content, { emitEvent: false });
       }
     }
   }
@@ -112,9 +138,16 @@ export class RichTextEditorComponent implements ControlValueAccessor {
   }
 
   onBlur(): void {
+    this.onTouched();
     if (this.control) {
       this.control.markAsTouched();
       this.updateControlValue(this.editorContent);
+    }
+  }
+
+  ngOnDestroy(): void {
+    if (this.controlSubscription) {
+      this.controlSubscription.unsubscribe();
     }
   }
 }

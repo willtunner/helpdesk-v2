@@ -1,3 +1,5 @@
-<app-dynamic-table [headers]="headers" [data]="calls" [actions]="['edit', 'delete']" (edit)="updateDocument($event)"
-    (delete)="deleteDocument($event)" (rowClick)="onRowClick($event)">
+<app-dynamic-table [headers]="headers" [data]="calls" [actions]="['edit', 'delete']" 
+    (edit)="updateDocument($event)"
+    (delete)="deleteDocument($event)" 
+    (rowClick)="onRowClick($event)">
 </app-dynamic-table>

@@ -16,7 +16,6 @@ import { ProfileSettingsComponent } from './pages/profile-settings/profile-setti
 import { TutorialsComponent } from './pages/tutorials/tutorials.component';
 import { TiltCardsComponent } from './shared/components/tilt-cards/tilt-cards.component';
 import { HolidayCalendarComponent } from './shared/components/holiday-calendar/holiday-calendar.component';
-import { CallsListComponent } from './pages/calls/calls-list/calls-list.component';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
@@ -26,15 +25,8 @@ export const routes: Routes = [
   { path: 'home', component: HomeComponent, canActivate: [authGuard] },
   { path: 'companies', component: CompaniesComponent, canActivate: [authGuard] },
   { path: 'clients', component: ClientHomeComponent, canActivate: [authGuard] },
-  {
-    path: 'calls',
-    component: CallsComponent,
-    canActivate: [authGuard],
-    children: [
-      { path: '', component: CallsListComponent },
-      { path: ':id', component: CallsComponent } 
-    ]
-  },
+  { path: 'calls', component: CallsComponent, canActivate: [authGuard] },
+  { path: 'calls/:id', component: CallsComponent, canActivate: [authGuard]  },
   { path: 'chat', component: ChatComponent, canActivate: [authGuard] },
   { path: 'system-version', component: SystemVersionComponent, canActivate: [authGuard] },
   { path: 'developer-area', component: DeveloperAreaComponent, canActivate: [authGuard] },

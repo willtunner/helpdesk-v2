@@ -1,10 +1,14 @@
-<h3>
-  {{ 'home.welcome' | translate }} 
-  <ng-container *ngIf="translatedRole"> ({{ translatedRole }})</ng-container>
-  <ng-container *ngIf="user?.username">, {{ user.username }}</ng-container>!
-</h3>
+<div class="container">
 
-<app-client-home *ngIf="userRole === UserType.CLIENT" />
-<app-operator-home *ngIf="userRole === UserType.OPERATOR" />
-<app-admin-home *ngIf="userRole === UserType.ADMIN" />
-<app-master-home *ngIf="userRole === UserType.MASTER" />
+  <h3>
+    {{ 'home.welcome' | translate }}
+    <ng-container *ngIf="translatedRole"> ({{ translatedRole }})</ng-container>
+    <ng-container *ngIf="user?.username">, {{ user.username }}</ng-container>!
+  </h3>
+
+  <app-client-home *ngIf="userRole === UserType.CLIENT" />
+  <app-operator-home *ngIf="userRole === UserType.OPERATOR" />
+  <app-admin-home *ngIf="userRole === UserType.ADMIN" />
+  <app-master-home *ngIf="userRole === UserType.MASTER" />
+
+</div>

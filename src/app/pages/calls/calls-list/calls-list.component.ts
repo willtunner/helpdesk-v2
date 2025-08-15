@@ -46,7 +46,7 @@ export class CallsListComponent implements OnInit {
       console.error('helpDeskCompanyId não está definido');
       return;
     }
-
+    console.log('Carregando chamados para a empresa:', this.operator.helpDeskCompanyId);
     this.loading = true;
     this.callService.getCallsByHelpDeskCompany$(this.operator.helpDeskCompanyId).subscribe({
       next: (calls) => {
@@ -116,4 +116,12 @@ export class CallsListComponent implements OnInit {
 
   updateDocument(any: any) { };
   deleteDocument(any: any) { };
+
+  addNewCall(newCall: Call): void {
+    // Adiciona no início do array para aparecer no topo
+    this.calls.unshift(newCall);
+    
+    // Opcional: Força a atualização da tabela
+    this.calls = [...this.calls];
+}
 }

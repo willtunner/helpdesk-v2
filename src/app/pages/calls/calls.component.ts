@@ -5,7 +5,7 @@ import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatRadioModule } from '@angular/material/radio';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ActivatedRoute } from '@angular/router';
-import { switchMap } from 'rxjs/operators';
+import { catchError, switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 
 // Componentes customizados
@@ -47,6 +47,7 @@ import { NotificationType } from '../../enums/notificationType.enum';
 })
 
 export class CallsComponent implements OnInit {
+  
   // Propriedades do componente
   form!: FormGroup;
   companies: Company[] = [];
@@ -90,7 +91,8 @@ export class CallsComponent implements OnInit {
       description: ['', Validators.required],
       resolution: ['', Validators.required],
       tags: [[], Validators.required],
-      closed: [false]
+      closed: [false],
+      helpDeskCompanyId: [ null]
     });
   }
 
@@ -108,52 +110,64 @@ export class CallsComponent implements OnInit {
         const callId = params['id'];
         if (callId) {
           this.loading = true;
-          return this.callServ.getCallById(callId);
+          return this.callServ.getCallById(callId).pipe(
+            catchError(err => {
+              console.error('Erro ao buscar chamado:', err);
+              this.loading = false;
+              this.messageService.customNotification(
+                NotificationType.ERROR,
+                'Erro ao carregar chamado'
+              );
+              return of(null);
+            })
+          );
         }
         return of(null);
       })
-    ).subscribe({
-      next: (call) => this.handleCallResponse(call),
-      error: (err) => this.handleCallError(err)
+    ).subscribe(call => {
+      if (call) {
+        this.selectedCall = call;
+        // Garante que as empresas estão carregadas antes de preencher o form
+        if (this.companies.length > 0) {
+          this.patchFormWithCallData();
+        } else {
+          this.loadCompanies().then(() => this.patchFormWithCallData());
+        }
+      }
+      this.loading = false;
     });
-  }
-
-  private handleCallResponse(call: Call | null): void {
-    if (call) {
-      this.selectedCall = call;
-      this.patchFormWithCallData();
-    }
-    this.loading = false;
-  }
-
-  private handleCallError(err: any): void {
-    console.error('Erro ao carregar chamado:', err);
-    this.loading = false;
-    this.messageService.customNotification(
-      NotificationType.ERROR,
-      'Erro ao carregar chamado'
-    );
   }
 
   private async patchFormWithCallData(): Promise<void> {
     if (!this.selectedCall) return;
 
+    // Primeiro preenche os valores básicos
     this.form.patchValue({
       companyId: this.selectedCall.companyId,
       clientId: this.selectedCall.clientId,
-      connection: this.selectedCall.connection,
-      title: this.selectedCall.title,
-      description: this.selectedCall.description,
-      resolution: this.selectedCall.resolution,
+      connection: this.selectedCall.connection || '',
+      title: this.selectedCall.title || '',
+      description: this.selectedCall.description || '',
+      resolution: this.selectedCall.resolution || '',
       tags: this.selectedCall.tags || [],
       closed: this.selectedCall.closed || false,
       operatorId: this.selectedCall.operatorId || this.operator?.id,
     });
 
+    // Carrega os clientes se houver companyId
     if (this.selectedCall.companyId) {
-      await this.loadClientsForCompany(this.selectedCall.companyId);
-      this.form.get('clientId')?.setValue(this.selectedCall.clientId);
+      try {
+        this.clients = await this.clientServ.getClientsByCompanyId(this.selectedCall.companyId);
+        
+        // Força a atualização do select de clientes
+        this.form.get('clientId')?.setValue(this.selectedCall.clientId);
+      } catch (error) {
+        console.error('Erro ao carregar clientes:', error);
+      }
     }
+
+    // Força a detecção de mudanças nos controles
+    this.form.updateValueAndValidity();
   }
 
   private async loadClientsForCompany(companyId: string): Promise<void> {
@@ -217,9 +231,40 @@ export class CallsComponent implements OnInit {
       return;
     }
 
+    this.loading = true;
+    this.form.get('helpDeskCompanyId')?.setValue(this.operator?.helpDeskCompanyId);
     this.callServ.saveCallWithGeneratedId(this.form.value)
-      .then(() => this.onClear())
-      .catch(error => console.error('Erro ao salvar chamado:', error));
+      .then((savedCall) => {
+        console.log('Chamado salvo com sucesso:', savedCall);
+        this.saveSuccess = true;
+        this.onClear();
+        
+        // Emite o evento para atualizar a lista
+        const callsList = this.getCallsListComponent();
+        if (callsList) {
+          callsList.calls.unshift(savedCall); // Adiciona no início do array
+        }
+      })
+      .catch(error => {
+        console.error('Erro ao salvar chamado:', error);
+        this.messageService.customNotification(
+          NotificationType.ERROR,
+          'Erro ao salvar chamado'
+        );
+      })
+      .finally(() => {
+        this.loading = false;
+        setTimeout(() => this.saveSuccess = false, 2000);
+      });
+  }
+
+  private getCallsListComponent(): CallsListComponent | null {
+    // Se você estiver usando ViewChild:
+    // return this.callsList;
+    
+    // Alternativa se o componente estiver no template:
+    const element = document.querySelector('app-calls-list');
+    return element ? (element as any).componentInstance as CallsListComponent : null;
   }
 
   onClear(): void {
@@ -227,16 +272,21 @@ export class CallsComponent implements OnInit {
     this.form.reset({ operatorId: this.operator?.id });
   }
 
-  loadCompanies(): void {
-    this.companyServ.getCompanyByFirebase().subscribe({
-      next: (companies) => {
-        this.companies = companies;
-        const companyId = this.form.get('companyId')?.value;
-        if (companyId) this.onCompanyChange(companyId);
-      },
-      error: (error) => this.handleCompaniesError(error)
+  private loadCompanies(): Promise<void> {
+    return new Promise((resolve) => {
+      this.companyServ.getCompanyByFirebase().subscribe({
+        next: (companies) => {
+          this.companies = companies;
+          resolve();
+        },
+        error: (error) => {
+          this.handleCompaniesError(error);
+          resolve();
+        }
+      });
     });
   }
+
 
   private handleCompaniesError(error: any): void {
     console.error('Erro ao carregar empresas:', error);

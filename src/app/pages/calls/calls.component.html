@@ -1,23 +1,28 @@
-<h3>Chamados:</h3>
 <div class="container">
+  <h3>Chamados:</h3>
   <div *ngIf="loading" class="loading-overlay">
     <mat-spinner></mat-spinner>
   </div>
+
+  <div *ngIf="form.invalid && form.touched" class="error-message">
+    Por favor, preencha todos os campos obrigatórios.
+  </div>
+
+
   <form [formGroup]="form" style="max-width: 900px;">
     <div class="main-top">
       <!-- Empresa -->
       <div class="companies">
         <app-dynamic-select [label]="'Empresa'" [options]="companies" [valueKey]="'id'" [labelKey]="'name'"
-          [type]="'company'" (onChange)="onCompanyChange($event)" 
-          [formControl]="getControl('companyId')" [errorMessage]="'Empresa é obrigatória'">
+          [type]="'company'" (onChange)="onCompanyChange($event)" [formControl]="getControl('companyId')"
+          [errorMessage]="'Empresa é obrigatória'">
         </app-dynamic-select>
       </div>
 
       <!-- Cliente -->
       <div class="clients">
         <app-dynamic-select [label]="'Cliente'" [options]="clients" [valueKey]="'id'" [labelKey]="'name'"
-          [type]="'client'" 
-          [formControl]="getControl('clientId')" (modelChange)="onClientSelected($event)">
+          [type]="'client'" [formControl]="getControl('clientId')" (modelChange)="onClientSelected($event)">
         </app-dynamic-select>
       </div>
 
@@ -51,9 +56,7 @@
       </app-custom-input>
 
       <!-- Observação -->
-      <app-rich-text-editor 
-        placeholder="Digite sua observação aqui..." 
-        [control]="getControl('resolution')">
+      <app-rich-text-editor placeholder="Digite sua observação aqui..." [control]="getControl('resolution')">
       </app-rich-text-editor>
 
       <!-- Tags e Radio -->
@@ -72,8 +75,11 @@
 
     <!-- Botões -->
     <div class="buttons" style="margin-top: 20px;">
-      <app-dynamic-button type="save" (click)="onSubmit()" [success]="saveSuccess"></app-dynamic-button>
-      <app-dynamic-button type="edit" (click)="handleSaveOrEdit($event)"></app-dynamic-button>
+      <app-dynamic-button *ngIf="!selectedCall" type="save" (click)="onSubmit()"
+        [success]="saveSuccess"></app-dynamic-button>
+      <app-dynamic-button *ngIf="selectedCall" type="edit" (click)="handleSaveOrEdit($event)"></app-dynamic-button>
+      <app-dynamic-button type="clear" (click)="onClear()"></app-dynamic-button>
+      <app-dynamic-button *ngIf="selectedCall" type="print" (click)="onClear()"></app-dynamic-button>
       <app-dynamic-button type="delete" (click)="onDelete()"></app-dynamic-button>
     </div>
   </form>
