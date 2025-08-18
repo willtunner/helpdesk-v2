@@ -46,7 +46,6 @@ table {
   }
 }
 
-
 .action-cell {
 
   padding: 0 !important; // Remove padding extra
@@ -102,5 +101,18 @@ mat-paginator {
   &:hover {
     background-color: #f5f5f5;
   }
+}
+
+/* Adicione isso ao seu arquivo CSS */
+.right-align {
+  text-align: right;
+  justify-content: flex-end;
+  display: flex;
+}
+
+/* Se você estiver usando Material Table, pode precisar deste também */
+.mat-column-actions {
+  text-align: right;
+  justify-content: flex-end;
 }
 
