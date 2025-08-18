@@ -5,6 +5,7 @@
   box-sizing: border-box;
   height: 110px;
   align-items: end;
+  margin-bottom: 15px;
 }
 
 .chart-container {
@@ -33,7 +34,8 @@
 
 /* Novo estilo para o gráfico de largura total */
 .full-width-chart {
-  grid-column: 1 / -1; /* Ocupa todas as colunas */
+  grid-column: 1 / -1;
+  /* Ocupa todas as colunas */
   width: 100%;
 }
 
@@ -41,7 +43,7 @@
 app-column-tag-chart {
   display: block;
   width: 100%;
-  
+
   highcharts-chart {
     display: block;
     width: 100%;
