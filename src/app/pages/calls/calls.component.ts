@@ -24,6 +24,13 @@ import { SessionService } from '../../services/session.service';
 import { SendNotificationService } from '../../services/send-notification.service';
 import { Call, Company, User } from '../../models/models';
 import { NotificationType } from '../../enums/notificationType.enum';
+import { MatDialog } from '@angular/material/dialog';
+import { CompanyModalComponent } from '../companies/company-modal/company-modal.component';
+import { ClientsModalComponent } from '../home/clients-modal/clients-modal.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { CreateClienteModalComponent } from '../home/clients-modal/create-cliente-modal/create-cliente-modal.component';
 
 @Component({
   selector: 'app-calls',
@@ -33,21 +40,25 @@ import { NotificationType } from '../../enums/notificationType.enum';
     ReactiveFormsModule,
     MatRadioModule,
     MatProgressSpinnerModule,
-    
+    MatTooltipModule,
+
     // Componentes customizados
     DynamicSelectComponent,
     CustomInputComponent,
     RichTextEditorComponent,
     TagsComponent,
     DynamicButtonComponent,
-    CallsListComponent
+    CallsListComponent,
+    MatIconModule,
+    MatButtonModule
+
   ],
   templateUrl: './calls.component.html',
   styleUrls: ['./calls.component.scss']
 })
 
 export class CallsComponent implements OnInit {
-  
+
   // Propriedades do componente
   form!: FormGroup;
   companies: Company[] = [];
@@ -68,7 +79,8 @@ export class CallsComponent implements OnInit {
     private clientServ: ClientService,
     private sessionService: SessionService,
     private messageService: SendNotificationService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private dialog: MatDialog
   ) {
     this.initializeForm();
     this.loadOperator();
@@ -84,17 +96,24 @@ export class CallsComponent implements OnInit {
   private initializeForm(): void {
     this.form = this.fb.group({
       operatorId: [''],
-      companyId: [null, Validators.required],
-      clientId: [null, Validators.required],
+      companyId: [null, {
+        validators: [Validators.required],
+        updateOn: 'blur'  // 🔑 só valida quando perder foco
+      }],
+      clientId: [null, {
+        validators: [Validators.required],
+        updateOn: 'blur'
+      }],
       connection: [''],
-      title: ['', Validators.required],
-      description: ['', Validators.required],
-      resolution: ['', Validators.required],
-      tags: [[], Validators.required],
+      title: ['', { validators: [Validators.required], updateOn: 'blur' }],
+      description: ['', { validators: [Validators.required], updateOn: 'blur' }],
+      resolution: ['', { validators: [Validators.required], updateOn: 'blur' }],
+      tags: [[], { validators: [Validators.required], updateOn: 'blur' }],
       closed: [false],
-      helpDeskCompanyId: [ null]
+      helpDeskCompanyId: [null]
     });
   }
+
 
   private loadOperator(): void {
     const user = this.sessionService.getSession();
@@ -158,7 +177,7 @@ export class CallsComponent implements OnInit {
     if (this.selectedCall.companyId) {
       try {
         this.clients = await this.clientServ.getClientsByCompanyId(this.selectedCall.companyId);
-        
+
         // Força a atualização do select de clientes
         this.form.get('clientId')?.setValue(this.selectedCall.clientId);
       } catch (error) {
@@ -194,7 +213,8 @@ export class CallsComponent implements OnInit {
   }
 
   onClientSelected(clientId: string): void {
-    this.onClientChange(clientId);
+    // this.onClientChange(clientId);
+    this.form.get('clientId')?.setValue(clientId, { emitEvent: false });
   }
 
   getControl(controlName: string): FormControl {
@@ -207,7 +227,7 @@ export class CallsComponent implements OnInit {
 
   handleSaveOrEdit(event: Event): void {
     if (this.form.invalid) return;
-    
+
     this.selectedCall ? this.updateCall() : this.onSubmit();
     this.isSaveOrEditSuccess = true;
     setTimeout(() => this.isSaveOrEditSuccess = false, 2000);
@@ -215,7 +235,7 @@ export class CallsComponent implements OnInit {
 
   updateCall(): void {
     if (this.form.invalid) return;
-    
+
     const formData = { ...this.form.value, id: this.selectedCall?.id };
     console.log('Atualizar chamado:', formData);
     // Implementar lógica de atualização
@@ -238,7 +258,7 @@ export class CallsComponent implements OnInit {
         console.log('Chamado salvo com sucesso:', savedCall);
         this.saveSuccess = true;
         this.onClear();
-        
+
         // Emite o evento para atualizar a lista
         const callsList = this.getCallsListComponent();
         if (callsList) {
@@ -261,7 +281,7 @@ export class CallsComponent implements OnInit {
   private getCallsListComponent(): CallsListComponent | null {
     // Se você estiver usando ViewChild:
     // return this.callsList;
-    
+
     // Alternativa se o componente estiver no template:
     const element = document.querySelector('app-calls-list');
     return element ? (element as any).componentInstance as CallsListComponent : null;
@@ -304,10 +324,64 @@ export class CallsComponent implements OnInit {
   }
 
   // Métodos vazios (para implementação futura)
-  openCompanyModal(): void {}
-  abrirModalCliente(): void {}
-  onEdit(): void {}
-  onDelete(): void {}
-  onPrint(): void {}
-  submit(): void {}
+  openCompanyModal(): void {
+    const dialogRef = this.dialog.open(CompanyModalComponent, {
+      width: '900px',
+      disableClose: true // Impede fechar clicando fora
+    });
+
+    dialogRef.afterClosed().subscribe((newCompany: Company | undefined) => {
+      if (newCompany) {
+        // Adiciona a nova empresa à lista e seleciona automaticamente
+        this.companies.push(newCompany);
+        this.form.get('companyId')?.setValue(newCompany.id);
+
+        // Força a atualização do select
+        this.companies = [...this.companies];
+      }
+    });
+  }
+
+  openClientModal(): void {
+    const companyId = this.form.get('companyId')?.value;
+
+    if (!companyId) {
+      this.snackBar.open('Selecione uma empresa primeiro', 'Fechar', {
+        duration: 3000,
+      });
+      return;
+    }
+
+    const company = this.companies.find(c => c.id === companyId);
+
+    const dialogRef = this.dialog.open(CreateClienteModalComponent, {
+      width: '600px',
+      disableClose: true, // Impede fechar clicando fora
+      data: {
+        companyId: companyId,
+        companyName: company?.name
+      }
+    });
+
+    dialogRef.afterClosed().subscribe((newClient: User | undefined) => {
+      if (newClient) {
+        // garante que o nome esteja disponível no select
+        this.clients = [...this.clients, { ...newClient, name: newClient.name }];
+    
+        this.form.patchValue({ clientId: newClient.id }, { emitEvent: false });
+    
+        this.onClientSelected(newClient.id);
+    
+        this.form.get('clientId')?.markAsTouched({ onlySelf: true });
+        this.form.markAsDirty();
+      }
+    });
+
+  }
+
+
+  onEdit(): void { }
+  onDelete(): void { }
+  onPrint(): void { }
+  submit(): void { }
 }

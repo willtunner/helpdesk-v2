@@ -1,0 +1,46 @@
+.dialog-container {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 0;
+    overflow: hidden;
+  }
+  
+  .dialog-header {
+    padding: 16px 20px;
+    background: #f5f5f5;
+    border-bottom: 1px solid #ddd;
+  
+    h1 {
+      font-size: 20px;
+      font-weight: 600;
+      color: #333;
+      margin: 0;
+      text-align: center;
+    }
+  }
+  
+  .dialog-body {
+    padding: 20px;
+    text-align: center;
+    font-size: 16px;
+    color: #555;
+  }
+  
+  hr {
+    margin: 0;
+    border: none;
+    border-top: 1px solid #ddd;
+  }
+  
+  .dialog-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+    padding: 12px 20px;
+  
+    button {
+      min-width: 90px;
+      border-radius: 8px;
+    }
+  }
+  

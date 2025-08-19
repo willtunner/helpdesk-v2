@@ -7,6 +7,7 @@ import {
 import { SendNotificationService } from './send-notification.service';
 import { DateTimeFormatPipe } from '../pipes/dateTimeFormatTimeStamp.pipe';
 import { NotificationType } from '../enums/notificationType.enum';
+import { addDoc, deleteDoc, doc, getDoc } from 'firebase/firestore';
 
 const PATH = 'clients';
 const PATH_COMPANIES = 'company';
@@ -63,9 +64,9 @@ export class ClientService {
         this._companiesCollection,
         where('helpDeskCompanyId', '==', helpDeskCompanyId)
       );
-      
+
       const companiesSnapshot = await getDocs(companiesQuery);
-      
+
       if (companiesSnapshot.empty) {
         return [];
       }
@@ -75,10 +76,10 @@ export class ClientService {
         companiesSnapshot.docs.map(async (companyDoc) => {
           const companyData = companyDoc.data() as Omit<Company, 'id' | 'clients'>;
           const companyId = companyDoc.id;
-          
+
           // Busca clientes da empresa
           const clients = await this.getClientsByCompanyId(companyId);
-          
+
           // Monta o objeto Company completo
           return {
             id: companyId,
@@ -90,7 +91,7 @@ export class ClientService {
       );
 
       return companiesWithClients;
-      
+
     } catch (error) {
       console.error('Erro ao buscar empresas com clientes:', error);
       this.messageService.customNotification(
@@ -102,5 +103,63 @@ export class ClientService {
   }
 
 
+  async createClient(client: Omit<User, 'id'>): Promise<User> {
+    console.log('Criando cliente:', client);
+    try {
+      // 1. Salva o cliente sem ID (Firestore gera automaticamente)
+      const docRef = await addDoc(this._collection, {
+        ...client,
+        created: new Date()
+      });
+
+      // 2. Busca o documento salvo para garantir consistência
+      const savedDoc = await getDoc(docRef);
+
+      // 3. Monta o objeto User com o ID do Firestore
+      const savedClient: User = {
+        id: savedDoc.id,
+        ...savedDoc.data()
+      } as User;
+
+      // Notificação de sucesso (opcional)
+      this.messageService.customNotification(
+        NotificationType.SUCCESS,
+        'Cliente criado com sucesso'
+      );
+
+      return savedClient;
+
+    } catch (error) {
+      console.error('Erro ao criar cliente:', error);
+      this.messageService.customNotification(
+        NotificationType.ERROR,
+        'Erro ao criar cliente'
+      );
+      throw error;
+    }
+  }
+
+  async deleteClient(clientId: string): Promise<void> {
+    try {
+      // 1. Cria a referência ao documento
+      const clientDocRef = doc(this._firestore, `${PATH}/${clientId}`);
+
+      // 2. Exclui o documento
+      await deleteDoc(clientDocRef);
+
+      // 3. Notificação de sucesso
+      this.messageService.customNotification(
+        NotificationType.SUCCESS,
+        'Cliente excluído com sucesso'
+      );
+    } catch (error) {
+      console.error('Erro ao excluir cliente:', error);
+      this.messageService.customNotification(
+        NotificationType.ERROR,
+        'Erro ao excluir cliente'
+      );
+      throw error;
+    }
+  }
 
 }

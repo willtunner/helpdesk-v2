@@ -21,6 +21,8 @@ import { ChartType } from '../../../enums/chart-types.enum';
 import { ClientService } from '../../../services/client.service';
 import { MatIconModule } from '@angular/material/icon';
 import { DynamicTableComponent } from '../../../shared/components/dynamic-table/dynamic-table.component';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog copy/confirmation-dialog.component';
+import { CreateClienteModalComponent } from '../clients-modal/create-cliente-modal/create-cliente-modal.component';
 
 @Component({
   selector: 'app-client-home',
@@ -54,6 +56,7 @@ export class ClientHomeComponent implements OnInit {
     private auth: AuthService,
     private userService: UserService,
     private clientService: ClientService,
+    private dialog: MatDialog
 
   ) {
     const session = this.auth.currentUser();
@@ -88,9 +91,53 @@ export class ClientHomeComponent implements OnInit {
     // Lógica para editar o documento
   }
 
-  deleteDocument(event: any): void {
-    console.log('Deletar documento:', event);
-    // Lógica para deletar o documento
+  deleteDocument(client: User, company: Company): void {
+    console.log('Deletar documento:', client);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        title: 'Confirmação de exclusão!',
+        message: `Você deseja deletar o cliente ${client.name}? da empresa ${company.name}`,
+      }
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.clientService.deleteClient(client.id).then(() => {
+          this.companies = this.companies.map(company => ({
+            ...company,
+            clients: company.clients.filter(c => c.id !== client.id)
+          }));
+        }).catch(err => {
+          console.error('Erro ao deletar cliente:', err);
+        });
+      }
+    });
+  }
+
+  openCreateClientModal(company: Company): void {
+    const dialogRef = this.dialog.open(CreateClienteModalComponent, {
+      width: '600px',
+      data: {
+        companyId: company.id,
+        companyName: company.name
+      }
+    });
+  
+    dialogRef.afterClosed().subscribe((newClient) => {
+      if (newClient) {
+        // Atualiza a lista de clientes daquela empresa
+        this.companies = this.companies.map(c => {
+          if (c.id === company.id) {
+            return {
+              ...c,
+              clients: [...c.clients, newClient]
+            };
+          }
+          return c;
+        });
+      }
+    });
   }
   
   

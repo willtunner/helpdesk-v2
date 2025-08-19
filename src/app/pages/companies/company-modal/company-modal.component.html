@@ -1,0 +1,89 @@
+<div class="modal-container" style="background-color: white;">
+    <h4 mat-dialog-title>Nova empresa: </h4>
+    
+    <div mat-dialog-content class="modal-content">
+      <form [formGroup]="companyForm" class="form-grid">
+        <!-- Linha 1 -->
+        <app-custom-input 
+          label="CNPJ" 
+          type="cnpj" 
+          [control]="companyForm.get('cnpj')!" 
+          (onSearch)="searchCnpj()">
+        </app-custom-input>
+  
+        <app-custom-input 
+          label="Nome" 
+          type="text" 
+          [control]="companyForm.get('name')!">
+        </app-custom-input>
+  
+        <!-- Linha 2 -->
+        <app-custom-input 
+          label="CEP" 
+          type="cep" 
+          [control]="companyForm.get('zipcode')!" 
+          (onSearch)="searchCep()">
+        </app-custom-input>
+  
+        <app-custom-input 
+          label="Endereço" 
+          type="text" 
+          [control]="companyForm.get('address')!">
+        </app-custom-input>
+  
+        <!-- Linha 3 -->
+        <app-custom-input 
+          label="Cidade" 
+          type="text" 
+          [control]="companyForm.get('city')!">
+        </app-custom-input>
+  
+        <app-custom-input 
+          label="Estado" 
+          type="text" 
+          [control]="companyForm.get('state')!">
+        </app-custom-input>
+  
+        <!-- Linha 4 -->
+        <app-custom-input 
+          label="Telefone" 
+          type="telefone" 
+          [control]="companyForm.get('phone')!">
+        </app-custom-input>
+  
+        <app-custom-input 
+          label="E-mail" 
+          type="email" 
+          [control]="companyForm.get('email')!">
+        </app-custom-input>
+  
+        <!-- Linha 5 -->
+        <app-custom-input 
+          label="Conexão Serviço" 
+          type="text" 
+          [control]="companyForm.get('connectionServ')!">
+        </app-custom-input>
+  
+        <app-custom-input 
+          label="Versão Serviço" 
+          type="text" 
+          [control]="companyForm.get('versionServ')!">
+        </app-custom-input>
+      </form>
+    </div>
+  
+    <div mat-dialog-actions class="modal-actions">
+      <app-dynamic-button 
+        type="cancel" 
+        (clicked)="onCancel()" 
+        [disabled]="loading">
+      </app-dynamic-button>
+  
+      <app-dynamic-button 
+        type="save" 
+        (clicked)="onSave()" 
+        [disabled]="companyForm.invalid || loading" 
+        [success]="loading">
+      </app-dynamic-button>
+    </div>
+  </div>

@@ -4,26 +4,28 @@
     <mat-spinner></mat-spinner>
   </div>
 
-  <div *ngIf="form.invalid && form.touched" class="error-message">
-    Por favor, preencha todos os campos obrigatórios.
-  </div>
-
-
   <form [formGroup]="form" style="max-width: 900px;">
     <div class="main-top">
       <!-- Empresa -->
       <div class="companies">
         <app-dynamic-select [label]="'Empresa'" [options]="companies" [valueKey]="'id'" [labelKey]="'name'"
-          [type]="'company'" (onChange)="onCompanyChange($event)" [formControl]="getControl('companyId')"
+          (onChange)="onCompanyChange($event)" [formControl]="getControl('companyId')"
           [errorMessage]="'Empresa é obrigatória'">
         </app-dynamic-select>
+        <button mat-icon-button color="primary" (click)="openCompanyModal()" matTooltip="Adicionar nova empresa">
+          <mat-icon>add</mat-icon>
+        </button>
       </div>
 
       <!-- Cliente -->
       <div class="clients">
         <app-dynamic-select [label]="'Cliente'" [options]="clients" [valueKey]="'id'" [labelKey]="'name'"
-          [type]="'client'" [formControl]="getControl('clientId')" (modelChange)="onClientSelected($event)">
+          [formControl]="getControl('clientId')" (modelChange)="onClientSelected($event)">
         </app-dynamic-select>
+        <button mat-icon-button color="primary" (click)="openClientModal()" [disabled]="!getControl('companyId').value"
+          matTooltip="Adicionar novo cliente">
+          <mat-icon>add</mat-icon>
+        </button>
       </div>
 
       <!-- Conexão -->

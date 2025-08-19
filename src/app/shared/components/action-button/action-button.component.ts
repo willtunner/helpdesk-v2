@@ -3,14 +3,15 @@ import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
-type ButtonType = 'save' | 'edit' | 'delete' | 'clear' | 'print' | 'find' | 'add' | 'pdf' | 'cancel' | 'login';
+type ButtonType = 'save' | 'edit' | 'delete' | 'clear' | 'print' | 'find' | 'add' | 'pdf' | 'cancel' | 'login' | 'close';
 
 
 @Component({
   selector: 'app-dynamic-button',
   standalone: true,
-  imports: [CommonModule, MatIconModule, TranslateModule],
+  imports: [CommonModule, MatIconModule, TranslateModule, MatTooltipModule],
   templateUrl: './action-button.component.html',
   styleUrls: ['./action-button.component.scss']
 })
@@ -19,7 +20,7 @@ export class DynamicButtonComponent implements OnDestroy {
   @Input() success: boolean = false;
   @Input() label?: string;
   @Input() disabled: boolean = false;
-
+  @Input() matTooltip: string = '';
   @Output() clicked = new EventEmitter<void>();
 
   isLogin: boolean = false;
@@ -87,6 +88,7 @@ export class DynamicButtonComponent implements OnDestroy {
       pdf: { labelKey: 'BUTTON.PDF', icon: 'picture_as_pdf', cssClass: 'pdf' },
       cancel: { labelKey: 'BUTTON.CANCEL', icon: 'cancel', cssClass: 'cancel' },
       login: { labelKey: 'BUTTON.LOGIN', icon: 'login', cssClass: 'login' },
+      close: { labelKey: 'FECHAR', icon: 'close', cssClass: 'close' },
     };
   
     return map[this.type] ?? map['save'];

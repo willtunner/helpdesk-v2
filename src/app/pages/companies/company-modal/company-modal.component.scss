@@ -1,0 +1,24 @@
+.modal-container {
+  padding: 10px;
+  max-width: 70vw;
+
+  .modal-content {
+    padding: 16px 0;
+    overflow-y: auto;
+    max-height: 50vh;
+    display: flex;
+    flex-direction: row;
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+  }
+
+  .modal-actions {
+    display: flex;
+    gap: 16px;
+    padding-top: 16px;
+  }
+}

@@ -25,6 +25,9 @@ $add-color: #0817a0;
 $add-dark: #0a042e;
 $login-color: #3f51b5;
 
+$close-color: #f1c40f; // amarelo
+$close-dark: #d4ac0d;
+
 $logout-hover-color: #c0392b;
 
 /* Estilo base compartilhado por todos os botões */
@@ -231,5 +234,16 @@ $pdf-color: #e74c3c;
 
   &.success {
     background-color: $green;
+  }
+}
+
+.button.close {
+  background-color: $close-color;
+  color: #000; // contraste
+  box-shadow: 0 0 20px 0 rgba($close-color, 0.55);
+
+  &.success {
+    background-color: $close-dark;
+    color: #fff;
   }
 }

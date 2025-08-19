@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, forwardRef } from '@angular/core';
+import { Component, Input, Output, EventEmitter, forwardRef, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSelectModule } from '@angular/material/select';
@@ -37,9 +37,8 @@ export class DynamicSelectComponent implements ControlValueAccessor {
   @Input() label = 'Selecionar';
   @Input() placeholder = '';
   @Input() model: any;
-  @Input() formControl!: FormControl;
+  @Input() formControl: FormControl = new FormControl();
   @Output() modelChange = new EventEmitter<any>();
-
   @Output() onChange = new EventEmitter<any>();
   @Output() openModal = new EventEmitter<void>();
 
@@ -51,10 +50,10 @@ export class DynamicSelectComponent implements ControlValueAccessor {
   @Input() showDefaultOption = true;
   @Input() defaultOptionLabel = 'Selecione';
   @Input() size: 'sm' | 'md' | 'lg' = 'md';
+  @Input() showButton: boolean = true; // Controla se o botão é exibido
 
-  // client | company | sector
-  @Input() type: 'client' | 'company' | 'sector' = 'client';
-
+  constructor(private cdr: ChangeDetectorRef) {}
+  
   getSizeClass(): string {
     switch (this.size) {
       case 'sm': return 'size-sm';
@@ -63,40 +62,22 @@ export class DynamicSelectComponent implements ControlValueAccessor {
     }
   }
 
-  getButtonColor(): 'primary' | 'warn' {
-    return this.model ? 'warn' : 'primary';
-  }
-
-  getButtonIcon(): string {
-    return this.model ? 'deselect' : 'open_in_new';
-  }
 
   onSelectionChange(value: any) {
     this.model = value;
     this.modelChange.emit(value);
     this.onChange.emit(value);
-    this.onChangeFn(value); // importante!
+    this.onChangeFn(value);
+    this.cdr.detectChanges(); // Força a detecção de mudanças
   }
 
-  handleButtonClick() {
-    if (this.model) {
-      this.model = null;
-      this.modelChange.emit(null);
-    } else {
-      this.openModal.emit();
-    }
-  }
 
-  onChangeFn: any = () => { };
-  onTouchedFn: any = () => { };
+  // ControlValueAccessor implementation
+  onChangeFn: (value: any) => void = () => {};
+  onTouchedFn: () => void = () => {};
 
   writeValue(value: any): void {
     this.model = value;
-    this.onChangeFn(value); // <== importante para notificar Angular
-  }
-
-  get isRequired(): boolean {
-    return this.formControl?.hasValidator?.(Validators.required) ?? false;
   }
 
   registerOnChange(fn: any): void {
@@ -107,71 +88,11 @@ export class DynamicSelectComponent implements ControlValueAccessor {
     this.onTouchedFn = fn;
   }
 
-  setDisabledState?(isDisabled: boolean): void {
+  setDisabledState(isDisabled: boolean): void {
     this.disabled = isDisabled;
   }
 
-
-  /*
-    1. Setores (sem botão)
-html
-Copiar
-Editar
-<app-dynamic-select
-  [label]="'Setor'"
-  [options]="sectors"
-  [valueKey]="'id'"
-  [labelKey]="'nome'"
-  [(model)]="selectedSector"
-  [type]="'sector'">
-</app-dynamic-select>
-ts
-Copiar
-Editar
-sectors = [
-  { id: 'fin', nome: 'Financeiro' },
-  { id: 'tec', nome: 'Tecnologia' },
-  { id: 'com', nome: 'Comercial' },
-];
-2. Clientes
-html
-Copiar
-Editar
-<app-dynamic-select
-  [label]="'Cliente'"
-  [options]="clients"
-  [valueKey]="'id'"
-  [labelKey]="'nome'"
-  [(model)]="selectedClient"
-  [type]="'client'"
-  (openModal)="abrirModalCliente()">
-</app-dynamic-select>
-ts
-Copiar
-Editar
-clients = [
-  { id: 1, nome: 'João Silva' },
-  { id: 2, nome: 'Maria Souza' }
-];
-3. Empresas
-html
-Copiar
-Editar
-<app-dynamic-select
-  [label]="'Empresa'"
-  [options]="companies"
-  [valueKey]="'id'"
-  [labelKey]="'nome'"
-  [(model)]="selectedCompany"
-  [type]="'company'"
-  (openModal)="abrirModalEmpresa()">
-</app-dynamic-select>
-ts
-Copiar
-Editar
-companies = [
-  { id: 100, nome: 'Tech Solutions' },
-  { id: 101, nome: 'Build Inc.' }
-];
-  */
+  get isRequired(): boolean {
+    return this.formControl?.hasValidator(Validators.required) ?? false;
+  }
 }

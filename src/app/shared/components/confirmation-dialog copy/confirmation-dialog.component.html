@@ -1,0 +1,26 @@
+<div class="dialog-container">
+  <!-- Header -->
+  <div class="dialog-header">
+    <h1 mat-dialog-title>{{ data.title }}</h1>
+  </div>
+
+  <!-- Body -->
+  <div mat-dialog-content class="dialog-body">
+    <p>{{ data.message }}</p>
+  </div>
+
+  <hr />
+
+  <!-- Footer -->
+  <div mat-dialog-actions class="dialog-footer">
+    <app-dynamic-button 
+      type="close"
+      (clicked)="onCancel()">
+    </app-dynamic-button>
+
+    <app-dynamic-button 
+      type="delete"
+      (clicked)="onConfirm()">
+    </app-dynamic-button>
+  </div>
+</div>

@@ -1,5 +1,5 @@
 import { AbstractControl, AsyncValidatorFn, ValidationErrors } from '@angular/forms';
-import { debounceTime, map, switchMap, of } from 'rxjs';
+import { debounceTime, map, switchMap, of, from } from 'rxjs';
 import { EmailValidationService } from './email-validation.service';
 
 export function emailExistsValidator(
@@ -14,9 +14,9 @@ export function emailExistsValidator(
     return of(control.value).pipe(
       debounceTime(400),
       switchMap(email =>
-        emailService.checkEmailExistsInCollections(email, collections).then(exists => {
-          return exists ? { emailExists: true } : null;
-        })
+        from(emailService.checkEmailExistsInCollections(email, collections)).pipe(
+          map(exists => (exists ? { emailExists: true } : null))
+        )
       )
     );
   };

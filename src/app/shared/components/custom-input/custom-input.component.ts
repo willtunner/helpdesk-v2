@@ -45,6 +45,7 @@ export class CustomInputComponent implements OnInit {
   inputType = 'text';
   isSearchable = false;
   @Input() loading: boolean = false;
+  @Input() showError: boolean = false;
   @Input() customError: string | null = null;
 
   constructor(private translate: TranslateService) {
@@ -107,9 +108,6 @@ export class CustomInputComponent implements OnInit {
     this.onSearch.emit();
   }
 
-  get showError(): boolean {
-    return this.control && this.control.invalid && this.control.touched;
-  }
 
   get formControl(): FormControl {
     return this.control as FormControl;

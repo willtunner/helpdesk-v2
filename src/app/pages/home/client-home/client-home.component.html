@@ -7,19 +7,21 @@
                 <div class="header-drop-down">
                     <mat-icon>apartment</mat-icon>
                     <span>{{ company.name }}</span>
-                    <mat-icon>person_add</mat-icon>
+                    <mat-icon class="add-client" (click)="openCreateClientModal(company)">
+                        person_add
+                    </mat-icon>
                 </div>
                 <div class="header-actions">
                     <mat-icon>{{ activeDropdown === i ? 'expand_less' : 'expand_more' }}</mat-icon>
                 </div>
             </div>
             <div class="dropdown-body" *ngIf="activeDropdown === i">
-                <div *ngIf="company.clients.length > 0" >
+                <div *ngIf="company.clients.length > 0">
                     <app-dynamic-table [headers]="headers" [data]="company.clients" [actions]="['edit', 'delete']"
-                    (edit)="updateDocument($event)" (delete)="deleteDocument($event)">
-                </app-dynamic-table>
+                        (edit)="updateDocument($event)" (delete)="deleteDocument($event, company)">
+                    </app-dynamic-table>
                 </div>
-                
+
                 <div *ngIf="company.clients.length === 0" class="no-videos-message">
                     <p>Não há clientes cadastrados.</p>
                 </div>
