@@ -1,15 +1,20 @@
 <div class="chart-container">
-  <div *ngIf="!loading; else loadingTemplate">
-    <highcharts-chart 
-      [Highcharts]="Highcharts" 
-      [options]="chartOptions"
-      style="display: block; width: 100%; height: 500px">
-    </highcharts-chart>
-  </div>
-
-  <ng-template #loadingTemplate>
-    <div class="loading-spinner">
-      <div class="spinner"></div>
+  <!-- Loading state -->
+  @if (loading) {
+    <div class="loading-overlay">
+      <mat-spinner diameter="50"></mat-spinner>
     </div>
-  </ng-template>
+  }
+
+  <!-- Chart -->
+  @if (!loading) {
+    <div class="highcharts-container">
+      <highcharts-chart
+        [Highcharts]="Highcharts"
+        [options]="chartOptions"
+        [callbackFunction]="chartCallback"
+        style="width: 100%; height: 100%; display: block;">
+      </highcharts-chart>
+    </div>
+  }
 </div>

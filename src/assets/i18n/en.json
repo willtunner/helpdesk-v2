@@ -10,42 +10,56 @@
       "yearly": "Yearly",
       "daily": "Daily",
       "weekly": "Weekly",
-      "semi-annual": "Semi-Annual",
+      "semi-annual": "Semi-annual",
       "period": "Period"
     }
+  },
+  "loading": {
+    "data": "Loading data, please wait..."
   },
   "charts": {
     "title": "Charts",
     "closeAll": "Close All",
     "openAll": "Open All",
+    "tags": {
+      "title": "Tickets by Tags",
+      "subtitle": "Distribution of tickets by problem type",
+      "yAxisTitle": "Number of Tickets"
+    },
     "pieChart": {
       "title": "Tickets by Company",
-      "description": "This is an example of a pie chart showing the distribution of tickets by company."
+      "description": "This is an example pie chart showing the distribution of tickets by company."
     },
     "lineChart": {
-      "title": "Tickets by Company (Line)",
-      "description": "This is an example of a line chart showing the distribution of tickets by company."
+      "title": "Tickets by Company",
+      "description": "This is an example pie chart showing the distribution of tickets by company."
     },
     "columnChart": {
-      "title": "Tickets by Company (Column)",
-      "description": "This is an example of a column chart showing the distribution of tickets by company."
+      "title": "Tickets by Company",
+      "description": "This is an example pie chart showing the distribution of tickets by company."
     },
     "barChart": {
-      "title": "Tickets by Company (Bar)",
-      "description": "This is an example of a bar chart showing the distribution of tickets by company."
+      "title": "Tickets by Company",
+      "description": "This is an example bar chart showing the distribution of tickets by company."
     }
   },
   "chart": {
-    "callsByMonth": "Tickets by Month",
+    "callsByMonth": "Tickets by month",
     "period": "Period",
     "monthYear": "Month/Year",
     "callCount": "Ticket Count",
     "noDataTitle": "No data available",
-    "noDataSubtitle": "There are no tickets for the selected period",
+    "noDataSubtitle": "No tickets for the selected period",
     "last30Days": "Last 30 days",
     "last6Months": "Last 6 months",
     "allAvailableData": "All available data",
-    "calls": "Tickets"
+    "calls": "Tickets",
+    "title": "Column Chart",
+    "subtitle": "",
+    "yAxisTitle": "Quantity",
+    "tooltip": {
+      "pointFormat": "Quantity: <b>{point.y}</b><br>Click for more details"
+    }
   },
   "sideNav": {
     "home": "Home",
@@ -59,11 +73,11 @@
     "video-docs": "Video Docs",
     "developer-area": "Development",
     "restricted-area": "Restricted Area",
-    "calendar": "Schedule"
+    "calendar": "Calendar"
   },
   "table": {
     "name": "Name",
-    "cnpj": "Tax ID",
+    "cnpj": "CNPJ",
     "email": "Email",
     "city": "City",
     "state": "State",
@@ -89,20 +103,20 @@
     "invalid_format": "Invalid format.",
     "passwords_mismatch": "Passwords do not match.",
     "invalid_mask": "Incomplete or invalid number.",
-    "invalid_cpf": "Invalid personal ID.",
-    "invalid_cnpj": "Invalid tax ID.",
+    "invalid_cpf": "Invalid CPF.",
+    "invalid_cnpj": "Invalid CNPJ.",
     "email_exist": "Email already registered."
   },
   "fields": {
     "name": "Name",
     "email": "Email",
     "phone": "Phone",
-    "cnpj": "Tax ID",
+    "cnpj": "CNPJ",
     "state": "State",
     "city": "City",
     "address": "Address",
     "zipcode": "ZIP Code",
-    "valid-mail": "Valid Email"
+    "valid-mail": "Valid email"
   },
   "roles": {
     "client": "Client",
@@ -116,7 +130,7 @@
     "DELETE": "DELETE",
     "CLEAR": "CLEAR",
     "PRINT": "PRINT",
-    "ADD": "ADD",
+    "ADD": "REGISTER",
     "FIND": "SEARCH",
     "PDF": "PDF",
     "CANCEL": "CANCEL",
@@ -126,19 +140,19 @@
   "inputs": {
     "client-modal": {
       "search-label": "Search Client",
-      "search-placeholder": "Enter name, email, or Tax ID...",
+      "search-placeholder": "Type name, email or CNPJ...",
       "found-clients-title": "Clients Found:"
     },
     "call-modal": {
       "search-label": "Search Ticket",
-      "search-placeholder": "Search by title, operator, or connection...",
+      "search-placeholder": "Search title, operator or connection..",
       "found-calls-title": "Tickets Found:"
     }
   },
   "titles-modals": {
     "call-list": "All Tickets",
-    "call-list-open": "List of All Open Tickets",
-    "call-list-close": "List of All Closed Tickets",
+    "call-list-open": "List all open tickets",
+    "call-list-close": "List all closed tickets",
     "client-list": "Client List"
   },
   "paginator": {
@@ -154,7 +168,7 @@
   },
   "calendar": {
     "calendar-title": "Holiday Calendar",
-    "calendar-subtitle": "Click a day to add an event",
+    "calendar-subtitle": "Click on a day to add an event",
     "year": "Year",
     "loading-calendar": "Loading calendar...",
     "scheduled-events": "Scheduled Events",
@@ -183,7 +197,79 @@
     ],
     "today": "Today!",
     "events": "{count, plural, =1 {1 Event} other {{count} Events}}",
-    "day-format": "{{day}}/{{month}}/{{year}}",
+    "day-format": "{{month}}/{{day}}/{{year}}",
     "holiday": "{{holiday}}"
+  },
+  "client": {
+    "title": "Client",
+    "subtitle": "Manage your clients here:",
+    "add-client": "Add Client",
+    "edit-client": "Edit Client",
+    "delete-client": "Delete Client",
+    "client-details": "Client Details",
+    "client-list": "Client List",
+    "search-client": "Search Client",
+    "client-not-found": "Client not found",
+    "notifications": {
+      "success": {
+        "clientUpdated": "Client {{name}} updated successfully!",
+        "clientDeleted": "Client {{name}} deleted successfully!",
+        "clientCreated": "Client {{name}} created successfully!"
+      },
+      "error": {
+        "loadingCompanies": "Error loading companies and clients",
+        "updatingClient": "Error updating client. Please try again.",
+        "deletingClient": "Error deleting client"
+      }
+    },
+    "confirmation": {
+      "deleteTitle": "Delete confirmation!",
+      "deleteClientMessage": "Do you want to delete client <strong>{{clientName}}</strong> from company <strong>{{companyName}}</strong>?"
+    }
+  },
+  "company": {
+    "title": "Company",
+    "subtitle": "Manage your companies here:",
+    "add-company": "Add Company",
+    "edit-company": "Edit Company",
+    "delete-company": "Delete Company",
+    "company-details": "Company Details",
+    "company-list": "Company List",
+    "search-company": "Search Company",
+    "company-not-found": "Company not found",
+    "notifications": {
+      "success": {
+        "companyUpdated": "Company {{name}} updated successfully!",
+        "companyDeleted": "Company {{name}} deleted successfully!",
+        "companyCreated": "Company {{name}} created successfully!"
+      },
+      "error": {
+        "loadingCompanies": "Error loading companies",
+        "updatingCompany": "Error updating company. Please try again.",
+        "deletingCompany": "Error deleting company"
+      }
+    },
+    "confirmation": {
+      "deleteTitle": "Delete confirmation!",
+      "deleteCompanyMessage": "Do you want to delete the company <strong>{{companyName}}</strong>?"
+    }
+  },
+  "tags": {
+    "placeholder": "Type 3 characters or press ctrl + space to search all",
+    "noTagMessage": "Tag does not exist, press enter to add a new tag",
+    "successMessage": "Tag added successfully!"
+  },
+  "calls": {
+    "title": "Tickets",
+    "list-title": "Ticket list",
+    "fields": {
+      "description": "Problem description",
+      "observation": "Observation",
+      "open": "Open"
+    },
+    "placeholders": {
+      "description": "Enter the description here",
+      "observation": "Enter your observation here..."
+    }
   }
 }

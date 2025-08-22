@@ -1,5 +1,5 @@
 <div class="container">
-    <h3>Empresas:</h3>
+    <h3>{{ 'company.subtitle' | translate }}</h3>
     <app-dynamic-table [headers]="headers" [data]="companies" [actions]="['edit', 'delete']"
         (edit)="updateDocument($event)" (delete)="deleteDocument($event)">
     </app-dynamic-table>

@@ -10,6 +10,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ClientService } from '../../../../services/client.service';
 import { emailExistsValidator } from '../../../../services/email-exists.validator';
 import { EmailValidationService } from '../../../../services/email-validation.service';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-create-cliente-modal',
@@ -19,7 +20,8 @@ import { EmailValidationService } from '../../../../services/email-validation.se
     ReactiveFormsModule,
     DynamicButtonComponent,
     CustomInputComponent,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    TranslateModule
   ],
   templateUrl: './create-cliente-modal.component.html',
   styleUrl: './create-cliente-modal.component.scss'

@@ -10,12 +10,13 @@
         </span>
       </div>
     </ng-container>
+
     <input 
       [formControl]="inputControl" 
       (keydown.enter)="onEnter($event)" 
       (keydown)="onKeydown($event)"
       (blur)="onBlur()"
-      placeholder="Digite 3 caracteres ou ctrl + espaço para buscar todas" />
+      [placeholder]="'tags.placeholder' | translate" />
   </div>
   
   <ul class="suggestions" *ngIf="(suggestedTags$ | async) as suggestedTags">
@@ -25,11 +26,11 @@
   </ul>
   
   <div *ngIf="successMessage" class="success-message">
-    {{ successMessage }}
+    {{ 'tags.successMessage' | translate }}
   </div>
   
   <div *ngIf="showNoTagMessage && (suggestedTags$ | async)?.length === 0" class="error-message">
-    Tag inexistente, pressione enter para cadastrar nova tag
+    {{ 'tags.noTagMessage' | translate }}
   </div>
   
   <mat-error *ngIf="showError" class="tag-input-container custom-field" [class.mat-form-field-invalid]="showError">

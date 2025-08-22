@@ -162,6 +162,7 @@ export class OperatorHomeComponent implements OnInit {
           this.countClosedCalls = closed.length;
           this.countAllCalls = all.length;
           this.simplifiedCalls = simplified;
+          console.log('Chamados Simplificados:', simplified);
           this.pieChartData = this.getPieData(simplified);
         },
         error: () => {
@@ -233,11 +234,11 @@ async getChartData(): Promise<any[]> {
     const tags = await this.tagService.getAllTagsByCall();
     
     const tagsDataPromises = tags.map(async (tag) => {
-      const { count } = await this.tagService.getCallsByTag(tag);
+      const calls = await this.tagService.getCallsByTag(tag); // retorna Call[]
       return {
         name: tag,
-        y: count,
-        color: this.getRandomColor() // Agora this está corretamente referenciado
+        y: calls.length, // aqui pega o total
+        color: this.getRandomColor()
       };
     });
 
@@ -247,6 +248,7 @@ async getChartData(): Promise<any[]> {
     return [];
   }
 }
+
 
 private getRandomColor(): string {
   return this.utilService.getRandomColor(); // Usando o serviço UtilService

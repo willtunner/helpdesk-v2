@@ -31,6 +31,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CreateClienteModalComponent } from '../home/clients-modal/create-cliente-modal/create-cliente-modal.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-calls',
@@ -41,6 +42,7 @@ import { CreateClienteModalComponent } from '../home/clients-modal/create-client
     MatRadioModule,
     MatProgressSpinnerModule,
     MatTooltipModule,
+    TranslateModule,
 
     // Componentes customizados
     DynamicSelectComponent,
@@ -50,7 +52,8 @@ import { CreateClienteModalComponent } from '../home/clients-modal/create-client
     DynamicButtonComponent,
     CallsListComponent,
     MatIconModule,
-    MatButtonModule
+    MatButtonModule,
+    
 
   ],
   templateUrl: './calls.component.html',

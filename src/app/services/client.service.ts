@@ -7,7 +7,7 @@ import {
 import { SendNotificationService } from './send-notification.service';
 import { DateTimeFormatPipe } from '../pipes/dateTimeFormatTimeStamp.pipe';
 import { NotificationType } from '../enums/notificationType.enum';
-import { addDoc, deleteDoc, doc, getDoc } from 'firebase/firestore';
+import { addDoc, deleteDoc, doc, getDoc, updateDoc } from 'firebase/firestore';
 
 const PATH = 'clients';
 const PATH_COMPANIES = 'company';
@@ -158,6 +158,59 @@ export class ClientService {
         NotificationType.ERROR,
         'Erro ao excluir cliente'
       );
+      throw error;
+    }
+  }
+
+  async updateClient(clientId: string, clientData: Partial<Omit<User, 'id'>>): Promise<User> {
+    try {
+      // 1. Validação básica - verifica se o cliente existe
+      const clientDocRef = doc(this._firestore, `${PATH}/${clientId}`);
+      const clientSnapshot = await getDoc(clientDocRef);
+
+      if (!clientSnapshot.exists()) {
+        throw new Error(`Cliente com ID ${clientId} não encontrado`);
+      }
+
+      // 2. Prepara os dados para atualização
+      const updateData = {
+        ...clientData,
+        updated: new Date() // Adiciona timestamp de atualização
+      };
+
+      // 3. Atualiza o documento no Firestore
+      await updateDoc(clientDocRef, updateData);
+
+      // 4. Busca o documento atualizado para retornar dados consistentes
+      const updatedDoc = await getDoc(clientDocRef);
+
+      // 5. Monta o objeto User atualizado
+      const updatedClient: User = {
+        id: updatedDoc.id,
+        ...updatedDoc.data()
+      } as User;
+
+      // 6. Notificação de sucesso
+      this.messageService.customNotification(
+        NotificationType.SUCCESS,
+        'Cliente atualizado com sucesso'
+      );
+
+      return updatedClient;
+
+    } catch (error) {
+      console.error('Erro ao atualizar cliente:', error);
+      
+      // Mensagem de erro mais específica
+      const errorMessage = error instanceof Error 
+        ? `Erro ao atualizar cliente: ${error.message}`
+        : 'Erro ao atualizar cliente';
+
+      this.messageService.customNotification(
+        NotificationType.ERROR,
+        errorMessage
+      );
+      
       throw error;
     }
   }

@@ -2,9 +2,11 @@
 
 <div class="modal-container" style="background-color: white;">
   <div class="modal-header">
-    <h4 mat-dialog-title>{{ data.client ? 'Editar Cliente' : 'Novo Cliente' }}</h4>
+    <h4 mat-dialog-title>
+      {{ data.client ? ('client.edit-client' | translate) : ('client.add-client' | translate) }}
+    </h4>
     <div class="company-name" *ngIf="companyName">
-      Empresa: <strong>{{companyName}}</strong>
+      {{ 'company.title' | translate }}: <strong>{{ companyName }}</strong>
       <mat-spinner *ngIf="!companyName" diameter="20"></mat-spinner>
     </div>
   </div>
@@ -12,29 +14,52 @@
   <div mat-dialog-content class="modal-content">
     <form [formGroup]="clientForm" class="form-grid">
       <!-- Linha 1 -->
-      <app-custom-input label="Username" type="text" [control]="clientForm.get('username')!"
-        [showError]="shouldShowError('username')" errorMessage="Username é obrigatório">
+      <app-custom-input 
+        [label]="'Username'" 
+        type="text" 
+        [control]="clientForm.get('username')!"
+        [showError]="shouldShowError('username')" 
+        >
       </app-custom-input>
 
-      <app-custom-input label="Nome Completo" type="text" [control]="clientForm.get('name')!"
-        [showError]="shouldShowError('name')" errorMessage="Nome é obrigatório">
+      <app-custom-input 
+        [label]="'fields.name' | translate" 
+        type="text" 
+        [control]="clientForm.get('name')!"
+        [showError]="shouldShowError('name')" 
+        >
       </app-custom-input>
 
       <!-- Linha 2 -->
-      <app-custom-input label="Telefone" type="telefone" [control]="clientForm.get('phone')!"
-        [showError]="shouldShowError('phone')" errorMessage="Telefone é obrigatório">
+      <app-custom-input 
+        [label]="'fields.phone' | translate" 
+        type="telefone" 
+        [control]="clientForm.get('phone')!"
+        [showError]="shouldShowError('phone')" 
+        >
       </app-custom-input>
 
-      <app-custom-input label="E-mail" type="email" [control]="clientForm.get('email')!"
-        [showError]="shouldShowError('email')" errorMessage="E-mail é obrigatório">
+      <app-custom-input 
+        [label]="'fields.email' | translate" 
+        type="email" 
+        [control]="clientForm.get('email')!"
+        [showError]="shouldShowError('email')" 
+        >
       </app-custom-input>
 
       <!-- Linha 3 -->
-      <app-custom-input label="Senha" type="password" [control]="clientForm.get('password')!"
-        [showError]="shouldShowError('password')" errorMessage="Senha é obrigatória">
+      <app-custom-input 
+        [label]="'Senha'" 
+        type="password" 
+        [control]="clientForm.get('password')!"
+        [showError]="shouldShowError('password')" 
+        >
       </app-custom-input>
 
-      <app-custom-input label="Conexão" type="text" [control]="clientForm.get('connection')!">
+      <app-custom-input 
+        [label]="'table.connection' | translate" 
+        type="text" 
+        [control]="clientForm.get('connection')!">
       </app-custom-input>
 
       <!-- Campos ocultos -->
@@ -44,12 +69,23 @@
   </div>
 
   <div mat-dialog-actions class="modal-actions">
-    <app-dynamic-button type="cancel" (clicked)="onCancel()" [disabled]="loading">
+    <app-dynamic-button 
+      type="cancel" 
+      (clicked)="onCancel()" 
+      [disabled]="loading">
+      {{ 'BUTTON.CANCEL' | translate }}
     </app-dynamic-button>
 
-    <app-dynamic-button type="save" (clicked)="onSave()" [disabled]="loading" [success]="loading">
+    <app-dynamic-button 
+      type="save" 
+      (clicked)="onSave()" 
+      [disabled]="loading" 
+      [success]="loading">
+      {{ 'BUTTON.SAVE' | translate }}
     </app-dynamic-button>
   </div>
+</div>
+
 
   <!-- Visualização do estado do formulário para debug -->
 <!-- <pre style="background: #f5f5f5; font-size: 8px;">
@@ -62,4 +98,3 @@
   Invalid Controls:
   {{ getInvalidControls() | json }}
 </pre> -->
-</div>

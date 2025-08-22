@@ -1,23 +1,13 @@
-//cliente-home.ts
-import { ChangeDetectorRef, Component, OnInit } from '@angular/core';
-import { DashboardCardComponent } from '../../../shared/components/dashboard-card/dashboard-card.component';
-import { ClientsModalComponent } from '../clients-modal/clients-modal.component';
+import { Component, OnInit } from '@angular/core';
 import { NotificationType } from '../../../enums/notificationType.enum';
-import { CallModalComponent } from '../call-modal/call-modal.component';
 import { AuthService } from '../../../services/auth.service';
-import { HelpCompanyService } from '../../../services/help-company.service';
-import { CallService } from '../../../services/call.service';
 import { UserService } from '../../../services/user.service';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
-import { CompanyService } from '../../../services/company.service';
 import { SendNotificationService } from '../../../services/send-notification.service';
 import { MatDialog } from '@angular/material/dialog';
-import { Call, Company, SimplifiedCall, User } from '../../../models/models';
+import { Company, User } from '../../../models/models';
 import { UserType } from '../../../enums/user-types.enum';
-import { catchError, forkJoin, of, take } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { ChartComponent } from '../../../shared/components/line-chart/line-chart.component';
-import { ChartType } from '../../../enums/chart-types.enum';
 import { ClientService } from '../../../services/client.service';
 import { MatIconModule } from '@angular/material/icon';
 import { DynamicTableComponent } from '../../../shared/components/dynamic-table/dynamic-table.component';
@@ -28,13 +18,11 @@ import { CreateClienteModalComponent } from '../clients-modal/create-cliente-mod
   selector: 'app-client-home',
   standalone: true,
   imports: [
-    DashboardCardComponent,
     TranslateModule,
     CommonModule,
-    ChartComponent,
     MatIconModule,
     DynamicTableComponent,
-    MatIconModule
+    MatIconModule,
   ],
   templateUrl: './client-home.component.html',
   styleUrl: './client-home.component.scss'
@@ -56,8 +44,9 @@ export class ClientHomeComponent implements OnInit {
     private auth: AuthService,
     private userService: UserService,
     private clientService: ClientService,
-    private dialog: MatDialog
-
+    private dialog: MatDialog,
+    private sendNotificationService: SendNotificationService,
+    private translate: TranslateService
   ) {
     const session = this.auth.currentUser();
 
@@ -71,24 +60,84 @@ export class ClientHomeComponent implements OnInit {
   }
 
   async ngOnInit(): Promise<void> {
+    this.loadCompaniesWithClients();
+  }
 
-    this.clientService.getCompaniesWithClients(this.user.helpDeskCompanyId!).then(companies => {
-      console.log('Empresas com clientes:', companies);
-      this.companies = companies;
-      // companies será um array de Company, cada uma com seu array de clients
-    })
-    .catch(error => {
-      console.error('Erro:', error);
-    });
+  // Método para carregar empresas com clientes
+  private loadCompaniesWithClients(): void {
+    this.clientService.getCompaniesWithClients(this.user.helpDeskCompanyId!)
+      .then(companies => {
+        console.log('Empresas com clientes:', companies);
+        this.companies = companies;
+      })
+      .catch(error => {
+        console.error('Erro:', error);
+        this.sendNotificationService.customNotification(
+          NotificationType.ERROR,
+          this.translate.instant('client.notifications.error.loadingCompanies')
+        );
+      });
   }
 
   toggleDropdown(index: number): void {
     this.activeDropdown = this.activeDropdown === index ? null : index;
   }
 
-  updateDocument(event: any): void {
-    console.log('Editar documento:', event);
-    // Lógica para editar o documento
+  // Método para atualizar cliente
+  async updateDocument(client: User): Promise<void> {
+    try {
+      console.log('Atualizando cliente:', client);
+      
+      // Extrai o ID e mantém apenas os dados atualizáveis
+      const { id, ...clientData } = client;
+      
+      // Chama o serviço para atualizar o cliente
+      const updatedClient = await this.clientService.updateClient(id, clientData);
+      
+      // Atualiza a lista local de clientes
+      this.updateLocalClient(updatedClient);
+      
+      // Mostra notificação de sucesso
+      this.sendNotificationService.customNotification(
+        NotificationType.SUCCESS,
+        this.translate.instant('client.notifications.success.clientUpdated', { name: updatedClient.name })
+      );
+      
+      console.log('Cliente atualizado:', updatedClient);
+      
+    } catch (error) {
+      console.error('Erro ao atualizar cliente:', error);
+      
+      // Mostra notificação de erro
+      this.sendNotificationService.customNotification(
+        NotificationType.ERROR,
+        this.translate.instant('client.notifications.error.updatingClient')
+      );
+      
+      // Relança o erro para que a tabela possa tratar o estado de erro
+      throw error;
+    }
+  }
+
+  // Método para atualizar o cliente na lista local
+  private updateLocalClient(updatedClient: User): void {
+    this.companies = this.companies.map(company => {
+      // Verifica se a empresa tem o cliente que foi atualizado
+      const clientIndex = company.clients.findIndex(c => c.id === updatedClient.id);
+      
+      if (clientIndex !== -1) {
+        // Atualiza o cliente na empresa
+        const updatedClients = [...company.clients];
+        updatedClients[clientIndex] = updatedClient;
+        
+        return {
+          ...company,
+          clients: updatedClients
+        };
+      }
+      
+      return company;
+    });
   }
 
   deleteDocument(client: User, company: Company): void {
@@ -96,20 +145,40 @@ export class ClientHomeComponent implements OnInit {
     const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
       width: '400px',
       data: {
-        title: 'Confirmação de exclusão!',
-        message: `Você deseja deletar o cliente ${client.name}? da empresa ${company.name}`,
+        title: this.translate.instant('client.confirmation.deleteTitle'),
+        message: this.translate.instant('client.confirmation.deleteClientMessage', { 
+          clientName: client.name, 
+          companyName: company.name 
+        })
       }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
         this.clientService.deleteClient(client.id).then(() => {
-          this.companies = this.companies.map(company => ({
-            ...company,
-            clients: company.clients.filter(c => c.id !== client.id)
-          }));
+          // Atualiza a lista local removendo o cliente
+          this.companies = this.companies.map(c => {
+            if (c.id === company.id) {
+              return {
+                ...c,
+                clients: c.clients.filter(c => c.id !== client.id)
+              };
+            }
+            return c;
+          });
+          
+          // Notificação de sucesso
+          this.sendNotificationService.customNotification(
+            NotificationType.SUCCESS,
+            `Cliente ${client.name} excluído com sucesso!`
+          );
+          
         }).catch(err => {
           console.error('Erro ao deletar cliente:', err);
+          this.sendNotificationService.customNotification(
+            NotificationType.ERROR,
+            this.translate.instant('client.notifications.error.deletingClient')
+          );
         });
       }
     });
@@ -136,9 +205,13 @@ export class ClientHomeComponent implements OnInit {
           }
           return c;
         });
+        
+        // Notificação de sucesso
+        this.sendNotificationService.customNotification(
+          NotificationType.SUCCESS,
+          this.translate.instant('client.notifications.success.clientCreated', { name: newClient.name })
+        );
       }
     });
   }
-  
-  
 }

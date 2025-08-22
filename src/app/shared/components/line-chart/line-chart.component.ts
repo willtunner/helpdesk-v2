@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, OnInit, effect, inject } from '@angular/core';
+import { Component, Input, OnChanges, OnInit, effect, inject, OnDestroy } from '@angular/core';
 import { HighchartsChartModule } from 'highcharts-angular';
 import * as Highcharts from 'highcharts';
 import { CommonModule } from '@angular/common';
@@ -6,7 +6,9 @@ import { ChartType } from '../../../enums/chart-types.enum';
 import { DynamicThreeToggleComponent } from '../dynamic-three-toggle/dynamic-three-toggle.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { MatIconModule } from '@angular/material/icon';
-import { TranslateService } from '../../../services/translate.service'; // Ajuste o path conforme seu projeto
+import { TranslateService } from '../../../services/translate.service';
+import { CallModalComponent } from '../../../pages/home/call-modal/call-modal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
   selector: 'app-chart',
@@ -21,12 +23,15 @@ import { TranslateService } from '../../../services/translate.service'; // Ajust
   templateUrl: './line-chart.component.html',
   styleUrls: ['./line-chart.component.scss'],
 })
-export class ChartComponent implements OnInit, OnChanges {
+export class ChartComponent implements OnInit, OnChanges, OnDestroy {
   Highcharts: typeof Highcharts = Highcharts;
   chartOptions: Highcharts.Options = {};
   chartInstance!: Highcharts.Chart;
   selectedToggle: string = 'ano';
   todasFechadas: boolean = false;
+  
+  // ID único para o container do gráfico
+  chartId: string = 'chart-' + Math.random().toString(36).substring(2, 11);
 
   @Input() type: ChartType = ChartType.COLUMN;
   @Input() title: string = '';
@@ -38,13 +43,12 @@ export class ChartComponent implements OnInit, OnChanges {
     companyName: string;
   }[] = [];
 
+  private dialog = inject(MatDialog);
   private readonly months = ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'];
   private colorMap: Map<string, string> = new Map();
   private translateService = inject(TranslateService);
 
-  constructor() {
-
-  }
+  constructor() {}
 
   private readonly languageEffect = effect(() => {
     const _ = this.translateService.selectedLanguage();
@@ -52,8 +56,21 @@ export class ChartComponent implements OnInit, OnChanges {
   });
 
   ngOnInit(): void {
-
+    // Garante que o gráfico seja inicializado com um ID único
+    this.buildChartOptions();
   }
+
+  ngOnDestroy(): void {
+    if (this.chartInstance && typeof this.chartInstance.destroy === 'function') {
+      try {
+        this.chartInstance.destroy();
+      } catch (e) {
+        console.warn('Erro ao destruir chart instance:', e);
+      }
+    }
+    this.chartInstance = null as any;
+  }
+  
 
   alternarSeries() {
     if (!this.chartInstance) return;
@@ -97,6 +114,9 @@ export class ChartComponent implements OnInit, OnChanges {
     const sortedYears = Array.from(years).sort();
     const categories = this.generateCategories(sortedYears);
 
+    // Mapeia chamados por categoria (ex: "Jan/2024")
+    const chamadosByCategory: Record<string, typeof this.chamados> = {};
+
     for (const chamado of chamadosFiltrados) {
       const { companyId, companyName, date } = chamado;
       const [day, month, year] = date.split('/').map(Number);
@@ -112,10 +132,17 @@ export class ChartComponent implements OnInit, OnChanges {
       const dateX = new Date(year, month - 1, day);
       const yearIndex = sortedYears.indexOf(year);
       const categoryIndex = yearIndex * 12 + dateX.getMonth();
+      const categoryLabel = `${this.months[dateX.getMonth()]}/${year}`;
 
       const empresa = companyMap.get(companyId);
       if (empresa && categoryIndex < empresa.data.length) {
         empresa.data[categoryIndex]++;
+
+        // Armazena os chamados por categoria
+        if (!chamadosByCategory[categoryLabel]) {
+          chamadosByCategory[categoryLabel] = [];
+        }
+        chamadosByCategory[categoryLabel].push(chamado);
       }
     }
 
@@ -132,6 +159,14 @@ export class ChartComponent implements OnInit, OnChanges {
       chart: {
         type: this.type as any,
         inverted: this.type === ChartType.BAR,
+        // Container único para evitar conflitos
+        renderTo: this.chartId,
+        // Adiciona um ID único para a instância do gráfico
+        events: {
+          load: () => {
+            console.log('Chart loaded in container:', this.chartId);
+          }
+        }
       },
       title: { 
         text: this.title || t('chart.callsByMonth'),
@@ -173,10 +208,20 @@ export class ChartComponent implements OnInit, OnChanges {
             style: { textOutline: 'none' }
           },
           enableMouseTracking: true,
-        },
-        column: {
-          pointPadding: 0.1,
-          borderWidth: 0
+          cursor: 'pointer',
+          point: {
+            events: {
+              click: (event) => {
+                const category = event.point.category as string;
+                const calls = chamadosByCategory[category] || [];
+
+                this.dialog.open(CallModalComponent, {
+                  width: '900px',
+                  data: { category, calls }
+                });
+              }
+            }
+          }
         }
       },
       series: series.length > 0 ? series : [{ type: 'line', data: [] }],
@@ -188,6 +233,14 @@ export class ChartComponent implements OnInit, OnChanges {
     const t = (key: string) => this.translateService.instant(key);
 
     this.chartOptions = {
+      chart: {
+        renderTo: this.chartId,
+        events: {
+          load: () => {
+            console.log('No data chart loaded in container:', this.chartId);
+          }
+        }
+      },
       title: {
         text: t('chart.noDataTitle'),
         style: { color: '#666', fontWeight: 'bold' }

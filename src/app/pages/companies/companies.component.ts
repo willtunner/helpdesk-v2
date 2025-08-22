@@ -5,11 +5,12 @@ import { Company } from '../../models/models';
 import { DynamicTableComponent } from '../../shared/components/dynamic-table/dynamic-table.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UpdateCompanyModalComponent } from './update-company-modal/update-company-modal.component';
+import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-companies',
   standalone: true,
-  imports: [DynamicTableComponent],
+  imports: [DynamicTableComponent, TranslateModule],
   templateUrl: './companies.component.html',
   styleUrl: './companies.component.scss'
 })

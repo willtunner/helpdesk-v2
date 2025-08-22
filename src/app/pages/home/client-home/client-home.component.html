@@ -1,5 +1,5 @@
 <div class="container">
-    <h3>Gerenciar clientes:</h3>
+    <h3>{{ 'client.subtitle' | translate }}</h3>
 
     <div class="dropdown-container">
         <div *ngFor="let company of companies; let i = index" class="dropdown">
@@ -7,7 +7,7 @@
                 <div class="header-drop-down">
                     <mat-icon>apartment</mat-icon>
                     <span>{{ company.name }}</span>
-                    <mat-icon class="add-client" (click)="openCreateClientModal(company)">
+                    <mat-icon class="add-client" (click)="$event.stopPropagation(); openCreateClientModal(company)">
                         person_add
                     </mat-icon>
                 </div>
@@ -17,13 +17,17 @@
             </div>
             <div class="dropdown-body" *ngIf="activeDropdown === i">
                 <div *ngIf="company.clients.length > 0">
-                    <app-dynamic-table [headers]="headers" [data]="company.clients" [actions]="['edit', 'delete']"
-                        (edit)="updateDocument($event)" (delete)="deleteDocument($event, company)">
+                    <app-dynamic-table 
+                        [headers]="headers" 
+                        [data]="company.clients" 
+                        [actions]="['edit', 'delete']"
+                        (save)="updateDocument($event)" 
+                        (delete)="deleteDocument($event, company)">
                     </app-dynamic-table>
                 </div>
 
                 <div *ngIf="company.clients.length === 0" class="no-videos-message">
-                    <p>Não há clientes cadastrados.</p>
+                    <p>{{ 'client.client-not-found' | translate }}</p>
                 </div>
             </div>
         </div>

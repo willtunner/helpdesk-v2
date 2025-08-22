@@ -3,9 +3,9 @@
     "welcome": "Bienvenido",
     "components": {
       "client": "Clientes",
-      "ticket-open": "Casos Abiertos",
-      "ticket-closed": "Casos Cerrados",
-      "ticket-answered": "Todos los Casos",
+      "ticket-open": "Tickets Abiertos",
+      "ticket-closed": "Tickets Cerrados",
+      "ticket-answered": "Todos los Tickets",
       "monthly": "Mensual",
       "yearly": "Anual",
       "daily": "Diario",
@@ -14,43 +14,57 @@
       "period": "Período"
     }
   },
+  "loading": {
+  "data": "Cargando datos, por favor espere..."
+},
   "charts": {
     "title": "Gráficos",
-    "closeAll": "Cerrar Todo",
-    "openAll": "Abrir Todo",
+    "closeAll": "Cerrar Todos",
+    "openAll": "Abrir Todos",
+    "tags": {
+    "title": "Llamados por Etiquetas",
+    "subtitle": "Distribución de llamados por tipo de problema",
+    "yAxisTitle": "Cantidad de Llamados"
+  },
     "pieChart": {
-      "title": "Casos por Empresa",
-      "description": "Este es un ejemplo de gráfico circular que muestra la distribución de casos por empresa."
+      "title": "Tickets por Empresa",
+      "description": "Este es un ejemplo de gráfico circular que muestra la distribución de tickets por empresa."
     },
     "lineChart": {
-      "title": "Casos por Empresa (Línea)",
-      "description": "Este es un ejemplo de gráfico lineal que muestra la distribución de casos por empresa."
+      "title": "Tickets por Empresa",
+      "description": "Este es un ejemplo de gráfico circular que muestra la distribución de tickets por empresa."
     },
     "columnChart": {
-      "title": "Casos por Empresa (Columna)",
-      "description": "Este es un ejemplo de gráfico de columnas que muestra la distribución de casos por empresa."
+      "title": "Tickets por Empresa",
+      "description": "Este es un ejemplo de gráfico circular que muestra la distribución de tickets por empresa."
     },
     "barChart": {
-      "title": "Casos por Empresa (Barras)",
-      "description": "Este es un ejemplo de gráfico de barras que muestra la distribución de casos por empresa."
+      "title": "Tickets por Empresa",
+      "description": "Este es un ejemplo de gráfico de barras que muestra la distribución de tickets por empresa."
     }
   },
   "chart": {
-    "callsByMonth": "Casos por Mes",
+    "callsByMonth": "Tickets por mes",
     "period": "Período",
     "monthYear": "Mes/Año",
-    "callCount": "Cantidad de Casos",
+    "callCount": "Cant. de Tickets",
     "noDataTitle": "No hay datos disponibles",
-    "noDataSubtitle": "No hay casos para el período seleccionado",
+    "noDataSubtitle": "No hay tickets para el período seleccionado",
     "last30Days": "Últimos 30 días",
     "last6Months": "Últimos 6 meses",
     "allAvailableData": "Todos los datos disponibles",
-    "calls": "Casos"
+    "calls": "Tickets",
+    "title": "Gráfico de Columnas",
+    "subtitle": "",
+    "yAxisTitle": "Cantidad",
+    "tooltip": {
+      "pointFormat": "Cantidad: <b>{point.y}</b><br>Haz clic para más detalles"
+    }
   },
   "sideNav": {
     "home": "Inicio",
     "clients": "Clientes",
-    "tickets": "Casos",
+    "tickets": "Tickets",
     "enterprises": "Empresas",
     "system-version": "Versión del Sistema",
     "chat": "Chat",
@@ -63,8 +77,8 @@
   },
   "table": {
     "name": "Nombre",
-    "cnpj": "CIF",
-    "email": "Correo electrónico",
+    "cnpj": "CNPJ",
+    "email": "Email",
     "city": "Ciudad",
     "state": "Estado",
     "phone": "Teléfono",
@@ -85,30 +99,30 @@
   },
   "erros": {
     "required": "Campo obligatorio.",
-    "invalid_email": "Correo electrónico inválido.",
+    "invalid_email": "E-mail inválido.",
     "invalid_format": "Formato inválido.",
-    "passwords_mismatch": "Las contraseñas no coinciden.",
+    "passwords_mismatch": "Contraseñas no coinciden.",
     "invalid_mask": "Número incompleto o inválido.",
-    "invalid_cpf": "NIF inválido.",
-    "invalid_cnpj": "CIF inválido.",
-    "email_exist": "Correo electrónico ya registrado."
+    "invalid_cpf": "CPF inválido.",
+    "invalid_cnpj": "CNPJ inválido.",
+    "email_exist": "E-mail ya registrado."
   },
   "fields": {
     "name": "Nombre",
-    "email": "Correo electrónico",
+    "email": "E-mail",
     "phone": "Teléfono",
-    "cnpj": "CIF",
+    "cnpj": "CNPJ",
     "state": "Estado",
     "city": "Ciudad",
     "address": "Dirección",
-    "zipcode": "Código postal",
-    "valid-mail": "Correo válido"
+    "zipcode": "CEP",
+    "valid-mail": "Email válido"
   },
   "roles": {
     "client": "Cliente",
     "operator": "Operador",
     "admin": "Administrador",
-    "master": "Maestro"
+    "master": "Master"
   },
   "BUTTON": {
     "SAVE": "GUARDAR",
@@ -126,19 +140,19 @@
   "inputs": {
     "client-modal": {
       "search-label": "Buscar Cliente",
-      "search-placeholder": "Escriba nombre, correo o CIF...",
+      "search-placeholder": "Digite nombre, email o CNPJ...",
       "found-clients-title": "Clientes Encontrados:"
     },
     "call-modal": {
-      "search-label": "Buscar Caso",
-      "search-placeholder": "Busque título, operador o conexión...",
-      "found-calls-title": "Casos Encontrados:"
+      "search-label": "Buscar Ticket",
+      "search-placeholder": "Busque título, operador o conexión..",
+      "found-calls-title": "Tickets Encontrados:"
     }
   },
   "titles-modals": {
-    "call-list": "Todos los Casos",
-    "call-list-open": "Lista de todos los Casos Abiertos",
-    "call-list-close": "Lista de todos los Casos Cerrados",
+    "call-list": "Todos los Tickets",
+    "call-list-open": "Lista todos Tickets abiertos",
+    "call-list-close": "Lista todos Tickets cerrados",
     "client-list": "Lista de Clientes"
   },
   "paginator": {
@@ -153,7 +167,7 @@
     }
   },
   "calendar": {
-    "calendar-title": "Calendario de Festivos",
+    "calendar-title": "Calendario de Feriados",
     "calendar-subtitle": "Haga clic en un día para agregar un evento",
     "year": "Año",
     "loading-calendar": "Cargando calendario...",
@@ -185,5 +199,77 @@
     "events": "{count, plural, =1 {1 Evento} other {{count} Eventos}}",
     "day-format": "{{day}}/{{month}}/{{year}}",
     "holiday": "{{holiday}}"
+  },
+  "client": {
+    "title": "Cliente",
+    "subtitle": "Gestione sus clientes aquí:",
+    "add-client": "Agregar Cliente",
+    "edit-client": "Editar Cliente",
+    "delete-client": "Eliminar Cliente",
+    "client-details": "Detalles del Cliente",
+    "client-list": "Lista de Clientes",
+    "search-client": "Buscar Cliente",
+    "client-not-found": "Cliente no encontrado",
+    "notifications": {
+      "success": {
+        "clientUpdated": "¡Cliente {{name}} actualizado con éxito!",
+        "clientDeleted": "¡Cliente {{name}} eliminado con éxito!",
+        "clientCreated": "¡Cliente {{name}} creado con éxito!"
+      },
+      "error": {
+        "loadingCompanies": "Error al cargar empresas y clientes",
+        "updatingClient": "Error al actualizar cliente. Intente nuevamente.",
+        "deletingClient": "Error al eliminar cliente"
+      }
+    },
+    "confirmation": {
+      "deleteTitle": "¡Confirmación de eliminación!",
+      "deleteClientMessage": "¿Desea eliminar el cliente <strong>{{clientName}}</strong> de la empresa <strong>{{companyName}}</strong>?"
+    }
+  },
+  "company": {
+    "title": "Empresa",
+    "subtitle": "Gestione sus empresas aquí:",
+    "add-company": "Agregar Empresa",
+    "edit-company": "Editar Empresa",
+    "delete-company": "Eliminar Empresa",
+    "company-details": "Detalles de la Empresa",
+    "company-list": "Lista de Empresas",
+    "search-company": "Buscar Empresa",
+    "company-not-found": "Empresa no encontrada",
+    "notifications": {
+      "success": {
+        "companyUpdated": "¡Empresa {{name}} actualizada con éxito!",
+        "companyDeleted": "¡Empresa {{name}} eliminada con éxito!",
+        "companyCreated": "¡Empresa {{name}} creada con éxito!"
+      },
+      "error": {
+        "loadingCompanies": "Error al cargar empresas y clientes",
+        "updatingCompany": "Error al actualizar empresa. Intente nuevamente.",
+        "deletingCompany": "Error al eliminar empresa"
+      }
+    },
+    "confirmation": {
+      "deleteTitle": "¡Confirmación de eliminación!",
+      "deleteCompanyMessage": "¿Desea eliminar la empresa <strong>{{companyName}}</strong>?"
+    }
+  },
+  "tags": {
+    "placeholder": "Escriba 3 caracteres o presione ctrl + espacio para buscar todas",
+    "noTagMessage": "Etiqueta inexistente, presione enter para registrar una nueva etiqueta",
+    "successMessage": "¡Etiqueta agregada con éxito!"
+  },
+  "calls": {
+    "title": "Llamados",
+    "list-title": "Lista de llamados",
+    "fields": {
+      "description": "Descripción del problema",
+      "observation": "Observación",
+      "open": "Abierto"
+    },
+    "placeholders": {
+      "description": "Escriba la descripción aquí",
+      "observation": "Escriba su observación aquí..."
+    }
   }
 }

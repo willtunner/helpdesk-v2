@@ -1,8 +1,23 @@
 .chart-container {
+  position: relative;
   width: 100%;
-  display: block;
-  overflow: hidden; /* Previne problemas de layout */
+  height: 100%;
+  min-height: 400px; // garante altura mínima
 }
+
+.loading-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: white; // fundo branco enquanto carrega
+  z-index: 10;
+}
+
 
 .full-width-chart {
   display: block;
@@ -48,4 +63,13 @@ highcharts-chart {
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
+}
+
+:host {
+  display: block;
+  position: relative;
+  
+  .highcharts-container {
+    isolation: isolate; // Previne interferência de estilos
+  }
 }

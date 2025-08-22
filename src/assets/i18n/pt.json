@@ -18,20 +18,25 @@
     "title": "Gráficos",
     "closeAll": "Fechar Todos",
     "openAll": "Abrir Todos",
+    "tags": {
+      "title": "Chamados por Tags",
+      "subtitle": "Distribuição de chamados por tipo de problema",
+      "yAxisTitle": "Quantidade de Chamados"
+    },
     "pieChart": {
       "title": "Chamados por Empresa",
       "description": "Este é um exemplo de gráfico de pizza que mostra a distribuição de chamados por empresa."
     },
     "lineChart": {
-      "title": "Chamados por Empresa LINHA",
+      "title": "Chamados por Empresa",
       "description": "Este é um exemplo de gráfico de pizza que mostra a distribuição de chamados por empresa."
     },
     "columnChart": {
-      "title": "Chamados por Empresa COLUNA",
+      "title": "Chamados por Empresa",
       "description": "Este é um exemplo de gráfico de pizza que mostra a distribuição de chamados por empresa."
     },
     "barChart": {
-      "title": "Chamados por Empresa BARRA",
+      "title": "Chamados por Empresa",
       "description": "Este é um exemplo de gráfico de barras que mostra a distribuição de chamados por empresa."
     }
   },
@@ -45,7 +50,13 @@
     "last30Days": "Últimos 30 dias",
     "last6Months": "Últimos 6 meses",
     "allAvailableData": "Todos os dados disponíveis",
-    "calls": "Chamados"
+    "calls": "Chamados",
+    "title": "Gráfico de Colunas",
+    "subtitle": "",
+    "yAxisTitle": "Quantidade",
+    "tooltip": {
+      "pointFormat": "Quantidade: <b>{point.y}</b><br>Clique para mais detalhes"
+    }
   },
   "sideNav": {
     "home": "Início",
@@ -185,5 +196,80 @@
     "events": "{count, plural, =1 {1 Evento} other {{count} Eventos}}",
     "day-format": "{{day}}/{{month}}/{{year}}",
     "holiday": "{{holiday}}"
+  },
+  "client": {
+    "title": "Cliente",
+    "subtitle": "Gerencie seus clientes aqui:",
+    "add-client": "Adicionar Cliente",
+    "edit-client": "Editar Cliente",
+    "delete-client": "Excluir Cliente",
+    "client-details": "Detalhes do Cliente",
+    "client-list": "Lista de Clientes",
+    "search-client": "Pesquisar Cliente",
+    "client-not-found": "Cliente não encontrado",
+    "notifications": {
+      "success": {
+        "clientUpdated": "Cliente {{name}} atualizado com sucesso!",
+        "clientDeleted": "Cliente {{name}} excluído com sucesso!",
+        "clientCreated": "Cliente {{name}} criado com sucesso!"
+      },
+      "error": {
+        "loadingCompanies": "Erro ao carregar empresas e clientes",
+        "updatingClient": "Erro ao atualizar cliente. Tente novamente.",
+        "deletingClient": "Erro ao excluir cliente"
+      }
+    },
+    "confirmation": {
+      "deleteTitle": "Confirmação de exclusão!",
+      "deleteClientMessage": "Você deseja deletar o cliente <strong>{{clientName}}</strong> da empresa <strong>{{companyName}}</strong>?"
+    }
+  },
+  "company": {
+    "title": "Empresa",
+    "subtitle": "Gerencie suas empresas aqui:",
+    "add-company": "Adicionar Empresa",
+    "edit-company": "Editar Empresa",
+    "delete-company": "Excluir Empresa",
+    "company-details": "Detalhes da Empresa",
+    "company-list": "Lista de Empresas",
+    "search-company": "Pesquisar Empresa",
+    "company-not-found": "Empresa não encontrada",
+    "notifications": {
+      "success": {
+        "companyUpdated": "Empresa {{name}} atualizada com sucesso!",
+        "companyDeleted": "Empresa {{name}} excluída com sucesso!",
+        "companyCreated": "Empresa {{name}} criada com sucesso!"
+      },
+      "error": {
+        "loadingCompanies": "Erro ao carregar empresas",
+        "updatingCompany": "Erro ao atualizar empresa. Tente novamente.",
+        "deletingCompany": "Erro ao excluir empresa"
+      }
+    },
+    "confirmation": {
+      "deleteTitle": "Confirmação de exclusão!",
+      "deleteCompanyMessage": "Você deseja deletar a empresa <strong>{{companyName}}</strong>?"
+    }
+  },
+  "tags": {
+    "placeholder": "Digite 3 caracteres ou ctrl + espaço para buscar todas",
+    "noTagMessage": "Tag inexistente, pressione enter para cadastrar nova tag",
+    "successMessage": "Tag adicionada com sucesso!"
+  },
+  "calls": {
+    "title": "Chamados",
+    "list-title": "Lista de chamados",
+    "fields": {
+      "description": "Descrição do problema",
+      "observation": "Observação",
+      "open": "Aberto"
+    },
+    "placeholders": {
+      "description": "Digite a descrição aqui",
+      "observation": "Digite sua observação aqui..."
+    }
+  },
+  "loading": {
+    "data": "Carregando dados, por favor aguarde..."
   }
 }

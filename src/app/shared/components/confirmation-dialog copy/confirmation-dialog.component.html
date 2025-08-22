@@ -5,9 +5,10 @@
   </div>
 
   <!-- Body -->
-  <div mat-dialog-content class="dialog-body">
+  <div mat-dialog-content [innerHTML]="data.message" class="dialog-body"></div>
+  <!-- <div mat-dialog-content class="dialog-body">
     <p>{{ data.message }}</p>
-  </div>
+  </div> -->
 
   <hr />
 

@@ -1,5 +1,5 @@
 <div class="container">
-  <h3>Chamados:</h3>
+  <h3>{{ 'calls.title' | translate }}</h3>
   <div *ngIf="loading" class="loading-overlay">
     <mat-spinner></mat-spinner>
   </div>
@@ -8,22 +8,22 @@
     <div class="main-top">
       <!-- Empresa -->
       <div class="companies">
-        <app-dynamic-select [label]="'Empresa'" [options]="companies" [valueKey]="'id'" [labelKey]="'name'"
+        <app-dynamic-select [label]="'company.title' | translate" [options]="companies" [valueKey]="'id'" [labelKey]="'name'"
           (onChange)="onCompanyChange($event)" [formControl]="getControl('companyId')"
-          [errorMessage]="'Empresa é obrigatória'">
+          [errorMessage]="'erros.required' | translate">
         </app-dynamic-select>
-        <button mat-icon-button color="primary" (click)="openCompanyModal()" matTooltip="Adicionar nova empresa">
+        <button mat-icon-button color="primary" (click)="openCompanyModal()" matTooltip="{{ 'company.add-company' | translate }}">
           <mat-icon>add</mat-icon>
         </button>
       </div>
 
       <!-- Cliente -->
       <div class="clients">
-        <app-dynamic-select [label]="'Cliente'" [options]="clients" [valueKey]="'id'" [labelKey]="'name'"
+        <app-dynamic-select [label]="'client.title' | translate" [options]="clients" [valueKey]="'id'" [labelKey]="'name'"
           [formControl]="getControl('clientId')" (modelChange)="onClientSelected($event)">
         </app-dynamic-select>
         <button mat-icon-button color="primary" (click)="openClientModal()" [disabled]="!getControl('companyId').value"
-          matTooltip="Adicionar novo cliente">
+          matTooltip="{{ 'client.add-client' | translate }}">
           <mat-icon>add</mat-icon>
         </button>
       </div>
@@ -31,7 +31,7 @@
       <!-- Conexão -->
       @if (!isNarrow) {
       <div class="conexao" [ngClass]="{ 'mobile': isNarrow }">
-        <app-custom-input label="Conexão" [control]="getControl('connection')" size="medio">
+        <app-custom-input [label]="'table.connection' | translate" [control]="getControl('connection')" size="medio">
         </app-custom-input>
       </div>
       }
@@ -40,25 +40,28 @@
     <!-- Conexão -->
     @if (isNarrow) {
     <div class="conexao" [ngClass]="{ 'mobile': isNarrow }">
-      <app-custom-input label="Conexão" [control]="getControl('connection')" size="full-width">
+      <app-custom-input [label]="'table.connection' | translate" [control]="getControl('connection')" size="full-width">
       </app-custom-input>
     </div>
     }
 
     <!-- Título -->
     <div class="title">
-      <app-custom-input label="Título" [control]="getControl('title')" size="full-width">
+      <app-custom-input [label]="'table.title' | translate" [control]="getControl('title')" size="full-width">
       </app-custom-input>
     </div>
 
     <!-- Descrição -->
     <div class="base" style="display: flex; flex-direction: column; gap: 2px;">
-      <app-custom-input [control]="getControl('description')" type="text-area" label="Descrição do problema"
-        placeholder="Digite a descrição aqui" size="full-width">
+      <app-custom-input [control]="getControl('description')" type="text-area"
+        [label]="'calls.fields.description' | translate"
+        [placeholder]="'calls.placeholders.description' | translate"
+        size="full-width">
       </app-custom-input>
 
       <!-- Observação -->
-      <app-rich-text-editor placeholder="Digite sua observação aqui..." [control]="getControl('resolution')">
+      <app-rich-text-editor [placeholder]="'calls.placeholders.observation' | translate"
+        [control]="getControl('resolution')">
       </app-rich-text-editor>
 
       <!-- Tags e Radio -->
@@ -68,8 +71,8 @@
         <!-- Status Aberto/Fechado -->
         <div class="form-radio">
           <mat-radio-group [formControl]="getControl('closed')" aria-label="closed">
-            <mat-radio-button [value]="false" class="radio-btn">Aberto</mat-radio-button>
-            <mat-radio-button [value]="true" class="radio-btn">Fechado</mat-radio-button>
+            <mat-radio-button [value]="false" class="radio-btn">{{ 'calls.fields.open' | translate }}</mat-radio-button>
+            <mat-radio-button [value]="true" class="radio-btn">{{ 'table.closed' | translate }}</mat-radio-button>
           </mat-radio-group>
         </div>
       </div>
@@ -78,16 +81,17 @@
     <!-- Botões -->
     <div class="buttons" style="margin-top: 20px;">
       <app-dynamic-button *ngIf="!selectedCall" type="save" (click)="onSubmit()"
-        [success]="saveSuccess"></app-dynamic-button>
-      <app-dynamic-button *ngIf="selectedCall" type="edit" (click)="handleSaveOrEdit($event)"></app-dynamic-button>
-      <app-dynamic-button type="clear" (click)="onClear()"></app-dynamic-button>
-      <app-dynamic-button *ngIf="selectedCall" type="print" (click)="onClear()"></app-dynamic-button>
-      <app-dynamic-button type="delete" (click)="onDelete()"></app-dynamic-button>
+        [success]="saveSuccess" [label]="'BUTTON.SAVE' | translate"></app-dynamic-button>
+      <app-dynamic-button *ngIf="selectedCall" type="edit" (click)="handleSaveOrEdit($event)"
+        [label]="'BUTTON.EDIT' | translate"></app-dynamic-button>
+      <app-dynamic-button type="clear" (click)="onClear()" [label]="'BUTTON.CLEAR' | translate"></app-dynamic-button>
+      <app-dynamic-button *ngIf="selectedCall" type="print" (click)="onClear()" [label]="'BUTTON.PRINT' | translate"></app-dynamic-button>
+      <app-dynamic-button type="delete" (click)="onDelete()" [label]="'BUTTON.DELETE' | translate"></app-dynamic-button>
     </div>
   </form>
 </div>
 
 <div class="call-list" style="margin-top: 20px;">
-  <h3>Lista de chamados:</h3>
+  <h3>{{ 'calls.list-title' | translate }}</h3>
   <app-calls-list (callSelected)="handleSelectedCall($event)"></app-calls-list>
 </div>

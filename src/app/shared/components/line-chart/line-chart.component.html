@@ -16,9 +16,12 @@
   </app-dynamic-three-toggle>
 </div>
 
-<highcharts-chart
-  [Highcharts]="Highcharts"
-  [options]="chartOptions"
-  [callbackFunction]="chartCallback"
-  style="width: 100%; height: 400px; display: block;"
-></highcharts-chart>
+<!-- Container com ID único para o gráfico -->
+<div [id]="chartId" class="chart-container">
+  <highcharts-chart
+    [Highcharts]="Highcharts"
+    [options]="chartOptions"
+    [callbackFunction]="chartCallback"
+    style="width: 100%; height: 400px; display: block;"
+  ></highcharts-chart>
+</div>
