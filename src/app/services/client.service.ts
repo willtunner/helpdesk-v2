@@ -191,10 +191,10 @@ export class ClientService {
       } as User;
 
       // 6. Notificação de sucesso
-      this.messageService.customNotification(
-        NotificationType.SUCCESS,
-        'Cliente atualizado com sucesso'
-      );
+      // this.messageService.customNotification(
+      //   NotificationType.SUCCESS,
+      //   'Cliente atualizado com sucesso'
+      // );
 
       return updatedClient;
 

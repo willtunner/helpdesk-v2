@@ -169,8 +169,8 @@ export class ClientHomeComponent implements OnInit {
           
           // Notificação de sucesso
           this.sendNotificationService.customNotification(
-            NotificationType.SUCCESS,
-            `Cliente ${client.name} excluído com sucesso!`
+            NotificationType.ERROR,
+            this.translate.instant('client.notifications.success.clientDeleted', { name: client.name })
           );
           
         }).catch(err => {

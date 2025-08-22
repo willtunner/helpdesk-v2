@@ -212,7 +212,7 @@
     "client-not-found": "Cliente no encontrado",
     "notifications": {
       "success": {
-        "clientUpdated": "¡Cliente {{name}} actualizado con éxito!",
+        "clientUpdated": "✅ ¡Cliente {{name}} actualizado con éxito!",
         "clientDeleted": "¡Cliente {{name}} eliminado con éxito!",
         "clientCreated": "¡Cliente {{name}} creado con éxito!"
       },

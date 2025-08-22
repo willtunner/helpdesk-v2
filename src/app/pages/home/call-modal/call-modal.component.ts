@@ -30,11 +30,11 @@ export class CallModalComponent {
 
   constructor(
     public dialogRef: MatDialogRef<CallModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: { calls: Call[], type: 'open' | 'closed' | 'all' }
+    @Inject(MAT_DIALOG_DATA) public data: { tagName: string; count: number; calls: Call[] },
   ) {
     this.calls = data.calls ?? [];
-    this.type = data.type;
-    console.log("calls Modal", data.calls);
+    // this.type = data.type;
+    console.log("calls Modal", data);
   }
 
   close(): void {

@@ -219,5 +219,37 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 
 
+/* Texto padrão */
+.custom-snackbar {
+  font-weight: 500;
+  font-size: 14px;
+  color: white !important;
+}
 
+/* O fundo certo é no .mdc-snackbar__surface */
+.mat-mdc-snack-bar-container.success-snackbar .mdc-snackbar__surface {
+  background-color: #4caf50 !important; /* verde */
+  color: #fff !important;
+}
+
+.mat-mdc-snack-bar-container.error-snackbar .mdc-snackbar__surface {
+  background-color: #f44336 !important; /* vermelho */
+  color: #fff !important;
+}
+
+.mat-mdc-snack-bar-container.info-snackbar .mdc-snackbar__surface {
+  background-color: #2196f3 !important; /* azul */
+  color: #fff !important;
+}
+
+.mat-mdc-snack-bar-container.default-snackbar .mdc-snackbar__surface {
+  background-color: #333 !important; /* fallback */
+  color: #fff !important;
+}
+
+/* Botão "Fechar" */
+.mat-mdc-snack-bar-container .mat-mdc-snack-bar-action {
+  color: #fff !important;
+  font-weight: bold;
+}
 

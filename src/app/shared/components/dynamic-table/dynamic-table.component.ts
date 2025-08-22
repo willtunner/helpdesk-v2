@@ -1,14 +1,20 @@
-import { Component, EventEmitter, HostListener, inject, Input, Output, signal, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatTableDataSource, MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { TranslateService as NgxTranslateService, TranslateModule } from '@ngx-translate/core';
+import { TranslateModule } from '@ngx-translate/core';
 import { MatSortModule } from '@angular/material/sort';
 import { MatPaginator } from '@angular/material/paginator';
 import { FormsModule } from '@angular/forms';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatTooltipModule } from '@angular/material/tooltip';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+
+import { EmailValidationService } from '../../../services/email-validation.service';
+import { SendNotificationService } from '../../../services/send-notification.service';
+import { NotificationType } from '../../../enums/notificationType.enum';
+import { TranslateService } from '../../../services/translate.service';
 
 @Component({
   selector: 'app-dynamic-table',
@@ -23,7 +29,8 @@ import { MatTooltipModule } from '@angular/material/tooltip';
     TranslateModule,
     FormsModule,
     MatProgressSpinnerModule,
-    MatTooltipModule 
+    MatTooltipModule,
+    MatSnackBarModule
   ],
   templateUrl: './dynamic-table.component.html',
   styleUrls: ['./dynamic-table.component.scss']
@@ -42,12 +49,18 @@ export class DynamicTableComponent {
 
   dataSource = new MatTableDataSource<any>([]);
 
-  editingRow: any = null;        // referência da linha em edição
-  editingData: any = {};         // dados editáveis
-  originalRowData: any = {};     // backup p/ cancelar
-  savingRowId: string | null = null; // ID da linha que está salvando
+  editingRow: any = null;
+  editingData: any = {};
+  originalRowData: any = {};
+  savingRowId: string | null = null;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
+
+  constructor(
+    private emailValidationService: EmailValidationService,
+    private notificationService: SendNotificationService,
+    private translate: TranslateService
+  ) {}
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -61,32 +74,55 @@ export class DynamicTableComponent {
     return [...this.headers.map(h => h.key), 'actions'];
   }
 
-  // Inicia edição
   startEdit(row: any) {
-    this.editingRow = row;                // mantém a referência
-    this.editingData = { ...row };        // cria objeto editável
-    this.originalRowData = { ...row };    // backup
+    this.editingRow = row;
+    this.editingData = { ...row };
+    this.originalRowData = { ...row };
   }
 
-  // Salva alterações
+  // 🚀 Verifica email antes de salvar
   async saveEdit() {
     if (this.editingRow) {
-      this.savingRowId = this.editingRow.id; // Marca a linha como salvando
-      
+      this.savingRowId = this.editingRow.id;
+
       try {
-        Object.assign(this.editingRow, this.editingData); // aplica mudanças
-        await this.save.emit(this.editingRow); // Aguarda a emissão do evento
-        this.cancelEdit(false); // encerra edição sem restaurar
+        if (this.editingData.email) {
+          const emailExists = await this.emailValidationService.checkEmailExistsInCollections(
+            this.editingData.email,
+            ['users', 'clients'] 
+          );
+
+          if (emailExists) {
+            this.notificationService.customNotification(
+              NotificationType.ERROR,
+              this.translate.instant('erros.email_exist')
+            );
+            this.savingRowId = null;
+            return;
+          }
+        }
+
+        Object.assign(this.editingRow, this.editingData);
+        await this.save.emit(this.editingRow);
+
+        // this.notificationService.customNotification(
+        //   NotificationType.SUCCESS,
+        //   '✅ Registro salvo com sucesso!'
+        // );
+
+        this.cancelEdit(false);
       } catch (error) {
+        this.notificationService.customNotification(
+          NotificationType.ERROR,
+          '❌ Erro ao salvar registro!'
+        );
         console.error('Erro ao salvar:', error);
-        // Em caso de erro, mantém a edição para o usuário corrigir
       } finally {
-        this.savingRowId = null; // Remove o estado de salvando
+        this.savingRowId = null;
       }
     }
   }
 
-  // Cancela edição (restaura dados originais)
   cancelEdit(restore: boolean = true) {
     if (this.editingRow && restore) {
       Object.assign(this.editingRow, this.originalRowData);
@@ -97,18 +133,16 @@ export class DynamicTableComponent {
     this.savingRowId = null;
   }
 
-  // Verifica se linha está em edição
   isEditing(row: any): boolean {
     return this.editingRow === row;
   }
 
-  // Verifica se linha está salvando
   isSaving(row: any): boolean {
     return this.savingRowId === row.id;
   }
 
   emit(action: string, row: any) {
-    if (this.isSaving(row)) return; // Impede ações durante o salvamento
+    if (this.isSaving(row)) return;
 
     switch (action) {
       case 'edit':
@@ -118,11 +152,16 @@ export class DynamicTableComponent {
           this.startEdit(row);
         }
         break;
-      case 'delete': this.delete.emit(row); break;
+      case 'delete':
+        this.delete.emit(row);
+        // this.notificationService.customNotification(
+        //   NotificationType.UPDATE,
+        //   'ℹ️ Registro excluído!'
+        // );
+        break;
       case 'load': this.load.emit(row); break;
       case 'print': this.print.emit(row); break;
       case 'view': this.view.emit(row); break;
     }
   }
 }
-

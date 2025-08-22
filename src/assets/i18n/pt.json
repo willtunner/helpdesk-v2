@@ -102,7 +102,7 @@
     "invalid_mask": "Número incompleto ou inválido.",
     "invalid_cpf": "CPF inválido.",
     "invalid_cnpj": "CNPJ inválido.",
-    "email_exist": "E-mail já cadastrado."
+    "email_exist": "⚠️ E-mail já cadastrado."
   },
   "fields": {
     "name": "Nome",
@@ -209,14 +209,14 @@
     "client-not-found": "Cliente não encontrado",
     "notifications": {
       "success": {
-        "clientUpdated": "Cliente {{name}} atualizado com sucesso!",
-        "clientDeleted": "Cliente {{name}} excluído com sucesso!",
-        "clientCreated": "Cliente {{name}} criado com sucesso!"
+        "clientUpdated": "🔄 Cliente {{name}} atualizado com sucesso!",
+        "clientDeleted": "🗑️ Cliente {{name}} excluído com sucesso!",
+        "clientCreated": "✅ Cliente {{name}} criado com sucesso!"
       },
       "error": {
-        "loadingCompanies": "Erro ao carregar empresas e clientes",
-        "updatingClient": "Erro ao atualizar cliente. Tente novamente.",
-        "deletingClient": "Erro ao excluir cliente"
+        "loadingCompanies": "⚠️ Erro ao carregar empresas e clientes",
+        "updatingClient":   "⚠️ Erro ao atualizar cliente. Tente novamente.",
+        "deletingClient":   "⚠️ Erro ao excluir cliente"
       }
     },
     "confirmation": {
