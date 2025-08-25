@@ -1,0 +1,23 @@
+<div class="filter-container">
+    <form [formGroup]="form" class="filter-form">
+        <div class="fields-grid">
+            <ng-container *ngFor="let field of fields">
+                <div class="field-item" [ngClass]="field.size">
+                    <app-custom-input [label]="field.label" [type]="field.type" [control]="form.get(field.key)!"
+                        [size]="field.size">
+                    </app-custom-input>
+                </div>
+            </ng-container>
+        </div>
+
+        <div class="filter-actions">
+            <!-- Botão Pesquisar -->
+            <app-dynamic-button type="find" (clicked)="applyFilter()" [matTooltip]="'Pesquisar dados'">
+            </app-dynamic-button>
+
+            <!-- Botão Limpar -->
+            <app-dynamic-button type="clear" (clicked)="resetFilter()" [matTooltip]="'Limpar filtros'">
+            </app-dynamic-button>
+        </div>
+    </form>
+</div>

@@ -4,11 +4,12 @@ import { Call, User } from '../../../models/models';
 import { CallService } from '../../../services/call.service';
 import { AuthService } from '../../../services/auth.service';
 import { Router } from '@angular/router';
+import { CustomFilterComponent } from '../../../shared/components/custom-filter/custom-filter.component';
 
 @Component({
   selector: 'app-calls-list',
   standalone: true,
-  imports: [DynamicTableComponent],
+  imports: [DynamicTableComponent, CustomFilterComponent],
   templateUrl: './calls-list.component.html',
   styleUrl: './calls-list.component.scss'
 })
@@ -16,6 +17,7 @@ export class CallsListComponent implements OnInit {
   private callService = inject(CallService);
   private authService = inject(AuthService);
   calls: Call[] = [];
+  filteredCalls: Call[] = [];
   operator!: User;
   loading = false;
   @Output() callSelected = new EventEmitter<Call>();
@@ -26,11 +28,9 @@ export class CallsListComponent implements OnInit {
     if (session) {
       this.operator = session;
     }
-    
+
     console.log('Operador:', this.operator);
   }
-
-  
 
   onRowClick(call: Call) {
     this.router.navigate(['/calls', call.id]);
@@ -52,6 +52,7 @@ export class CallsListComponent implements OnInit {
       next: (calls) => {
         console.log('Chamados carregados:', calls);
         this.calls = calls;
+        this.filteredCalls = calls;
         this.loading = false;
       },
       error: (err) => {
@@ -120,8 +121,13 @@ export class CallsListComponent implements OnInit {
   addNewCall(newCall: Call): void {
     // Adiciona no início do array para aparecer no topo
     this.calls.unshift(newCall);
-    
+
     // Opcional: Força a atualização da tabela
     this.calls = [...this.calls];
-}
+  }
+
+  onFilteredCompanies(filtered: Call[]) {
+      console.log('Empresas filtradas:', filtered);
+      this.filteredCalls = filtered; // Atualiza apenas os dados filtrados
+    }
 }

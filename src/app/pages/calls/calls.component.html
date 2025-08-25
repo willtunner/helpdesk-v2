@@ -8,19 +8,20 @@
     <div class="main-top">
       <!-- Empresa -->
       <div class="companies">
-        <app-dynamic-select [label]="'company.title' | translate" [options]="companies" [valueKey]="'id'" [labelKey]="'name'"
-          (onChange)="onCompanyChange($event)" [formControl]="getControl('companyId')"
+        <app-dynamic-select [label]="'company.title' | translate" [options]="companies" [valueKey]="'id'"
+          [labelKey]="'name'" (onChange)="onCompanyChange($event)" [formControl]="getControl('companyId')"
           [errorMessage]="'erros.required' | translate">
         </app-dynamic-select>
-        <button mat-icon-button color="primary" (click)="openCompanyModal()" matTooltip="{{ 'company.add-company' | translate }}">
+        <button mat-icon-button color="primary" (click)="openCompanyModal()"
+          matTooltip="{{ 'company.add-company' | translate }}">
           <mat-icon>add</mat-icon>
         </button>
       </div>
 
       <!-- Cliente -->
       <div class="clients">
-        <app-dynamic-select [label]="'client.title' | translate" [options]="clients" [valueKey]="'id'" [labelKey]="'name'"
-          [formControl]="getControl('clientId')" (modelChange)="onClientSelected($event)">
+        <app-dynamic-select [label]="'client.title' | translate" [options]="clients" [valueKey]="'id'"
+          [labelKey]="'name'" [formControl]="getControl('clientId')" (modelChange)="onClientSelected($event)">
         </app-dynamic-select>
         <button mat-icon-button color="primary" (click)="openClientModal()" [disabled]="!getControl('companyId').value"
           matTooltip="{{ 'client.add-client' | translate }}">
@@ -54,8 +55,7 @@
     <!-- Descrição -->
     <div class="base" style="display: flex; flex-direction: column; gap: 2px;">
       <app-custom-input [control]="getControl('description')" type="text-area"
-        [label]="'calls.fields.description' | translate"
-        [placeholder]="'calls.placeholders.description' | translate"
+        [label]="'calls.fields.description' | translate" [placeholder]="'calls.placeholders.description' | translate"
         size="full-width">
       </app-custom-input>
 
@@ -80,12 +80,13 @@
 
     <!-- Botões -->
     <div class="buttons" style="margin-top: 20px;">
-      <app-dynamic-button *ngIf="!selectedCall" type="save" (click)="onSubmit()"
-        [success]="saveSuccess" [label]="'BUTTON.SAVE' | translate"></app-dynamic-button>
+      <app-dynamic-button *ngIf="!selectedCall" type="save" (click)="onSubmit()" [success]="saveSuccess"
+        [label]="'BUTTON.SAVE' | translate"></app-dynamic-button>
       <app-dynamic-button *ngIf="selectedCall" type="edit" (click)="handleSaveOrEdit($event)"
         [label]="'BUTTON.EDIT' | translate"></app-dynamic-button>
       <app-dynamic-button type="clear" (click)="onClear()" [label]="'BUTTON.CLEAR' | translate"></app-dynamic-button>
-      <app-dynamic-button *ngIf="selectedCall" type="print" (click)="onClear()" [label]="'BUTTON.PRINT' | translate"></app-dynamic-button>
+      <app-dynamic-button *ngIf="selectedCall" type="print" (click)="onClear()"
+        [label]="'BUTTON.PRINT' | translate"></app-dynamic-button>
       <app-dynamic-button type="delete" (click)="onDelete()" [label]="'BUTTON.DELETE' | translate"></app-dynamic-button>
     </div>
   </form>

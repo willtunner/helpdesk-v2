@@ -1,4 +1,15 @@
-<app-dynamic-table [headers]="headers" [data]="calls" [actions]="['edit', 'delete']" 
+
+<app-custom-filter [fields]="[
+{ key: 'name', label: 'fields.name', type: 'text', size: 'medio' },
+{ key: 'email', label: 'fields.email', type: 'text', size: 'medio' },
+{ key: 'tag', label: 'fields.tag', type: 'text', size: 'pequeno' },
+{ key: 'title', label: 'fields.title', type: 'text', size: 'pequeno' },
+{ key: 'operator', label: 'fields.operator', type: 'text', size: 'pequeno' },
+{ key: 'client', label: 'fields.client', type: 'text', size: 'pequeno' },
+{ key: 'company', label: 'fields.company', type: 'text', size: 'pequeno' }
+]" [data]="calls" (filteredData)="onFilteredCompanies($event)">
+</app-custom-filter>
+<app-dynamic-table [headers]="headers" [data]="filteredCalls" [actions]="['edit', 'delete']" 
     (edit)="updateDocument($event)"
     (delete)="deleteDocument($event)" 
     (rowClick)="onRowClick($event)">

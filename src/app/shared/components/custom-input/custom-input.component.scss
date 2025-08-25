@@ -51,3 +51,48 @@
   border-left: none !important;
   border-right: none !important;
 }
+
+/* Classes de tamanho para os inputs */
+.input-small {
+  ::ng-deep .mat-mdc-form-field {
+    width: 100% !important;
+    max-width: 220px;
+  }
+}
+
+.input-medium {
+  ::ng-deep .mat-mdc-form-field {
+    width: 100% !important;
+    max-width: 320px;
+  }
+}
+
+.input-large {
+  ::ng-deep .mat-mdc-form-field {
+    width: 100% !important;
+    max-width: 480px;
+  }
+}
+
+.input-full {
+  ::ng-deep .mat-mdc-form-field {
+    width: 100% !important;
+    max-width: 100%;
+  }
+}
+
+/* Mantém os outros estilos existentes */
+::ng-deep .mat-mdc-text-field-wrapper {
+  padding: 0 !important;
+  width: 100% !important;
+}
+
+::ng-deep .mat-mdc-form-field-infix {
+  padding: 0 !important;
+  min-height: 40px !important;
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* ... outros estilos existentes ... */

@@ -1,6 +1,14 @@
 <div class="container">
-    <h3>{{ 'company.subtitle' | translate }}</h3>
-    <app-dynamic-table [headers]="headers" [data]="companies" [actions]="['edit', 'delete']"
-        (edit)="updateDocument($event)" (delete)="deleteDocument($event)">
-    </app-dynamic-table>
+  <h3>{{ 'company.subtitle' | translate }}</h3>
+  <app-custom-filter [fields]="[
+    { key: 'name', label: 'fields.name', type: 'text', size: 'pequeno' },
+    { key: 'cnpj', label: 'fields.cnpj', type: 'text', size: 'pequeno' },
+    { key: 'city', label: 'fields.city', type: 'text', size: 'medio' },
+    { key: 'state', label: 'fields.state', type: 'text', size: 'pequeno' },
+    { key: 'versionServ', label: 'fields.version', type: 'text', size: 'pequeno' }
+  ]" [data]="companies" (filteredData)="onFilteredCompanies($event)">
+  </app-custom-filter>
+  <app-dynamic-table [headers]="headers" [data]="filteredCompanies" [actions]="['edit', 'delete']"
+    (edit)="updateDocument($event)" (delete)="deleteDocument($event)">
+  </app-dynamic-table>
 </div>

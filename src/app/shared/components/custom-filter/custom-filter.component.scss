@@ -1,0 +1,138 @@
+.filter-container {
+  padding: 1.5rem;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  background: #fafafa;
+  margin-bottom: 1rem;
+}
+
+.filter-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.fields-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  max-width: 920px;
+  align-items: flex-start;
+}
+
+/* Sistema baseado no tamanho do input */
+.field-item {
+  flex: 0 0 auto; /* Não cresce, não encolhe, tamanho automático */
+}
+
+.field-item.pequeno {
+  width: calc(25% - 8px); /* 4 por linha (25% - gap ajustado) */
+  min-width: 180px;
+}
+
+.field-item.medio {
+  width: calc(50% - 8px); /* 2 por linha */
+  min-width: 280px;
+}
+
+.field-item.grande {
+  width: calc(75% - 8px); /* 1.3 por linha */
+  min-width: 420px;
+}
+
+.field-item.full-width {
+  width: 100%; /* 1 por linha */
+  min-width: 100%;
+}
+
+.filter-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  align-items: center;
+  width: 100%;
+}
+
+/* Quebra automática quando atinge 920px */
+@media (max-width: 920px) {
+  .fields-grid {
+    max-width: 100%;
+  }
+  
+  .field-item.pequeno {
+    width: calc(33.333% - 7px); /* 3 por linha */
+    min-width: 160px;
+  }
+  
+  .field-item.medio {
+    width: calc(50% - 8px);
+    min-width: 240px;
+  }
+  
+  .field-item.grande {
+    width: calc(66.666% - 7px);
+    min-width: 320px;
+  }
+}
+
+@media (max-width: 768px) {
+  .field-item.pequeno {
+    width: calc(50% - 8px); /* 2 por linha */
+    min-width: 140px;
+  }
+  
+  .field-item.medio {
+    width: 100%; /* 1 por linha */
+    min-width: 100%;
+  }
+  
+  .field-item.grande {
+    width: 100%; /* 1 por linha */
+    min-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .field-item.pequeno {
+    width: 100%; /* 1 por linha */
+    min-width: 100%;
+  }
+  
+  .filter-actions {
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+}
+
+/* Ajustes para os botões personalizados */
+::ng-deep .filter-actions .button {
+  min-width: 140px;
+  height: 42px;
+  font-weight: 500;
+}
+
+/* Garante que os inputs ocupem 100% do container */
+::ng-deep .field-item .custom-field {
+  width: 100% !important;
+}
+
+/* Ajustes específicos para os tamanhos dos inputs */
+::ng-deep .input-small .mat-mdc-form-field {
+  width: 100% !important;
+  max-width: 220px;
+}
+
+::ng-deep .input-medium .mat-mdc-form-field {
+  width: 100% !important;
+  max-width: 320px;
+}
+
+::ng-deep .input-large .mat-mdc-form-field {
+  width: 100% !important;
+  max-width: 480px;
+}
+
+::ng-deep .input-full .mat-mcd-form-field {
+  width: 100% !important;
+  max-width: 100%;
+}

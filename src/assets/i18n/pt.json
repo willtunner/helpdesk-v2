@@ -113,7 +113,13 @@
     "city": "Cidade",
     "address": "Endereço",
     "zipcode": "CEP",
-    "valid-mail": "Email válido"
+    "valid-mail": "Email válido",
+    "version": "Versão",
+    "tag": "Tag",
+    "title": "Título",
+    "operator": "Operador",
+    "client": "Cliente",
+    "company": "Empresa"
   },
   "roles": {
     "client": "Cliente",
