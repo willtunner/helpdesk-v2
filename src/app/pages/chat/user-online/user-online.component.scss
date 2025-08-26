@@ -1,0 +1,21 @@
+.card-board-chat {
+    background-color: white;
+}
+
+.user-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.avatar {
+    width: 50px;
+    border-radius: 50%;
+}
+
+.button {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}

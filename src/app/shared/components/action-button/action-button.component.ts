@@ -5,8 +5,7 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-type ButtonType = 'save' | 'edit' | 'delete' | 'clear' | 'print' | 'find' | 'add' | 'pdf' | 'cancel' | 'login' | 'close';
-
+type ButtonType = 'save' | 'edit' | 'delete' | 'clear' | 'print' | 'find' | 'add' | 'pdf' | 'cancel' | 'login' | 'close' | 'logout';
 
 @Component({
   selector: 'app-dynamic-button',
@@ -20,10 +19,9 @@ export class DynamicButtonComponent implements OnDestroy {
   @Input() success: boolean = false;
   @Input() label?: string;
   @Input() disabled: boolean = false;
-  @Input() matTooltip: string = '';
+  @Input() isLoggedIn?: boolean; 
   @Output() clicked = new EventEmitter<void>();
 
-  isLogin: boolean = false;
   hovered: boolean = false;
 
   private langChangeSub: Subscription;
@@ -32,7 +30,6 @@ export class DynamicButtonComponent implements OnDestroy {
     private translateService: TranslateService,
     private cdr: ChangeDetectorRef
   ) {
-    // Atualiza o componente quando o idioma muda
     this.langChangeSub = this.translateService.onLangChange.subscribe(() => {
       this.cdr.markForCheck();
     });
@@ -43,40 +40,33 @@ export class DynamicButtonComponent implements OnDestroy {
   }
 
   emit() {
-    if (this.type === 'login') {
-      this.isLogin = !this.isLogin;
-    }
     if (!this.disabled) {
       this.clicked.emit();
     }
   }
 
   onMouseEnter() {
-    if (this.type === 'login') {
-      this.hovered = true;
-    }
+    this.hovered = true;
   }
 
   onMouseLeave() {
-    if (this.type === 'login') {
-      this.hovered = false;
-    }
+    this.hovered = false;
   }
 
   get config() {
     if (this.type === 'login') {
-      const isLoggedIn = this.isLogin;
+      const isLoggedIn = !!this.isLoggedIn;
       const isHovering = this.hovered;
-  
+
       return {
         labelKey: isLoggedIn ? 'BUTTON.LOGOUT' : 'BUTTON.LOGIN',
         icon: isLoggedIn ? 'speaker_notes_off' : 'speaker_notes',
         cssClass: isLoggedIn
-          ? (isHovering ? 'login' : 'logout') // Sair: vermelho, hover: azul
-          : (isHovering ? 'logout' : 'login'), // Entrar: azul, hover: vermelho
+          ? (isHovering ? 'login' : 'logout')
+          : (isHovering ? 'logout' : 'login'),
       };
     }
-  
+
     const map: Record<ButtonType, { labelKey: string; icon: string; cssClass: string }> = {
       save: { labelKey: 'BUTTON.SAVE', icon: 'save', cssClass: 'save' },
       edit: { labelKey: 'BUTTON.EDIT', icon: 'edit', cssClass: 'edit' },
@@ -89,11 +79,11 @@ export class DynamicButtonComponent implements OnDestroy {
       cancel: { labelKey: 'BUTTON.CANCEL', icon: 'cancel', cssClass: 'cancel' },
       login: { labelKey: 'BUTTON.LOGIN', icon: 'login', cssClass: 'login' },
       close: { labelKey: 'FECHAR', icon: 'close', cssClass: 'close' },
+      logout: { labelKey: 'BUTTON.LOGOUT', icon: 'logout', cssClass: 'logout' },
     };
-  
+
     return map[this.type] ?? map['save'];
   }
-  
 
   get cssClass() {
     return `button ${this.config.cssClass} ${this.success ? 'success' : ''}`;
@@ -103,3 +93,4 @@ export class DynamicButtonComponent implements OnDestroy {
     return this.config.icon;
   }
 }
+

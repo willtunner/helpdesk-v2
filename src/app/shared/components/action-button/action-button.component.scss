@@ -30,6 +30,10 @@ $close-dark: #d4ac0d;
 
 $logout-hover-color: #c0392b;
 
+$logout-color: #c0392b; // Vermelho para Logout
+$logout-dark: #a53125; // Vermelho mais escuro
+$logout-hover-color: #e74c3c; // Vermelho mais claro no hover
+
 /* Estilo base compartilhado por todos os botões */
 
 .button {
@@ -222,8 +226,19 @@ $pdf-color: #e74c3c;
   box-shadow: 0 0 20px 0 rgba($login-color, 0.55);
   color: white;
 
+  &:hover:not([disabled]) {
+    background-color: darken($login-color, 10%);
+    box-shadow: 0 0 20px 0 rgba(darken($login-color, 10%), 0.65);
+  }
+
   &.success {
     background-color: $green;
+    box-shadow: 0 0 20px 0 rgba($green, 0.55);
+  }
+
+  &:active:not([disabled]) {
+    background-color: darken($login-color, 15%);
+    box-shadow: 0 0 20px 0 rgba(darken($login-color, 15%), 0.45);
   }
 }
 
@@ -245,5 +260,26 @@ $pdf-color: #e74c3c;
   &.success {
     background-color: $close-dark;
     color: #fff;
+  }
+}
+
+.button.logout {
+  background-color: $logout-color; // Vermelho para logout
+  box-shadow: 0 0 20px 0 rgba($logout-color, 0.55);
+  color: white;
+
+  &:hover:not([disabled]) {
+    background-color: $logout-hover-color; // Vermelho mais claro no hover
+    box-shadow: 0 0 20px 0 rgba($logout-hover-color, 0.65);
+  }
+
+  &.success {
+    background-color: $green;
+    box-shadow: 0 0 20px 0 rgba($green, 0.55);
+  }
+
+  &:active:not([disabled]) {
+    background-color: $logout-dark; // Vermelho mais escuro quando pressionado
+    box-shadow: 0 0 20px 0 rgba($logout-dark, 0.45);
   }
 }

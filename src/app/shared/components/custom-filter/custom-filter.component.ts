@@ -4,6 +4,7 @@ import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
 import { CustomInputComponent } from '../custom-input/custom-input.component';
 import { MatButtonModule } from '@angular/material/button';
 import { DynamicButtonComponent } from '../action-button/action-button.component';
+import { MatTooltipModule } from '@angular/material/tooltip';
 
 interface FilterField {
   key: string;
@@ -16,7 +17,7 @@ interface FilterField {
   selector: 'app-custom-filter',
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, CustomInputComponent, 
-    MatButtonModule, DynamicButtonComponent],
+    MatButtonModule, DynamicButtonComponent, MatTooltipModule],
   templateUrl: './custom-filter.component.html',
   styleUrls: ['./custom-filter.component.scss']
 })

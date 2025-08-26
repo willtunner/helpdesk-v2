@@ -4,20 +4,16 @@
     <!-- COLUNA ESQUERDA FIXA -->
     <div class="sidebar">
       <!-- Operador Logado -->
-      <mat-card class="card-board-chat">
-        <mat-card-title>OPERADOR LOGADO</mat-card-title>
-        <div class="user-info">
-          <img [src]="operator.img" alt="avatar" class="avatar" />
-          <span class="status" [class.online]="isOnline"></span>
-          <span>{{ operator.name }}</span>
-        </div>
-        <app-dynamic-button type="login" (clicked)="onLogin()" class="btn-login"></app-dynamic-button>
-      </mat-card>
-
+      <app-user-online
+      [currentUser]="currentUser"
+      [isOnline]="isLoggedIn"
+      [isLoggedIn]="isLoggedIn"
+      (login)="toggleLoginStatus()">
+    </app-user-online>
       <!-- Fila de Espera -->
       <mat-card class="card-board">
         <mat-card-title>FILA DE ESPERA</mat-card-title>
-        <table mat-table [dataSource]="waitingList" class="mat-elevation-z1">
+        <table mat-table [dataSource]="waitingList()" class="mat-elevation-z1">
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef> Nome </th>
             <td mat-cell *matCellDef="let e"> {{e.name}} </td>
@@ -39,7 +35,7 @@
       <!-- Operadores Online -->
       <mat-card class="card-board">
         <mat-card-title>OPERADORES ONLINE</mat-card-title>
-        <table mat-table [dataSource]="onlineOperators" class="mat-elevation-z1">
+        <table mat-table [dataSource]="operators()" class="mat-elevation-z1">
           <ng-container matColumnDef="name">
             <th mat-header-cell *matHeaderCellDef> Nome </th>
             <td mat-cell *matCellDef="let e"> {{e.name}} </td>
