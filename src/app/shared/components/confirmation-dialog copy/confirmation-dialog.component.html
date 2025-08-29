@@ -14,14 +14,10 @@
 
   <!-- Footer -->
   <div mat-dialog-actions class="dialog-footer">
-    <app-dynamic-button 
-      type="close"
-      (clicked)="onCancel()">
+    <app-dynamic-button type="close" (clicked)="onCancel()">
     </app-dynamic-button>
 
-    <app-dynamic-button 
-      type="delete"
-      (clicked)="onConfirm()">
+    <app-dynamic-button [type]="data.typeButtom" (clicked)="onConfirm()">
     </app-dynamic-button>
   </div>
 </div>

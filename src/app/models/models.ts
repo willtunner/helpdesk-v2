@@ -76,7 +76,6 @@ export interface Company {
     helpDeskCompany?: HelpDeskCompany | null;
     companyId?: string;
     company?: Company | null;
-    occurrency?: string;
   }
 
 
@@ -89,6 +88,13 @@ export interface Company {
     client: User;
     mensages: Message[],
     unreadCount?: number;
+    occurrence: string;
+  }
+
+  export interface userChatLogged {
+    user: User;
+    occurrency?: string;
+    date: any;
   }
 
   export interface Message {

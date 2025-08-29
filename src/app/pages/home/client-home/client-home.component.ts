@@ -11,8 +11,8 @@ import { CommonModule } from '@angular/common';
 import { ClientService } from '../../../services/client.service';
 import { MatIconModule } from '@angular/material/icon';
 import { DynamicTableComponent } from '../../../shared/components/dynamic-table/dynamic-table.component';
-import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog copy/confirmation-dialog.component';
 import { CreateClienteModalComponent } from '../clients-modal/create-cliente-modal/create-cliente-modal.component';
+import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog copy/confirmation-dialog.component';
 
 @Component({
   selector: 'app-client-home',
@@ -23,6 +23,7 @@ import { CreateClienteModalComponent } from '../clients-modal/create-cliente-mod
     MatIconModule,
     DynamicTableComponent,
     MatIconModule,
+    CommonModule
   ],
   templateUrl: './client-home.component.html',
   styleUrl: './client-home.component.scss'

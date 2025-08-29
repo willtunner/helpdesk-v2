@@ -1,0 +1,24 @@
+<div class="dialog-container">
+  <h1 mat-dialog-title>Motivo da Ocorrência</h1>
+
+  <div mat-dialog-content>
+    <form [formGroup]="occurrenceForm">
+      <mat-form-field appearance="outline" class="full-width">
+        <mat-label>Selecione o motivo</mat-label>
+        <mat-select formControlName="reason">
+          <mat-option *ngFor="let reason of reasons" [value]="reason">
+            {{ reason }}
+          </mat-option>
+        </mat-select>
+        <mat-error *ngIf="occurrenceForm.get('reason')?.hasError('required')">
+          O motivo é obrigatório
+        </mat-error>
+      </mat-form-field>
+    </form>
+  </div>
+
+  <div mat-dialog-actions class="dialog-actions">
+    <button mat-stroked-button color="warn" (click)="close()">Cancelar5</button>
+    <button mat-flat-button color="primary" (click)="submit()" [disabled]="!occurrenceForm.valid">OK</button>
+  </div>
+</div>

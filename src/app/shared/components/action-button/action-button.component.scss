@@ -34,6 +34,9 @@ $logout-color: #c0392b; // Vermelho para Logout
 $logout-dark: #a53125; // Vermelho mais escuro
 $logout-hover-color: #e74c3c; // Vermelho mais claro no hover
 
+$ok-color: #009688; // verde água
+$ok-dark: darken($ok-color, 10%);
+
 /* Estilo base compartilhado por todos os botões */
 
 .button {
@@ -281,5 +284,28 @@ $pdf-color: #e74c3c;
   &:active:not([disabled]) {
     background-color: $logout-dark; // Vermelho mais escuro quando pressionado
     box-shadow: 0 0 20px 0 rgba($logout-dark, 0.45);
+  }
+}
+
+
+
+.button.ok {
+  background-color: $ok-color;
+  box-shadow: 0 0 20px 0 rgba($ok-color, 0.55);
+  color: white;
+
+  &:hover:not([disabled]) {
+    background-color: $ok-dark;
+    box-shadow: 0 0 20px 0 rgba($ok-dark, 0.65);
+  }
+
+  &.success {
+    background-color: $green; // já existe no seu tema
+    box-shadow: 0 0 20px 0 rgba($green, 0.55);
+  }
+
+  &:active:not([disabled]) {
+    background-color: darken($ok-dark, 5%);
+    box-shadow: 0 0 20px 0 rgba(darken($ok-dark, 5%), 0.45);
   }
 }

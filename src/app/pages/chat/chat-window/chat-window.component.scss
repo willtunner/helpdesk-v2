@@ -1,0 +1,123 @@
+/* Container geral */
+.chat-container {
+  display: flex;
+  flex-direction: column;
+  height: 430px;
+  position: relative;
+  background-color: #e9edef;
+  overflow: hidden;
+}
+
+/* Área da janela de chat */
+.chat-window {
+  flex: 1; /* Expande para ocupar todo o espaço disponível */
+  overflow-y: auto; /* Scroll vertical */
+  padding: 10px;
+  box-sizing: border-box;
+  max-height: calc(100% - 70px); /* Calcula espaço disponível menos a altura do chat-input */
+}
+
+/* Área fixa do input de chat */
+.chat-input {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-top: 1px solid #ddd;
+  background-color: #fff;
+  padding: 10px;
+  position: sticky; /* Fixa no final do container */
+  bottom: 0;
+  width: 100%;
+  z-index: 10; /* Garante que o input fique acima do conteúdo */
+}
+
+/* Estilo para o input de texto */
+.chat-input input {
+  flex: 1;
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 20px;
+  outline: none;
+  background-color: #f9f9f9;
+}
+
+/* Botões */
+.chat-input button {
+  padding: 10px;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+button[mat-icon-button] {
+  border-radius: 50%;
+}
+
+/* Estilos de mensagem continuam os mesmos */
+.message-container {
+  display: flex;
+  margin: 10px;
+  align-items: center;
+  position: relative; /* Para garantir que o posicionamento da bolha não afete os outros elementos */
+}
+
+.sent {
+  display: flex;
+  justify-content: flex-end;
+  margin-right: 0; /* Remover o espaço extra da direita */
+}
+
+.message-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  margin-right: -10px;
+  border: solid 4px #fff;
+  z-index: 2;
+}
+
+.message-bubble {
+  padding: 10px;
+  border-radius: 15px;
+  max-width: 490px;
+  min-height: 40px;
+  min-width: 150px;
+  font-size: 14px;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, 0.1);
+  position: relative;
+  display: inline-block;
+  word-wrap: break-word;
+  white-space: normal; /* Adiciona para garantir que as quebras de linha sejam respeitadas */
+  margin-right: 0; /* Garante que não haja margin extra quando o texto cresce */
+}
+
+.message-bubble p {
+  margin: 0;
+}
+
+.message-bubble span {
+  font-size: 10px;
+  color: #999;
+  position: absolute;
+  bottom: 5px;
+  right: 10px;
+}
+
+.sent .message-bubble {
+  background-color: #d9f7d9;
+  text-align: right;
+}
+
+.received .message-bubble {
+  background-color: #fff;
+  text-align: left;
+}
+
+.uploaded-image {
+  max-width: 200px;
+  max-height: 200px;
+  border-radius: 8px;
+  margin: 5px 0;
+  margin-bottom: 15px;
+  cursor: pointer;
+}

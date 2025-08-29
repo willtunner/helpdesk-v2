@@ -1,0 +1,46 @@
+/* Container principal */
+.dialog-container {
+  background: #fff; /* Fundo branco */
+  color: #333; /* Texto escuro */
+  border-radius: 12px; /* Bordas mais suaves */
+  padding: 24px;
+  font-family: 'Roboto', sans-serif;
+  min-width: 350px;
+  max-width: 500px;
+}
+
+/* Título elegante */
+h1.mat-dialog-title {
+  margin: 0 0 20px 0;
+  font-size: 1.6rem;
+  font-weight: 600;
+  color: #2c3e50; /* Cinza escuro elegante */
+  text-align: center;
+}
+
+/* Campo de formulário */
+.full-width {
+  width: 100%;
+}
+
+mat-form-field {
+  margin-bottom: 20px;
+}
+
+/* Área de ações */
+.dialog-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 12px;
+  margin-top: 15px;
+}
+
+/* Botão cancelar */
+button[color="warn"] {
+  font-weight: 500;
+}
+
+/* Botão OK */
+button[color="primary"] {
+  font-weight: 600;
+}

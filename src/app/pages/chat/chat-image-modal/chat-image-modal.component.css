@@ -1,0 +1,14 @@
+.image-modal-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 95vh;
+    background-color: rgba(0, 0, 0, 0.8);
+    border-radius: 10px;
+    
+  }
+  img {
+    max-width: 90%;
+    max-height: 90%;
+    border-radius: 10px;
+  }

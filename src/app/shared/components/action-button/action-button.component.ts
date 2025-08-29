@@ -5,7 +5,8 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { Subscription } from 'rxjs';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
-type ButtonType = 'save' | 'edit' | 'delete' | 'clear' | 'print' | 'find' | 'add' | 'pdf' | 'cancel' | 'login' | 'close' | 'logout';
+type ButtonType = 'save' | 'edit' | 'delete' | 'clear' | 'print' | 
+'find' | 'add' | 'pdf' | 'cancel' | 'login' | 'close' | 'logout' | 'ok';
 
 @Component({
   selector: 'app-dynamic-button',
@@ -33,6 +34,7 @@ export class DynamicButtonComponent implements OnDestroy {
     this.langChangeSub = this.translateService.onLangChange.subscribe(() => {
       this.cdr.markForCheck();
     });
+    console.log('TIPO: ',this.type)
   }
 
   ngOnDestroy(): void {
@@ -80,6 +82,7 @@ export class DynamicButtonComponent implements OnDestroy {
       login: { labelKey: 'BUTTON.LOGIN', icon: 'login', cssClass: 'login' },
       close: { labelKey: 'FECHAR', icon: 'close', cssClass: 'close' },
       logout: { labelKey: 'BUTTON.LOGOUT', icon: 'logout', cssClass: 'logout' },
+      ok: { labelKey: 'BUTTON.OK', icon: 'check_circle', cssClass: 'ok' },
     };
 
     return map[this.type] ?? map['save'];

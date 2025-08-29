@@ -28,6 +28,11 @@ export class UserOnlineComponent {
   }
 
   onLogin() {
+    if(this.currentUser.roles?.includes('CLIENT')) {
+      console.log('Cliente entrando na fila de espera...');
+
+    }
+
     this.login.emit();
   }
 }

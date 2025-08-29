@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DynamicButtonComponent } from '../action-button/action-button.component';
 
@@ -9,12 +9,15 @@ import { DynamicButtonComponent } from '../action-button/action-button.component
   templateUrl: './confirmation-dialog.component.html',
   styleUrl: './confirmation-dialog.component.scss'
 })
-export class ConfirmationDialogComponent {
+export class ConfirmationDialogComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ConfirmationDialogComponent>,
     @Inject(MAT_DIALOG_DATA) public data: any
   ) {}
 
+  ngOnInit(): void {
+    console.log('Dialog data:', this.data);
+  }
 
   onConfirm(): void {
     this.dialogRef.close(true);

@@ -10,13 +10,13 @@ import { MatTableModule } from '@angular/material/table';
 import { MatIconModule } from '@angular/material/icon';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatDialog } from '@angular/material/dialog';
-import { ConfirmationDialogComponent } from '../confirmation-dialog/confirmation-dialog.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { SavedDocument } from '../../../interface/dynamic-form.interface';
 import { DocumentService } from '../../../services/document.service';
 import { DynamicTableComponent } from '../dynamic-table/dynamic-table.component';
 import { FirebaseDatePipe } from '../../../pipes/firebase-timestamp.pipe';
 import { DynamicButtonComponent } from '../action-button/action-button.component';
+import { ConfirmationDialogComponent } from '../confirmation-dialog copy/confirmation-dialog.component';
 
 @Component({
   selector: 'app-mtb-dev',

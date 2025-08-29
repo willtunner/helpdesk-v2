@@ -10,7 +10,6 @@ export class SendNotificationService {
   constructor(private snackBar: MatSnackBar) {}
 
   customNotification(type: NotificationType, message: string, duration: number = 5000): void {
-    debugger;
     let panelClass = '';
     switch (type) {
       case NotificationType.SUCCESS:

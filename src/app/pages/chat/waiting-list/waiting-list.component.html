@@ -1,0 +1,32 @@
+<mat-card class="card-board">
+  <mat-card-title style="color: white;">FILA DE ESPERA</mat-card-title>
+
+  <table mat-table [dataSource]="data || waitingList()" class="mat-elevation-z1">
+
+    <!-- Nome -->
+    <ng-container matColumnDef="name">
+      <th mat-header-cell *matHeaderCellDef> Nome </th>
+      <td mat-cell *matCellDef="let e"> {{ e.user.name }} </td>
+    </ng-container>
+
+    <!-- Setor (Ocorrência) -->
+    <ng-container matColumnDef="sector">
+      <th mat-header-cell *matHeaderCellDef> Setor </th>
+      <td mat-cell *matCellDef="let e"> {{ e.occurrency }} </td>
+    </ng-container>
+
+    <!-- Tempo -->
+    <ng-container matColumnDef="time">
+      <th mat-header-cell *matHeaderCellDef> Tempo </th>
+      <td mat-cell *matCellDef="let e"> {{ getElapsedTime(e) }} </td>
+    </ng-container>
+
+    <!-- Cabeçalho e linhas -->
+    <tr mat-header-row *matHeaderRowDef="displayedColumns" style="height: 10px !important;"></tr>
+
+    <!-- 🔹 aqui adicionamos cursor e dblclick -->
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" class="clickable-row"
+      [class.active-row]="isRowActive(row)" [class.busy-row]="isRowBusyByOther(row)" (dblclick)="openDialog(row)">
+    </tr>
+  </table>
+</mat-card>

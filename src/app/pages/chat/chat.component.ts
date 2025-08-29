@@ -2,30 +2,46 @@ import { CommonModule } from '@angular/common';
 import { Component, computed, effect, OnInit } from '@angular/core';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
-import { DynamicButtonComponent } from '../../shared/components/action-button/action-button.component';
-import { User } from '../../models/models';
+import { ChatRoom, User } from '../../models/models';
 import { AuthService } from '../../services/auth.service';
 import { UserOnlineComponent } from './user-online/user-online.component';
 import { ChatService } from '../../services/chat-service.service';
-
+import { WaitingListComponent } from './waiting-list/waiting-list.component';
+import { OperatorsOnlineComponent } from './operators-online/operators-online.component';
+import { UserType } from '../../enums/user-types.enum';
+import { UserService } from '../../services/user.service';
+import { ActiveChatsComponent } from './active-chats/active-chats.component';
+import { ChatWindowComponent } from './chat-window/chat-window.component';
 @Component({
   selector: 'app-chat',
   standalone: true,
-  imports: [MatCardModule, MatTableModule, CommonModule, UserOnlineComponent],
+  imports: [MatCardModule, MatTableModule, CommonModule, 
+    UserOnlineComponent, WaitingListComponent, 
+    OperatorsOnlineComponent, ActiveChatsComponent, ChatWindowComponent  ],
   templateUrl: './chat.component.html',
   styleUrl: './chat.component.scss'
 })
 export class ChatComponent implements OnInit {
   currentUser!: User;
-  // waitingList: any = [];
+  userRole!: UserType;
   isLoggedIn: boolean = false;
-  // operators: User[] = [];
+  UserType = UserType;
+  activeChats = computed<ChatRoom[]>(() => {
+    const allSupport = this.customerSupport();
+    if (this.currentUser && this.userRole === UserType.OPERATOR) {
+      return allSupport.filter(chat => chat.operator?.id === this.currentUser.id);
+    }
+    return [];
+  });
+  isOnline = false;
 
   // 👇 computed para sempre refletir os signals do serviço
   operators = computed(() => this.chatService.operators());
   waitingList = computed(() => this.chatService.clientWaitingList());
+  customerSupport = computed(() => this.chatService.customerSupport());
 
-  constructor(private auth: AuthService, private chatService: ChatService) { 
+  constructor(private auth: AuthService, private chatService: ChatService, 
+    private userService: UserService) { 
     const session = this.auth.currentUser();
     if (session) {
       this.currentUser = session;
@@ -33,25 +49,38 @@ export class ChatComponent implements OnInit {
     }
 
     effect(() => {
-      console.log('Operators atualizados:', this.operators());
-      console.log('Clientes atualizados:', this.waitingList());
+      console.log('Operators operators:', this.operators());
+      console.log('Clientes waitingList:', this.waitingList());
+      console.log('customerSupport', this.customerSupport());
+
+      const allSupport = this.customerSupport();
+  
     });
+
+    try {
+      this.userRole = this.userService.getEffectiveUserRole(this.currentUser);
+      console.log('Role detectada:', this.userRole);
+    } catch (err) {
+      console.error('Erro ao detectar role:', err);
+    }
   }
 
   async ngOnInit() {
-    await this.chatService.initializeOperators();
-    console.log('waitingList', this.waitingList);
-  
+    this.chatService.initializeOperators();
+    
     if (this.currentUser) {
       this.isLoggedIn = await this.chatService.isUserOnline(this.currentUser.id);
-      console.log(`Usuário ${this.currentUser.name} está online?`, this.isLoggedIn);
     }
+
+    // 👇 sempre que carregar, busca os chats do operador logado
+    if (this.userRole === UserType.OPERATOR) {
+      await this.chatService.loadCustomerSupport(this.currentUser.id);
+    }
+
+    
   }
+
   
-
-  isOnline = false;
-
-  activeChats = ['Teste', 'Alfredo'];
 
   onLogin() { 
     this.logInChat();
@@ -93,7 +122,7 @@ export class ChatComponent implements OnInit {
     if (this.currentUser) {
       try {
         const updatedUser = await this.chatService.logUserInChat(this.currentUser);
-        this.isLoggedIn = updatedUser.isLoggedIn;
+        this.isLoggedIn = updatedUser.user.isLoggedIn;
         this.currentUser = { ...this.currentUser, ...updatedUser };
         console.log('Usuário logado no chat:', updatedUser);
       } catch (error) {

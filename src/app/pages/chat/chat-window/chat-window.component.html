@@ -1,0 +1,54 @@
+<div class="chat-container">
+  <!-- Janela de chat -->
+  <div class="chat-window" #chatWindow>
+    <div
+      *ngFor="let message of messages"
+      [class]="message.sender === currentUser.id ? 'sent' : 'received'">
+      <div class="message-container">
+        <img
+          [src]="message?.imageUrl"
+          alt="Foto do Enviador"
+          class="message-avatar"
+        />
+        <div class="message-bubble">
+          <ng-container *ngIf="message.uploadImg; else textMessage">
+            <!-- Exibir imagem enviada -->
+            <img [src]="message.uploadImg" alt="Imagem enviada" class="uploaded-image" (click)="openImageModal(message.uploadImg)"  />
+          </ng-container>
+          <ng-template #textMessage >
+            <!-- Exibir texto da mensagem -->
+            <p style="margin-bottom: 15px;">{{ message.content }}</p>
+          </ng-template>
+          <span>{{ message.timestamp | dateFormat }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Input do chat (só aparece se houver mensagens) -->
+  <div class="chat-input" *ngIf="isChatVisible">
+    <!-- Botão de anexar arquivo com spinner -->
+    <button mat-icon-button (click)="attachFile()" [disabled]="isUploading">
+      <mat-icon *ngIf="!isUploading">attach_file</mat-icon>
+      <mat-progress-spinner 
+        *ngIf="isUploading" 
+        diameter="24" 
+        mode="indeterminate">
+      </mat-progress-spinner>
+    </button>
+  
+    <!-- Input de mensagem -->
+    <input
+      [(ngModel)]="messageContent"
+      placeholder="Digite uma mensagem..."
+      type="text"
+      (keyup.enter)="sendMessage()"
+      (focus)="markMessage()"
+    />
+  
+    <!-- Botão de enviar mensagem --> 
+    <button mat-icon-button color="primary" (click)="sendMessage()" [disabled]="isUploading">
+      <mat-icon>send</mat-icon>
+    </button>
+  </div>
+</div>

@@ -141,7 +141,8 @@
     "PDF": "PDF",
     "CANCEL": "CANCELAR",
     "LOGIN": "ENTRAR",
-    "LOGOUT": "SALIR"
+    "LOGOUT": "SALIR",
+    "OK": "¡CONFIRMAR!"
   },
   "inputs": {
     "client-modal": {

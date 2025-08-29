@@ -4,81 +4,31 @@
     <!-- COLUNA ESQUERDA FIXA -->
     <div class="sidebar">
       <!-- Operador Logado -->
-      <app-user-online
-      [currentUser]="currentUser"
-      [isOnline]="isLoggedIn"
-      [isLoggedIn]="isLoggedIn"
-      (login)="toggleLoginStatus()">
-    </app-user-online>
+      <app-user-online [currentUser]="currentUser" [isOnline]="isLoggedIn" [isLoggedIn]="isLoggedIn"
+        (login)="toggleLoginStatus()">
+      </app-user-online>
       <!-- Fila de Espera -->
-      <mat-card class="card-board">
-        <mat-card-title>FILA DE ESPERA</mat-card-title>
-        <table mat-table [dataSource]="waitingList()" class="mat-elevation-z1">
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef> Nome </th>
-            <td mat-cell *matCellDef="let e"> {{e.name}} </td>
-          </ng-container>
-          <ng-container matColumnDef="sector">
-            <th mat-header-cell *matHeaderCellDef> Setor </th>
-            <td mat-cell *matCellDef="let e"> {{e.sector}} </td>
-          </ng-container>
-          <ng-container matColumnDef="time">
-            <th mat-header-cell *matHeaderCellDef> Tempo </th>
-            <td mat-cell *matCellDef="let e"> {{e.time}} </td>
-          </ng-container>
 
-          <tr mat-header-row *matHeaderRowDef="['name', 'sector', 'time']" style="height: 10px !important;"></tr>
-          <tr mat-row *matRowDef="let row; columns: ['name', 'sector', 'time'];" style="height: 30px !important;"></tr>
-        </table>
-      </mat-card>
+      <app-waiting-list [data]="waitingList()" 
+      [customerSupport]="customerSupport()" 
+      [currentUser]="currentUser"
+        *ngIf="userRole != UserType.CLIENT">
+      </app-waiting-list>
+
 
       <!-- Operadores Online -->
-      <mat-card class="card-board">
-        <mat-card-title>OPERADORES ONLINE</mat-card-title>
-        <table mat-table [dataSource]="operators()" class="mat-elevation-z1">
-          <ng-container matColumnDef="name">
-            <th mat-header-cell *matHeaderCellDef> Nome </th>
-            <td mat-cell *matCellDef="let e"> {{e.name}} </td>
-          </ng-container>
-          <ng-container matColumnDef="sector">
-            <th mat-header-cell *matHeaderCellDef> Setor </th>
-            <td mat-cell *matCellDef="let e"> {{e.sector}} </td>
-          </ng-container>
-          <ng-container matColumnDef="atendimentos">
-            <th mat-header-cell *matHeaderCellDef> Atend... </th>
-            <td mat-cell *matCellDef="let e"> {{e.atendimentos}} </td>
-          </ng-container>
-
-          <tr mat-header-row *matHeaderRowDef="['name', 'sector', 'atendimentos']" style="height: 10px !important;">
-          </tr>
-          <tr mat-row *matRowDef="let row; columns: ['name', 'sector', 'atendimentos'];"
-            style="height: 30px !important;">
-          </tr>
-        </table>
-      </mat-card>
+      <app-operators-online [data]="operators()" *ngIf="userRole != UserType.CLIENT"></app-operators-online>
     </div>
 
     <!-- COLUNA DIREITA FLEXÍVEL -->
     <div class="main">
       <!-- Atendimentos -->
-      <mat-card>
-        <mat-card-title>ATENDIMENTOS</mat-card-title>
-        <div class="cards">
-          <mat-card *ngFor="let name of activeChats" class="user-card">
-            <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ6XHD9yjd8auL9plQXjsebFt4CJ-cS8ejRtw&s"
-              style="width: 30px;" alt="avatar" />
-            <div>{{ name }}</div>
-          </mat-card>
-        </div>
-      </mat-card>
+      <app-active-chats [activeChats]="activeChats()"></app-active-chats>
 
       <!-- Chat -->
-      <mat-card class="chat-box">
-        <mat-card-title>CHAT</mat-card-title>
-        <div class="chat-area">
-          <!-- Conteúdo do chat -->
-        </div>
-      </mat-card>
+      <div class="box-body">
+        <app-chat-window></app-chat-window>
+      </div>
     </div>
   </div>
 </div>

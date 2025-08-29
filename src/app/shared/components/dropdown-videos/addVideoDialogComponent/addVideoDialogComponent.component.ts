@@ -13,9 +13,9 @@ import { MatCheckboxModule } from '@angular/material/checkbox';
 import { DropDownVideos, Video } from '../../../../models/models';
 import { SessionService } from '../../../../services/session.service';
 import { VideoService } from '../../../../services/videoService.service';
-import { ConfirmationDialogComponent } from '../../confirmation-dialog/confirmation-dialog.component';
 import { CustomInputComponent } from '../../custom-input/custom-input.component';
 import { DynamicButtonComponent } from '../../action-button/action-button.component';
+import { ConfirmationDialogComponent } from '../../confirmation-dialog copy/confirmation-dialog.component';
 
 @Component({
   selector: 'app-addVideoDialogComponent',
