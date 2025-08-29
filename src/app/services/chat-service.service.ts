@@ -366,9 +366,9 @@ export class ChatService {
     try {
       const q = query(this._chatRooms, where('close', '==', false));
       const snapshot = await getDocs(q);
-  
+
       const chats: ChatRoom[] = snapshot.docs.map((doc) => doc.data() as ChatRoom);
-  
+
       console.log('📌 Todos os chats ativos:', chats);
       return chats;
     } catch (error) {
@@ -376,7 +376,26 @@ export class ChatService {
       return [];
     }
   }
-  
+
+  listenToMessages(chatRoomId: string): void {
+    const chatDocRef = doc(this._firestore, `chat_room/${chatRoomId}`);
+
+    // Escuta alterações no Firestore em tempo real
+    onSnapshot(chatDocRef, (docSnapshot) => {
+      if (docSnapshot.exists()) {
+        const data = docSnapshot.data() as ChatRoom;
+        const messages = data?.mensages || [];
+        this.activeMessagesSubject.next(messages); // Atualiza o BehaviorSubject
+      } else {
+        console.warn(`Sala de chat ${chatRoomId} não encontrada.`);
+      }
+    });
+  }
+
+  saveRoomActive(activeChatRoom: ChatRoom) {
+    this.activeChatRoom.set(activeChatRoom);
+  }
+
 
 
 }

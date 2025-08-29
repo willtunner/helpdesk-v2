@@ -1,7 +1,7 @@
 <mat-card style="background-color: white;">
   <mat-card-title style="padding-left: 10px;">ATENDIMENTOS</mat-card-title>
   <div class="cards">
-    <mat-card *ngFor="let chat of activeChats" class="user-card">
+    <mat-card *ngFor="let chat of activeChats" class="user-card" (click)="viewChat(chat)">
       <img [src]="chat.client.imageUrl || 'https://via.placeholder.com/40'" alt="avatar" />
       <div class="username">{{ chat.client.name }}</div>
     </mat-card>
