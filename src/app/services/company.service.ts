@@ -107,10 +107,60 @@ export class CompanyService {
     }
   }
 
-  getCompanyByFirebase(): Observable<Company[]> {
-    const orderedQuery = query(this._collection, orderBy('name', 'asc'));
-    return collectionData(orderedQuery, { idField: 'id' }) as Observable<Company[]>;
+  getCompanyByFirebase(helpDeskCompanyId?: string): Observable<Company[]> {
+    let companyQuery;
+    
+    if (helpDeskCompanyId) {
+      // Se foi passado um helpDeskCompanyId, filtra por esse campo
+      companyQuery = query(
+        this._collection, 
+        where('helpDeskCompanyId', '==', helpDeskCompanyId),
+        orderBy('name', 'asc')
+      );
+    } else {
+      // Se não foi passado parâmetro, retorna todas as empresas ordenadas
+      companyQuery = query(this._collection, orderBy('name', 'asc'));
+    }
+    
+    return collectionData(companyQuery, { idField: 'id' }) as Observable<Company[]>;
   }
+
+  // No CompanyService, adicione este método:
+// No CompanyService, modifique o método createCompany:
+async createCompany(companyData: Partial<Company>): Promise<Company> {
+  try {
+    // Adiciona timestamps como Date
+    const companyWithTimestamps = {
+      ...companyData,
+      created: new Date(),
+      updated: new Date()
+    };
+
+    const docRef = await addDoc(this._collection, companyWithTimestamps);
+    
+    // Converte as datas para string antes de retornar
+    const newCompany = {
+      id: docRef.id,
+      ...companyWithTimestamps,
+      created: companyWithTimestamps.created.toISOString(), // Converte para string
+      updated: companyWithTimestamps.updated.toISOString()  // Converte para string
+    } as Company;
+
+    this.messageService.customNotification(
+      NotificationType.SUCCESS,
+      'Empresa criada com sucesso'
+    );
+
+    return this.formatCompanyDates(newCompany);
+  } catch (error) {
+    console.error('Erro ao criar empresa:', error);
+    this.messageService.customNotification(
+      NotificationType.ERROR,
+      'Erro ao criar empresa'
+    );
+    throw error;
+  }
+}
 
 
 }

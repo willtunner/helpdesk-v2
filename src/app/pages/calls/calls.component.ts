@@ -26,12 +26,12 @@ import { Call, Company, User } from '../../models/models';
 import { NotificationType } from '../../enums/notificationType.enum';
 import { MatDialog } from '@angular/material/dialog';
 import { CompanyModalComponent } from '../companies/company-modal/company-modal.component';
-import { ClientsModalComponent } from '../home/clients-modal/clients-modal.component';
 import { MatTooltipModule } from '@angular/material/tooltip';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { CreateClienteModalComponent } from '../home/clients-modal/create-cliente-modal/create-cliente-modal.component';
 import { TranslateModule } from '@ngx-translate/core';
+import { AuthService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-calls',
@@ -73,6 +73,7 @@ export class CallsComponent implements OnInit {
   isSaveOrEditSuccess = false;
   saveSuccess = false;
   deleteSuccess = false;
+  user!: User ;
 
   constructor(
     private fb: FormBuilder,
@@ -83,10 +84,16 @@ export class CallsComponent implements OnInit {
     private sessionService: SessionService,
     private messageService: SendNotificationService,
     private route: ActivatedRoute,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private auth: AuthService,
   ) {
     this.initializeForm();
     this.loadOperator();
+
+    const session = this.auth.currentUser();
+    if (session) {
+      this.user = session;
+    }
   }
 
   ngOnInit(): void {
@@ -297,7 +304,7 @@ export class CallsComponent implements OnInit {
 
   private loadCompanies(): Promise<void> {
     return new Promise((resolve) => {
-      this.companyServ.getCompanyByFirebase().subscribe({
+      this.companyServ.getCompanyByFirebase(this.user.helpDeskCompanyId).subscribe({
         next: (companies) => {
           this.companies = companies;
           resolve();

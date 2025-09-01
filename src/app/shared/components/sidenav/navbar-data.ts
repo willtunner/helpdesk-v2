@@ -14,6 +14,6 @@ export const NAVBAR_DATA: INavbarData[] = [
   { routeLink: 'developer-area', icon: 'code', label: 'sideNav.developer-area', allowedRoles: [UserType.MASTER] },
   { routeLink: 'restricted-area', icon: 'developer_mode', label: 'sideNav.restricted-area', allowedRoles: [UserType.MASTER] },
   { routeLink: 'profile-settings', icon: 'settings', label: 'sideNav.settings', allowedRoles: [UserType.CLIENT, UserType.OPERATOR, UserType.ADMIN, UserType.MASTER] },
-  { routeLink: 'exit', icon: 'logout', label: 'sideNav.logout', allowedRoles: [UserType.CLIENT, UserType.OPERATOR, UserType.ADMIN, UserType.MASTER] },
+  { routeLink: 'exit', icon: 'logout', label: 'sideNav.logout',  },
   
 ];

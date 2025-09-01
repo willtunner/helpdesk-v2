@@ -60,7 +60,7 @@ export class OperatorHomeComponent implements OnInit {
   countOpenCalls: number = 0;
   countClosedCalls: number = 0;
   countAllCalls: number = 0;
-  isLoading = true;
+  isLoading = false;
   simplifiedCalls: SimplifiedCall[] = [];
 
   constructor(
@@ -103,14 +103,15 @@ export class OperatorHomeComponent implements OnInit {
       'charts.pieChart.description',
       'dashboard.clients'
     ]);
-
+  
     if (this.user.helpDeskCompanyId) {
+      this.isLoading = true; // Inicia o loading aqui
       await this.loadAllData(this.user.helpDeskCompanyId);
     } else {
       console.warn('Usuário não está associado a uma empresa');
-      this.isLoading = false;
+      this.isLoading = false; // Já está false, mas mantém por clareza
     }
-
+  
     const role = this.userService.getEffectiveUserRole(this.user);
     console.log('Função efetiva do usuário:', role);
   }
@@ -118,15 +119,18 @@ export class OperatorHomeComponent implements OnInit {
 
   private async loadAllData(helpDeskCompanyId: string): Promise<void> {
     try {
+      this.isLoading = true; // Garante que está carregando
+      this.cdr.detectChanges(); // Força a detecção de mudanças
+  
       const [company, clients] = await Promise.all([
         this.helpCompanyService.getHelpCompanyById(helpDeskCompanyId),
         this.companyService.getCompanyByHelpDeskId(helpDeskCompanyId)
       ]);
-
+  
       this.clients = clients;
       this.countCompanies = clients.length;
       console.log('Empresas associadas:', clients);
-
+  
       forkJoin({
         open: this.callService.getCalls$(false, helpDeskCompanyId).pipe(
           take(1),
@@ -165,15 +169,18 @@ export class OperatorHomeComponent implements OnInit {
           console.log('Chamados Simplificados:', simplified);
           this.pieChartData = this.getPieData(simplified);
         },
-        error: () => {
+        error: (error) => {
           this.messageService.customNotification(NotificationType.ERROR, 'Erro geral ao carregar os dados de chamados');
+          console.error('Erro no forkJoin:', error);
+          this.isLoading = false;
+          this.cdr.detectChanges();
         },
         complete: () => {
           this.isLoading = false;
           this.cdr.detectChanges();
         }
       });
-
+  
     } catch (error) {
       this.messageService.customNotification(NotificationType.ERROR, 'Erro ao carregar dados da empresa');
       console.error('Erro ao carregar dados:', error);

@@ -1,7 +1,7 @@
 import { Injectable, inject, signal } from '@angular/core';
 import { Firestore, collection, doc, addDoc, updateDoc, query, where, getDocs, getDoc, arrayUnion, onSnapshot } from '@angular/fire/firestore';
 import { BehaviorSubject, } from 'rxjs';
-import { ChatRoom, Company, Message, User } from '../models/models';
+import { ChatRoom, Company, HelpDeskCompany, Message, User } from '../models/models';
 import { CompanyService } from './company.service';
 import { UserType } from '../enums/user-types.enum';
 
@@ -82,12 +82,23 @@ export class UserService {
     }
   }
 
-  getEffectiveUserRole(user: User): UserType {
-    if (!user || !Array.isArray(user.roles) || user.roles.length === 0) {
-      throw new Error('Usuário deve ter ao menos uma role válida.');
+  getEffectiveUserRole(user: User, company?: HelpDeskCompany): UserType {
+    if (!user) {
+      throw new Error('Usuário inválido.');
     }
   
-    const roles = user.roles.map(r => r.toLowerCase()) as UserType[];
+    // Roles diretas do usuário
+    const userRoles = Array.isArray(user.roles) ? user.roles.map(r => r.toLowerCase()) : [];
+  
+    // Roles vindas da empresa (caso o usuário esteja vinculado a ela)
+    const companyRoles = company?.roles?.map(r => r.toLowerCase()) ?? [];
+  
+    // Combina ambas (user + empresa)
+    const roles = [...new Set([...userRoles, ...companyRoles])] as UserType[];
+  
+    if (roles.length === 0) {
+      throw new Error('Usuário deve ter ao menos uma role válida.');
+    }
   
     // Não permitir OPERATOR e CLIENT juntos
     if (roles.includes(UserType.OPERATOR) && roles.includes(UserType.CLIENT)) {
@@ -119,5 +130,6 @@ export class UserService {
   
     throw new Error('Nenhuma role válida foi identificada.');
   }
+  
 }
 

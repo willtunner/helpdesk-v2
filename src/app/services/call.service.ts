@@ -277,6 +277,7 @@ export class CallService {
   async saveCallWithGeneratedId(call: Omit<Call, 'id'>): Promise<Call> {
     try {
       // Define os timestamps antes de salvar
+      debugger;
       call.created = new Date();
       call.updated = new Date();
 

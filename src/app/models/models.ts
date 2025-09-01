@@ -54,6 +54,7 @@ export interface Company {
     email: string;
     companies: Company[];
     employees: User[];
+    roles: string[];
     password?: string;
     active: boolean;
   }
