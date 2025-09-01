@@ -1,4 +1,4 @@
-<div class="container" *ngIf="isLoading">
+<div class="container" *ngIf="!isLoading">
   <app-dashboard-card (click)="openClientsModal()" icon="support_agent" [end]="countCompanies" [duration]="1200"
     [label]="'home.components.client' | translate" color="#f20f40">
   </app-dashboard-card>
@@ -22,7 +22,7 @@
   <p>{{ 'loading.data' | translate }}</p>
 </div>
 
-<div class="chart-container" *ngIf="isLoading">
+<div class="chart-container" *ngIf="!isLoading">
   <app-chart [type]="ChartType.LINE" 
     [title]="'charts.lineChart.title' | translate"
     [chamados]="simplifiedCalls">
