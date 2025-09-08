@@ -4,6 +4,7 @@
     {{ 'home.welcome' | translate }}
     <ng-container *ngIf="translatedRole"> ({{ translatedRole }})</ng-container>
     <ng-container *ngIf="user?.username">, {{ user.username }}</ng-container>!
+    
   </h3>
 
   <app-client-home *ngIf="userRole === UserType.CLIENT" />

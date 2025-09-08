@@ -76,26 +76,10 @@ export class OperatorHomeComponent implements OnInit {
     private utilService: UtilService,
     private tagService: TagService,
   ) {
-    const session = this.auth.currentUser();
 
-    this.getChartData = this.getChartData.bind(this);
-
-
-    if (session) {
-      this.user = session;
-      console.log('Sessão carregada:', this.user);
-      console.log('ID da empresa do usuário:', this.user.helpDeskCompanyId);
-
-      try {
-        this.userRole = this.userService.getEffectiveUserRole(this.user);
-        console.log('Role detectada:', this.userRole);
-      } catch (err) {
-        console.error('Erro ao detectar role:', err);
-      }
-    }
   }
 
-  
+
 
   async ngOnInit(): Promise<void> {
     this.translateService.load([
@@ -103,7 +87,21 @@ export class OperatorHomeComponent implements OnInit {
       'charts.pieChart.description',
       'dashboard.clients'
     ]);
-  
+
+    const session = this.auth.currentUser();
+
+    if (session) {
+      const user = await this.userService.getUserWithHelpDeskCompany(session.id);
+      if (user !== null) this.user = user;
+      console.log('Usuário carregado:', this.user);
+      try {
+        this.userRole = this.userService.getEffectiveUserRole(this.user);
+        console.log('Role detectada:', this.userRole);
+      } catch (err) {
+        console.error('Erro ao detectar role:', err);
+      }
+    }
+
     if (this.user.helpDeskCompanyId) {
       this.isLoading = true; // Inicia o loading aqui
       await this.loadAllData(this.user.helpDeskCompanyId);
@@ -111,9 +109,9 @@ export class OperatorHomeComponent implements OnInit {
       console.warn('Usuário não está associado a uma empresa');
       this.isLoading = false; // Já está false, mas mantém por clareza
     }
-  
-    const role = this.userService.getEffectiveUserRole(this.user);
-    console.log('Função efetiva do usuário:', role);
+
+    this.getChartData = this.getChartData.bind(this);
+
   }
 
 
@@ -121,16 +119,16 @@ export class OperatorHomeComponent implements OnInit {
     try {
       this.isLoading = true; // Garante que está carregando
       this.cdr.detectChanges(); // Força a detecção de mudanças
-  
+
       const [company, clients] = await Promise.all([
         this.helpCompanyService.getHelpCompanyById(helpDeskCompanyId),
         this.companyService.getCompanyByHelpDeskId(helpDeskCompanyId)
       ]);
-  
+
       this.clients = clients;
       this.countCompanies = clients.length;
       console.log('Empresas associadas:', clients);
-  
+
       forkJoin({
         open: this.callService.getCalls$(false, helpDeskCompanyId).pipe(
           take(1),
@@ -180,7 +178,7 @@ export class OperatorHomeComponent implements OnInit {
           this.cdr.detectChanges();
         }
       });
-  
+
     } catch (error) {
       this.messageService.customNotification(NotificationType.ERROR, 'Erro ao carregar dados da empresa');
       console.error('Erro ao carregar dados:', error);
@@ -219,50 +217,50 @@ export class OperatorHomeComponent implements OnInit {
   }
 
   getPieData(chamados: any): { name: string; y: number; calls: Call[] }[] {
-  const companyMap: Record<string, Call[]> = {};
+    const companyMap: Record<string, Call[]> = {};
 
-  for (const call of chamados) {
-    const name = call.companyName;
-    if (!companyMap[name]) {
-      companyMap[name] = [];
+    for (const call of chamados) {
+      const name = call.companyName;
+      if (!companyMap[name]) {
+        companyMap[name] = [];
+      }
+      companyMap[name].push(call);
     }
-    companyMap[name].push(call);
+
+    return Object.entries(companyMap).map(([name, calls]) => ({
+      name,
+      y: calls.length,
+      calls
+    }));
   }
 
-  return Object.entries(companyMap).map(([name, calls]) => ({
-    name,
-    y: calls.length,
-    calls
-  }));
-}
+  async getChartData(): Promise<any[]> {
+    try {
+      const tags = await this.tagService.getAllTagsByCall();
 
-async getChartData(): Promise<any[]> {
-  try {
-    const tags = await this.tagService.getAllTagsByCall();
-    
-    const tagsDataPromises = tags.map(async (tag) => {
-      const calls = await this.tagService.getCallsByTag(tag); // retorna Call[]
-      return {
-        name: tag,
-        y: calls.length, // aqui pega o total
-        color: this.getRandomColor()
-      };
-    });
+      const tagsDataPromises = tags.map(async (tag) => {
+        const calls = await this.tagService.getCallsByTag(tag); // retorna Call[]
+        return {
+          name: tag,
+          y: calls.length, // aqui pega o total
+          color: this.getRandomColor()
+        };
+      });
 
-    return await Promise.all(tagsDataPromises);
-  } catch (error) {
-    console.error('Error fetching chart data:', error);
-    return [];
+      return await Promise.all(tagsDataPromises);
+    } catch (error) {
+      console.error('Error fetching chart data:', error);
+      return [];
+    }
   }
-}
 
 
-private getRandomColor(): string {
-  return this.utilService.getRandomColor(); // Usando o serviço UtilService
-  // Ou se preferir manter local:
-  // return '#' + Math.floor(Math.random()*16777215).toString(16);
-}
+  private getRandomColor(): string {
+    return this.utilService.getRandomColor(); // Usando o serviço UtilService
+    // Ou se preferir manter local:
+    // return '#' + Math.floor(Math.random()*16777215).toString(16);
+  }
 
 
-  
+
 }

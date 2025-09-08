@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule } from '@angular/forms';
 import { DynamicButtonComponent } from '../../../shared/components/action-button/action-button.component';
@@ -9,6 +9,7 @@ import { Company, User } from '../../../models/models';
 import { CompanyService } from '../../../services/company.service';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { AuthService } from '../../../services/auth.service';
+import { UtilService } from '../../../services/util.service';
 
 @Component({
   selector: 'app-company-modal',
@@ -26,13 +27,16 @@ export class CompanyModalComponent implements OnInit {
   companyForm: FormGroup;
   loading = false;
   user!: User;
+  loadingCep = false;
+  loadingCnpj = false;
 
   constructor(
     public dialogRef: MatDialogRef<CompanyModalComponent>,
     private fb: FormBuilder,
     private companyService: CompanyService,
     private snackBar: MatSnackBar,
-    private auth: AuthService
+    private auth: AuthService,
+    private utilService: UtilService
   ) {
     const session = this.auth.currentUser();
     if (session) {
@@ -75,9 +79,15 @@ async onSave(): Promise<void> {
         name: formData.name,
         email: formData.email,
         phone: formData.phone,
+        cnpj: formData.cnpj,
+        zipcode: formData.zipcode,
+        city: formData.city,
+        state: formData.state,
         address: formData.address,
-        // ... outros campos do formulário
-        helpDeskCompanyId: this.user.helpDeskCompanyId // se aplicável
+        helpDeskCompanyId: this.user.helpDeskCompanyId,
+        versionServ: formData.versionServ,
+        connectionServ: formData.connectionServ,
+        keywords: this.utilService.generateKeywordsFromName(formData.name),
       };
 
       const savedCompany = await this.companyService.createCompany(companyData);
@@ -105,7 +115,26 @@ async onSave(): Promise<void> {
   }
 
   searchCnpj(): void {
-    // Implementar busca de CNPJ aqui
-    console.log('Buscando CNPJ...');
+    const cnpj = this.getControl('cnpj').value;
+    if (cnpj) {
+      this.loadingCnpj = true;
+      this.utilService.consultarCnpj(cnpj).subscribe(data => {
+        this.companyForm.patchValue({
+          name: data.nome || '',
+          email: data.email || '',
+          phone: data.telefone || '',
+          address: data.logradouro || '',
+          neighborhood: data.bairro || '',
+          city: data.municipio || '',
+          state: data.uf || '',
+          zipcode: data.cep || ''
+        });
+        this.loadingCnpj = false;
+      }, () => this.loadingCnpj = false);
+    }
   }
+
+  getControl(name: string): FormControl {
+      return this.companyForm.get(name) as FormControl;
+    }
 }

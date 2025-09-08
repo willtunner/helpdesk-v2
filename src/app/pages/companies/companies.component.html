@@ -8,6 +8,7 @@
     { key: 'versionServ', label: 'fields.version', type: 'text', size: 'pequeno' }
   ]" [data]="companies" (filteredData)="onFilteredCompanies($event)">
   </app-custom-filter>
+
   <app-dynamic-table [headers]="headers" [data]="filteredCompanies" [actions]="['edit', 'delete']"
     (edit)="updateDocument($event)" (delete)="deleteDocument($event)">
   </app-dynamic-table>

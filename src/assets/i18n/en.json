@@ -221,7 +221,8 @@
       "success": {
         "clientUpdated": "✅ Client {{name}} updated successfully!",
         "clientDeleted": "Client {{name}} deleted successfully!",
-        "clientCreated": "Client {{name}} created successfully!"
+        "clientCreated": "Client {{name}} created successfully!",
+        "operatorDeleted": "🗑️ Operator {{name}} deleted successfully!"
       },
       "error": {
         "loadingCompanies": "Error loading companies and clients",
@@ -231,7 +232,8 @@
     },
     "confirmation": {
       "deleteTitle": "Delete confirmation!",
-      "deleteClientMessage": "Do you want to delete client <strong>{{clientName}}</strong> from company <strong>{{companyName}}</strong>?"
+      "deleteClientMessage": "Do you want to delete client <strong>{{clientName}}</strong> from company <strong>{{companyName}}</strong>?",
+      "deleteCompanyMessage": "Do you want to delete company <strong>{{companyName}}</strong>?"
     }
   },
   "company": {

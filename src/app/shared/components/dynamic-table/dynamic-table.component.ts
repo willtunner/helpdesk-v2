@@ -20,9 +20,9 @@ import { TranslateService } from '../../../services/translate.service';
   selector: 'app-dynamic-table',
   standalone: true,
   imports: [
-    CommonModule, 
-    MatTableModule, 
-    MatIconModule, 
+    CommonModule,
+    MatTableModule,
+    MatIconModule,
     MatButtonModule,
     MatSortModule,
     MatPaginator,
@@ -60,7 +60,7 @@ export class DynamicTableComponent {
     private emailValidationService: EmailValidationService,
     private notificationService: SendNotificationService,
     private translate: TranslateService
-  ) {}
+  ) { }
 
   ngAfterViewInit() {
     this.dataSource.paginator = this.paginator;
@@ -89,7 +89,7 @@ export class DynamicTableComponent {
         if (this.editingData.email) {
           const emailExists = await this.emailValidationService.checkEmailExistsInCollections(
             this.editingData.email,
-            ['users', 'clients'] 
+            ['users', 'clients']
           );
 
           if (emailExists) {
@@ -103,12 +103,9 @@ export class DynamicTableComponent {
         }
 
         Object.assign(this.editingRow, this.editingData);
-        await this.save.emit(this.editingRow);
 
-        // this.notificationService.customNotification(
-        //   NotificationType.SUCCESS,
-        //   '✅ Registro salvo com sucesso!'
-        // );
+        // Emite edit em vez de save
+        await this.edit.emit(this.editingRow); // Alterado de save para edit
 
         this.cancelEdit(false);
       } catch (error) {

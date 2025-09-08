@@ -5,8 +5,11 @@ import { Company } from '../../models/models';
 import { DynamicTableComponent } from '../../shared/components/dynamic-table/dynamic-table.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UpdateCompanyModalComponent } from './update-company-modal/update-company-modal.component';
-import { TranslateModule } from '@ngx-translate/core';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CustomFilterComponent } from '../../shared/components/custom-filter/custom-filter.component';
+import { ConfirmationDialogComponent } from '../../shared/components/confirmation-dialog copy/confirmation-dialog.component';
+import { SendNotificationService } from '../../services/send-notification.service';
+import { NotificationType } from '../../enums/notificationType.enum';
 
 @Component({
   selector: 'app-companies',
@@ -23,7 +26,9 @@ export class CompaniesComponent implements OnInit {
   constructor(
     private companyService: CompanyService,
     private auth: AuthService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private translate: TranslateService,
+    private messageService: SendNotificationService
   ) { }
 
   headers = [
@@ -55,23 +60,92 @@ export class CompaniesComponent implements OnInit {
     }
 
   }
+  
+  async updateDocument(company: Company): Promise<void> {
+    console.log('Update company:', company);
+    
+    try {
+      const { id, ...companyData } = company;
+  
+      // Chama o serviço para atualizar a empresa
+      const updatedCompany = await this.companyService.updateCompany(id, companyData);
+  
+      // Atualiza a lista local de empresas
+      this.updateLocalCompany(updatedCompany);
+  
+      // Mostra notificação de sucesso
+      this.messageService.customNotification(
+        NotificationType.SUCCESS,
+        this.translate.instant('company.notifications.success.companyUpdated', { name: updatedCompany.name })
+      );
+  
+      console.log('Empresa atualizada no banco:', updatedCompany);
+  
+    } catch (error) {
+      console.error('Erro ao atualizar empresa:', error);
+      
+      // Mostra notificação de erro
+      this.messageService.customNotification(
+        NotificationType.ERROR,
+        this.translate.instant('company.notifications.error.updatingCompany')
+      );
+  
+      throw error;
+    }
+  }
+  
 
-  updateDocument(company: Company) {
-    const dialogRef = this.dialog.open(UpdateCompanyModalComponent, {
-      width: '600px',
-      data: company
+  // Atualiza localmente a lista de empresas
+  private updateLocalCompany(updatedCompany: Company): void {
+    this.companies = this.companies.map(c =>
+      c.id === updatedCompany.id ? updatedCompany : c
+    );
+    this.filteredCompanies = [...this.companies]; // mantém filtrado atualizado também
+  }
+
+
+  deleteDocument(row: Company) {
+    console.log('Delete row:', row);
+    const dialogRef = this.dialog.open(ConfirmationDialogComponent, {
+      width: '400px',
+      data: {
+        title: this.translate.instant('client.confirmation.deleteTitle'),
+        typeButtom: 'delete',
+        message: this.translate.instant('client.confirmation.deleteCompanyMessage', {
+          companyName: row.name,
+        })
+      }
     });
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        console.log('Empresa atualizada:', result);
-        // Aqui você pode fazer update no backend
+        this.companyService.deleteCompany(row.id).then(() => {
+          // Atualiza a lista local removendo o cliente
+          this.companies = this.companies.map(c => {
+            if (c.id === row.id) {
+              return {
+                ...c,
+                clients: c.clients.filter(c => c.id !== row.id)
+              };
+            }
+            return c;
+          });
+
+          // Notificação de sucesso
+          this.messageService.customNotification(
+            NotificationType.ERROR,
+            this.translate.instant('client.notifications.success.operatorDeleted', { name: row.name })
+          );
+
+        }).catch(err => {
+          console.error('Erro ao deletar cliente:', err);
+          this.messageService.customNotification(
+            NotificationType.ERROR,
+            this.translate.instant('client.notifications.error.deletingClient')
+          );
+        });
       }
     });
-  }
-
-  deleteDocument(row: any) {
-    console.log('Delete row:', row);
   }
 
   onFilteredCompanies(filtered: Company[]) {

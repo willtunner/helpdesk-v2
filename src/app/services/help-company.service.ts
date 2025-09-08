@@ -68,4 +68,62 @@ export class HelpCompanyService {
       return null;
     }
   }
+
+  async updateHelpCompany(companyId: string, companyData: Partial<HelpDeskCompany>): Promise<HelpDeskCompany> {
+    try {
+      const companyDocRef = doc(this._firestore, `helpCompanies/${companyId}`);
+
+      // Remove campos que não devem ser atualizados
+      const { id, created, companies, employees, ...safeData } = companyData;
+
+      // Prepara dados para atualização
+      const updateData: any = {
+        ...safeData,
+        updated: new Date()
+      };
+
+      // Se name foi alterado, atualiza keywords
+      if (safeData.name) {
+        updateData.keywords = this.utilService.generateKeywordsFromName(safeData.name);
+      }
+
+      // Converte campos numéricos se necessário
+      if (safeData.cnpj !== undefined) {
+        updateData.cnpj = Number(safeData.cnpj);
+      }
+
+      if (safeData.zipcode !== undefined) {
+        updateData.zipcode = Number(String(safeData.zipcode).replace(/\D/g, ''));
+      }
+
+      if (safeData.phone !== undefined) {
+        updateData.phone = Number(String(safeData.phone).replace(/\D/g, ''));
+      }
+
+      // Atualiza no Firestore
+      await updateDoc(companyDocRef, updateData);
+
+      // Busca a empresa atualizada para retornar
+      const updatedCompany = await this.getHelpCompanyById(companyId);
+      
+      if (!updatedCompany) {
+        throw new Error('Erro ao buscar empresa atualizada');
+      }
+
+      this.messageService.customNotification(
+        NotificationType.SUCCESS,
+        'Empresa atualizada com sucesso'
+      );
+
+      return updatedCompany;
+
+    } catch (error) {
+      console.error('Erro ao atualizar empresa:', error);
+      this.messageService.customNotification(
+        NotificationType.ERROR,
+        'Erro ao atualizar empresa'
+      );
+      throw error;
+    }
+  }
 }

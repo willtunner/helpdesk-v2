@@ -1,1 +1,187 @@
-<p>profile-settings works!</p>
+<div class="profile-container" *ngIf="!isLoading">
+    <h2>Editar Perfil</h2>
+  
+    <!-- FORMULÁRIO DO USUÁRIO -->
+    <form [formGroup]="userForm" (ngSubmit)="saveUser()">
+      <mat-card class="card-section">
+        <h3>Meus Dados</h3>
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Nome</mat-label>
+            <input matInput formControlName="name">
+            <mat-error *ngIf="userForm.get('name')?.hasError('required')">
+              Nome é obrigatório
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Email</mat-label>
+            <input matInput formControlName="email" type="email">
+            <mat-error *ngIf="userForm.get('email')?.hasError('required')">
+              Email é obrigatório
+            </mat-error>
+            <mat-error *ngIf="userForm.get('email')?.hasError('email')">
+              Email inválido
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Telefone</mat-label>
+            <input matInput formControlName="phone">
+            <mat-error *ngIf="userForm.get('phone')?.hasError('required')">
+              Telefone é obrigatório
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Usuário</mat-label>
+            <input matInput formControlName="username">
+            <mat-error *ngIf="userForm.get('username')?.hasError('required')">
+              Usuário é obrigatório
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Campos de Senha -->
+          <mat-form-field appearance="outline">
+            <mat-label>Nova Senha</mat-label>
+            <input matInput type="password" formControlName="password" autocomplete="new-password">
+            <mat-hint>Mínimo 6 caracteres</mat-hint>
+            <mat-error *ngIf="userForm.get('password')?.hasError('minlength')">
+              A senha deve ter pelo menos 6 caracteres
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Repetir Senha</mat-label>
+            <input matInput type="password" formControlName="confirmPassword" autocomplete="new-password">
+            <mat-error *ngIf="userForm.get('confirmPassword')?.hasError('passwordMismatch')">
+              As senhas não coincidem
+            </mat-error>
+          </mat-form-field>
+  
+          <!-- Upload de Imagem -->
+          <div class="image-upload">
+            <img *ngIf="userForm.get('imageUrl')?.value" 
+                 [src]="userForm.get('imageUrl')?.value" 
+                 alt="Foto de perfil" 
+                 class="profile-image">
+            <input type="file" (change)="onImageSelected($event)" accept="image/*">
+          </div>
+        </div>
+  
+        <div class="card-actions">
+          <button mat-flat-button color="primary" type="submit" 
+                  [disabled]="userForm.invalid || userLoading">
+            {{ userLoading ? 'Salvando...' : 'Salvar Dados Pessoais' }}
+          </button>
+          <button mat-stroked-button color="warn" type="button" 
+                  (click)="resetUserForm()" [disabled]="userLoading">
+            Cancelar
+          </button>
+        </div>
+      </mat-card>
+    </form>
+  
+    <!-- FORMULÁRIO DA EMPRESA -->
+    <form [formGroup]="companyForm" (ngSubmit)="saveCompany()" *ngIf="hasHelpCompany">
+      <mat-card class="card-section">
+        <h3>Dados da Empresa</h3>
+        <div class="form-grid">
+          <mat-form-field appearance="outline">
+            <mat-label>Nome da Empresa</mat-label>
+            <input matInput formControlName="name">
+            <mat-error *ngIf="companyForm.get('name')?.hasError('required')">
+              Nome da empresa é obrigatório
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>CNPJ</mat-label>
+            <input matInput formControlName="cnpj">
+            <mat-error *ngIf="companyForm.get('cnpj')?.hasError('required')">
+              CNPJ é obrigatório
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Cidade</mat-label>
+            <input matInput formControlName="city">
+            <mat-error *ngIf="companyForm.get('city')?.hasError('required')">
+              Cidade é obrigatória
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Estado</mat-label>
+            <input matInput formControlName="state">
+            <mat-error *ngIf="companyForm.get('state')?.hasError('required')">
+              Estado é obrigatório
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Endereço</mat-label>
+            <input matInput formControlName="address">
+            <mat-error *ngIf="companyForm.get('address')?.hasError('required')">
+              Endereço é obrigatório
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Bairro</mat-label>
+            <input matInput formControlName="neighborhood">
+            <mat-error *ngIf="companyForm.get('neighborhood')?.hasError('required')">
+              Bairro é obrigatório
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>CEP</mat-label>
+            <input matInput formControlName="zipcode">
+            <mat-error *ngIf="companyForm.get('zipcode')?.hasError('required')">
+              CEP é obrigatório
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Telefone da Empresa</mat-label>
+            <input matInput formControlName="phone">
+            <mat-error *ngIf="companyForm.get('phone')?.hasError('required')">
+              Telefone é obrigatório
+            </mat-error>
+          </mat-form-field>
+  
+          <mat-form-field appearance="outline">
+            <mat-label>Email da Empresa</mat-label>
+            <input matInput formControlName="email" type="email">
+            <mat-error *ngIf="companyForm.get('email')?.hasError('required')">
+              Email é obrigatório
+            </mat-error>
+            <mat-error *ngIf="companyForm.get('email')?.hasError('email')">
+              Email inválido
+            </mat-error>
+          </mat-form-field>
+        </div>
+
+        <app-dynamic-table [headers]="headers" [data]="userHelpDeskCompany" [actions]="['edit', 'delete']"
+        (edit)="updateDocument($event)" (delete)="deleteDocument($event)">
+      </app-dynamic-table>
+  
+        <div class="card-actions">
+          <button mat-flat-button color="primary" type="submit" 
+                  [disabled]="companyForm.invalid || companyLoading">
+            {{ companyLoading ? 'Salvando...' : 'Salvar Dados da Empresa' }}
+          </button>
+          <button mat-stroked-button color="warn" type="button" 
+                  (click)="resetCompanyForm()" [disabled]="companyLoading">
+            Cancelar
+          </button>
+        </div>
+      </mat-card>
+    </form>
+  </div>
+  
+  <div *ngIf="isLoading" class="loading-container">
+    <mat-spinner></mat-spinner>
+    <p>Carregando dados...</p>
+  </div>

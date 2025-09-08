@@ -7,6 +7,7 @@ import { NotificationType } from '../enums/notificationType.enum';
 import { SessionService } from './session.service';
 
 const PATH_OPERATOR = 'users';
+const PATH_HELP_COMPANY = 'helpCompanies';
 
 @Injectable({
   providedIn: 'root',
@@ -14,6 +15,7 @@ const PATH_OPERATOR = 'users';
 export class OperatorsService {
   private _firestore = inject(Firestore);
   private _usersCollection = collection(this._firestore, PATH_OPERATOR);
+  private _helpCompaniesCollection = collection(this._firestore, PATH_HELP_COMPANY);
 
   constructor(
     private messageService: SendNotificationService,
@@ -40,41 +42,6 @@ export class OperatorsService {
       throw error;
     }
   }
-
-  // async saveOperator(operator: Omit<User, 'id'>): Promise<User> {
-  //   const operatorData: Omit<User, 'id'> = {
-  //     ...operator,
-  //     created: new Date(), // Campo obrigatório, inicializa com a data atual
-  //     deleted: false, // Campo obrigatório
-  //     updated: null, // Inicializa como null
-  //     phone: operator.phone || '', // Campo obrigatório, fallback para vazio
-  //     connection: operator.connection || null, // Opcional
-  //     userId: operator.|| '', // Campo obrigatório, precisa ser preenchido
-  //     imageUrl: operator.imageUrl || '', // Campo obrigatório, fallback para vazio
-  //     roles: operator.roles || ['OPERATOR'], // Campo obrigatório, default para OPERATOR
-  //   };
-
-  //   console.log('Dados do operador a serem salvos:', operatorData);
-  //   try {
-  //     const docRef = await addDoc(this._usersCollection, operatorData);
-  //     const newOperator: User = { ...operatorData, id: docRef.id };
-  //     await updateDoc(docRef, { id: docRef.id });
-
-  //     this.messageService.customNotification(
-  //       NotificationType.SUCCESS,
-  //       `${newOperator.username} cadastrado com sucesso!`
-  //     );
-
-  //     return newOperator;
-  //   } catch (error) {
-  //     this.messageService.customNotification(
-  //       NotificationType.ERROR,
-  //       'Erro ao salvar o operador no Firebase'
-  //     );
-  //     console.error('Erro ao salvar o operador no Firebase:', error);
-  //     throw error;
-  //   }
-  // }
 
   async updateCurrentUser(updatedUser: User): Promise<void> {
     try {

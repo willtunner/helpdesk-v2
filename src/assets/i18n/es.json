@@ -221,7 +221,8 @@
       "success": {
         "clientUpdated": "✅ ¡Cliente {{name}} actualizado con éxito!",
         "clientDeleted": "¡Cliente {{name}} eliminado con éxito!",
-        "clientCreated": "¡Cliente {{name}} creado con éxito!"
+        "clientCreated": "¡Cliente {{name}} creado con éxito!",
+        "operatorDeleted": "🗑️ Operador {{name}} eliminado con éxito!"
       },
       "error": {
         "loadingCompanies": "Error al cargar empresas y clientes",
@@ -231,7 +232,8 @@
     },
     "confirmation": {
       "deleteTitle": "¡Confirmación de eliminación!",
-      "deleteClientMessage": "¿Desea eliminar el cliente <strong>{{clientName}}</strong> de la empresa <strong>{{companyName}}</strong>?"
+      "deleteClientMessage": "¿Desea eliminar el cliente <strong>{{clientName}}</strong> de la empresa <strong>{{companyName}}</strong>?",
+      "deleteCompanyMessage": "¿Desea eliminar la empresa <strong>{{companyName}}</strong>?"
     }
   },
   "company": {
