@@ -37,25 +37,26 @@ export class ClientService {
 
   async getClientById(clientId: string): Promise<User | null> {
     try {
-      const q = query(
-        this._collection,
-        where('id', '==', clientId)
-      );
-
-      const snapshot = await getDocs(q);
-
-      if (!snapshot.empty) {
-        return { id: snapshot.docs[0].id, ...snapshot.docs[0].data() } as User;
+      // Cria a referência para o documento na coleção "clients"
+      const clientDocRef = doc(this._firestore, `${PATH}/${clientId}`);
+      const docSnapshot = await getDoc(clientDocRef);
+  
+      if (docSnapshot.exists()) {
+        return { id: docSnapshot.id, ...docSnapshot.data() } as User;
       } else {
         console.warn(`Cliente com ID ${clientId} não encontrado.`);
         return null;
       }
     } catch (error) {
       console.error('Erro ao buscar cliente por ID:', error);
-      this.messageService.customNotification(NotificationType.ERROR, 'Erro ao buscar cliente');
+      this.messageService.customNotification(
+        NotificationType.ERROR,
+        'Erro ao buscar cliente'
+      );
       throw error;
     }
   }
+  
 
   async getCompaniesWithClients(helpDeskCompanyId: string): Promise<Company[]> {
     try {

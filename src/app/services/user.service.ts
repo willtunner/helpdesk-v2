@@ -294,6 +294,51 @@ export class UserService {
       return [];
     }
   }
+
+  async saveOperator(userData: Partial<User>): Promise<User> {
+    try {
+      // Gera um novo doc em "users"
+      const userDocRef = await addDoc(this._usersCollection, {
+        ...userData,
+        deleted: false,
+        created: new Date(),
+        updated: null,
+      });
+  
+      const savedUser: User = {
+        id: userDocRef.id,
+        deleted: false,
+        created: new Date(),
+        updated: null,
+        username: userData.username ?? '',
+        name: userData.name ?? '',
+        phone: userData.phone ?? '',
+        email: userData.email ?? '',
+        password: userData.password ?? '',
+        isLoggedIn: false,
+        imageUrl: userData.imageUrl ?? '',
+        roles: userData.roles ?? ['OPERATOR'],
+        connection: userData.connection ?? null,
+        helpDeskCompanyId: userData.helpDeskCompanyId ?? '',
+        companyId: userData.companyId ?? '',
+      };
+  
+      this.messageService.customNotification(
+        NotificationType.SUCCESS,
+        'Operador cadastrado com sucesso'
+      );
+  
+      return savedUser;
+    } catch (error) {
+      console.error('Erro ao salvar operador:', error);
+      this.messageService.customNotification(
+        NotificationType.ERROR,
+        'Erro ao cadastrar operador'
+      );
+      throw error;
+    }
+  }
+  
   
   
 }

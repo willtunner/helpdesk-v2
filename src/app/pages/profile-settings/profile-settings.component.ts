@@ -14,6 +14,8 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { DynamicTableComponent } from '../../shared/components/dynamic-table/dynamic-table.component';
+import { MatDialog } from '@angular/material/dialog';
+import { AddOperatorDialogComponent } from './add-operator-dialog/add-operator-dialog.component';
 
 @Component({
   selector: 'app-profile-settings',
@@ -48,6 +50,7 @@ export class ProfileSettingsComponent implements OnInit {
     private userService: UserService,
     private helpCompanyService: HelpCompanyService,
     private messageService: SendNotificationService,
+    private dialog: MatDialog
 
   ) {}
 
@@ -295,5 +298,27 @@ export class ProfileSettingsComponent implements OnInit {
 
   updateDocument(index: any) {}
   deleteDocument(index: any) {}
+
+  openAddOperatorModal(): void {
+    const dialogRef = this.dialog.open(AddOperatorDialogComponent, {
+      width: '500px',
+      data:  this.user.helpDeskCompanyId 
+    });
+
+    dialogRef.afterClosed().subscribe(async (result: Partial<User>) => {
+      if (result) {
+        try {
+          const savedUser = await this.userService.saveOperator(result);
+          console.log('Novo operador salvo:', savedUser);
+  
+          // Atualiza a lista de operadores
+          this.userHelpDeskCompany = await this.userService.getUsersByHelpDeskCompanyIdOrdered(this.user.helpDeskCompanyId!);
+  
+        } catch (err) {
+          console.error('Erro ao salvar operador:', err);
+        }
+      }
+    });
+  }
 
 }

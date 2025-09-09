@@ -1,0 +1,57 @@
+<h2 mat-dialog-title>Cadastrar Operador</h2>
+<mat-dialog-content class="dialog-content">
+  <form [formGroup]="operatorForm">
+    
+    <app-custom-input
+      label="Nome"
+      [control]="operatorForm.get('name')!"
+      type="text"
+      size="full-width">
+    </app-custom-input>
+
+    <app-custom-input
+      label="Email"
+      [control]="operatorForm.get('email')!"
+      type="email"
+      size="full-width">
+    </app-custom-input>
+
+    <app-custom-input
+      label="Telefone"
+      [control]="operatorForm.get('phone')!"
+      type="telefone"
+      size="full-width">
+    </app-custom-input>
+
+    <app-custom-input
+      label="Usuário"
+      [control]="operatorForm.get('username')!"
+      type="text"
+      size="full-width">
+    </app-custom-input>
+
+    <app-custom-input
+      label="Senha"
+      [control]="operatorForm.get('password')!"
+      type="password"
+      size="full-width">
+    </app-custom-input>
+
+    <!-- Campo somente leitura com o ID -->
+    <app-custom-input
+      label="HelpDesk Company ID"
+      [control]="operatorForm.get('helpDeskCompanyId')!"
+      type="text"
+      size="full-width"
+      cssClass="readonly-field">
+    </app-custom-input>
+
+  </form>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-stroked-button mat-dialog-close>Cancelar</button>
+  <button mat-flat-button color="primary" [mat-dialog-close]="operatorForm.value" [disabled]="operatorForm.invalid">
+    Salvar
+  </button>
+</mat-dialog-actions>

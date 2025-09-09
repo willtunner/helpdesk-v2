@@ -45,37 +45,39 @@ export class CallService {
       where('helpDeskCompanyId', '==', helpDeskCompanyId),
       orderBy('created', 'desc')
     ];
-
+  
     if (operatorId) {
       constraints.push(where('operatorId', '==', operatorId));
     }
-
+  
     const q = query(this._collectionCalls, ...constraints);
-
+  
     return collectionData(q, { idField: 'id' }).pipe(
       switchMap((calls: any[]) => {
         if (calls.length === 0) return of([]);
-
+  
         // Para cada call, criamos um observable que busca os dados completos
         const callsWithDetails$ = calls.map(call => {
           // Converte as datas
           const created = (call.created as any)?.toDate?.() || new Date();
           const updated = (call.updated as any)?.toDate?.() || new Date();
           const finalized = call.finalized ? (call.finalized as any)?.toDate?.() || null : null;
-
-          // Cria observables para cada entidade relacionada
+  
+          // Busca a company no PATH = "company"
           const company$ = call.companyId
-            ? from(this.companyService.getCompanyById(call.companyId))
+            ? from(this.companyService.getCompanyById(call.companyId)) // já usa PATH=company
             : of(null);
-
+  
+          // Busca o operador
           const operator$ = call.operatorId
             ? from(this.operatorsService.getUserById(call.operatorId))
             : of(null);
-
+  
+          // Busca o client no PATH = "clients"
           const client$ = call.clientId
-            ? from(this.clientService.getClientById(call.clientId))
+            ? from(this.clientService.getClientById(call.clientId)) // já usa PATH=clients
             : of(null);
-
+  
           // Combina todos os observables
           return forkJoin([company$, operator$, client$]).pipe(
             map(([company, operator, client]) => ({
@@ -89,7 +91,7 @@ export class CallService {
             } as Call))
           );
         });
-
+  
         // Combina todos os observables de calls
         return forkJoin(callsWithDetails$);
       }),
@@ -103,6 +105,7 @@ export class CallService {
       })
     );
   }
+  
 
   getCalls$(closed?: boolean, helpDeskCompanyId?: string): Observable<Call[]> {
     const constraints: any[] = [];

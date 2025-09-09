@@ -9,7 +9,7 @@ import { SendNotificationService } from './send-notification.service';
 import { NotificationType } from '../enums/notificationType.enum';
 import { DateTimeFormatPipe } from '../pipes/dateTimeFormatTimeStamp.pipe';
 import { Observable } from 'rxjs';
-import { deleteDoc } from 'firebase/firestore';
+import { deleteDoc, getDoc } from 'firebase/firestore';
 
 const PATH = 'company';
 const HELP_DESK_COMPANY = 'helpCompanies';
@@ -67,13 +67,12 @@ export class CompanyService {
 
   async getCompanyById(companyId: string): Promise<Company | null> {
     try {
-      const docSnapshot = await getDocs(
-        query(collection(this._firestore, HELP_DESK_COMPANY), where('id', '==', companyId))
-      );
-
-      if (!docSnapshot.empty) {
-        const companyData = docSnapshot.docs[0].data();
-        const company = { id: companyId, ...companyData } as Company;
+      const companyDocRef = doc(this._firestore, `${PATH}/${companyId}`);
+      const docSnapshot = await getDoc(companyDocRef);
+  
+      if (docSnapshot.exists()) {
+        const companyData = docSnapshot.data();
+        const company = { id: docSnapshot.id, ...companyData } as Company;
         return this.formatCompanyDates(company);
       } else {
         console.warn(`Empresa com ID ${companyId} não encontrada.`);
