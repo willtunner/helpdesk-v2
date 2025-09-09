@@ -17,6 +17,8 @@ import { DynamicTableComponent } from '../dynamic-table/dynamic-table.component'
 import { FirebaseDatePipe } from '../../../pipes/firebase-timestamp.pipe';
 import { DynamicButtonComponent } from '../action-button/action-button.component';
 import { ConfirmationDialogComponent } from '../confirmation-dialog copy/confirmation-dialog.component';
+import { AuthService } from '../../../services/auth.service';
+import { User } from '../../../models/models';
 
 @Component({
   selector: 'app-mtb-dev',
@@ -51,6 +53,7 @@ export class MtbDevComponent implements OnInit {
   isLoadingDoc = false;
   isProcessingSave = false;
   firebaseDatePipe = inject(FirebaseDatePipe);
+  user!: User;
 
   headers = [
     { key: 'id', label: 'ID' },
@@ -85,6 +88,7 @@ export class MtbDevComponent implements OnInit {
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     private documentService: DocumentService,
+    private auth: AuthService
   ) {
     // Efeito para salvar localStorage
     effect(() => {
@@ -105,7 +109,11 @@ export class MtbDevComponent implements OnInit {
   }
 
   ngOnInit() {
-
+    const session = this.auth.currentUser();
+    
+    if(session){
+      this.user = session;
+    }
   }
 
 
@@ -191,7 +199,7 @@ export class MtbDevComponent implements OnInit {
         );
         this.snackBar.open('Documento atualizado com sucesso!', 'Fechar', { duration: 2000 });
       } else {
-        await this.documentService.saveDocument(this.documentTitle, this.editorContent);
+        await this.documentService.saveDocument(this.documentTitle, this.editorContent, this.user.helpDeskCompanyId!);
         this.snackBar.open('Documento salvo com sucesso!', 'Fechar', { duration: 2000 });
       }
 

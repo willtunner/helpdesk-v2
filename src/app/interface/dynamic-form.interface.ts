@@ -47,5 +47,6 @@ export interface SavedDocument {
   content: string;
   createdAt: Date;
   updatedAt?: Date;
+  helpDeskCompanyId: string;
 }
 

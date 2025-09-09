@@ -15,6 +15,8 @@ import { DocumentService } from '../../services/document.service';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { ConfirmationDialogComponent } from '../../shared/components/confirmation-dialog copy/confirmation-dialog.component';
+import { AuthService } from '../../services/auth.service';
+import { User } from '../../models/models';
 
 @Component({
   selector: 'app-tutorials',
@@ -43,6 +45,7 @@ export class TutorialsComponent {
   savedDocuments = signal<SavedDocument[]>([]);
   nextId = 1;
   isGeneratingPDF = signal(false);
+  user!: User;
 
   quillModules = {
     toolbar: [
@@ -61,6 +64,7 @@ export class TutorialsComponent {
     public dialog: MatDialog,
     private snackBar: MatSnackBar,
     private documentService: DocumentService,
+    private auth: AuthService
   ) {
     // Efeito para salvar localStorage
     effect(() => {
@@ -81,7 +85,8 @@ export class TutorialsComponent {
   }
 
   ngOnInit() {
-
+    const session = this.auth.currentUser();
+    this.user = session!;
   }
 
 
@@ -163,7 +168,7 @@ export class TutorialsComponent {
       );
       this.snackBar.open('Documento atualizado com sucesso!', 'Fechar', { duration: 2000 });
     } else {
-      await this.documentService.saveDocument(this.documentTitle, this.editorContent);
+      await this.documentService.saveDocument(this.documentTitle, this.editorContent, this.user.helpDeskCompanyId!);
       this.snackBar.open('Documento salvo com sucesso!', 'Fechar', { duration: 2000 });
     }
 
