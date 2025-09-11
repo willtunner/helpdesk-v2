@@ -27,7 +27,7 @@ import { CommonModule } from '@angular/common';
   templateUrl: './admin-home.component.html',
   styleUrl: './admin-home.component.scss'
 })
-export class AdminHomeComponent implements OnInit  {
+export class AdminHomeComponent implements OnInit {
   user!: User;
   ChartType = ChartType;
   UserType = UserType;
@@ -52,10 +52,10 @@ export class AdminHomeComponent implements OnInit  {
     private messageService: SendNotificationService,
     private dialog: MatDialog,
     private utilService: UtilService,
-    private tagService: TagService,) { 
-      const session = this.auth.currentUser();
+    private tagService: TagService,) {
+    const session = this.auth.currentUser();
 
-    this.getChartData = this.getChartData.bind(this);
+    // this.getChartData = this.getChartData.bind(this);
 
 
     if (session) {
@@ -70,25 +70,25 @@ export class AdminHomeComponent implements OnInit  {
         console.error('Erro ao detectar role:', err);
       }
     }
+  }
+
+  async ngOnInit(): Promise<void> {
+    this.translateService.load([
+      'charts.pieChart.title',
+      'charts.pieChart.description',
+      'dashboard.clients'
+    ]);
+
+    if (this.user.helpDeskCompanyId) {
+      await this.loadAllData(this.user.helpDeskCompanyId);
+    } else {
+      console.warn('Usuário não está associado a uma empresa');
+      this.isLoading = false;
     }
 
-    async ngOnInit(): Promise<void> {
-      this.translateService.load([
-        'charts.pieChart.title',
-        'charts.pieChart.description',
-        'dashboard.clients'
-      ]);
-  
-      if (this.user.helpDeskCompanyId) {
-        await this.loadAllData(this.user.helpDeskCompanyId);
-      } else {
-        console.warn('Usuário não está associado a uma empresa');
-        this.isLoading = false;
-      }
-  
-      const role = this.userService.getEffectiveUserRole(this.user);
-      console.log('Função efetiva do usuário:', role);
-    }
+    const role = this.userService.getEffectiveUserRole(this.user);
+    console.log('Função efetiva do usuário:', role);
+  }
 
   openClientsModal(): void {
     this.dialog.open(ClientsModalComponent, {
@@ -183,51 +183,51 @@ export class AdminHomeComponent implements OnInit  {
   }
 
   openCallsModal(type: 'open' | 'closed' | 'all'): void {
-      let closed: boolean | undefined;
-  
-      if (type === 'open') closed = false;
-      else if (type === 'closed') closed = true;
-  
-      this.callService.getCalls$(closed, this.user.helpDeskCompanyId).pipe(take(1)).subscribe({
-        next: (calls: Call[]) => {
-          this.dialog.open(CallModalComponent, {
-            width: '1000px',
-            panelClass: 'custom-modal',
-            data: { calls, type }
-          });
-        },
-        error: (err) => {
-          this.messageService.customNotification(NotificationType.ERROR, 'Erro ao carregar chamados');
-          console.error(err);
-        }
-      });
-    }
+    let closed: boolean | undefined;
 
-    async getChartData(): Promise<any[]> {
-      try {
-        const tags = await this.tagService.getAllTagsByCall();
-        
-        const tagsDataPromises = tags.map(async (tag) => {
-          const calls = await this.tagService.getCallsByTag(tag); // retorna Call[]
-          return {
-            name: tag,
-            y: calls.length, // aqui pega o total
-            color: this.getRandomColor()
-          };
+    if (type === 'open') closed = false;
+    else if (type === 'closed') closed = true;
+
+    this.callService.getCalls$(closed, this.user.helpDeskCompanyId).pipe(take(1)).subscribe({
+      next: (calls: Call[]) => {
+        this.dialog.open(CallModalComponent, {
+          width: '1000px',
+          panelClass: 'custom-modal',
+          data: { calls, type }
         });
-    
-        return await Promise.all(tagsDataPromises);
-      } catch (error) {
-        console.error('Error fetching chart data:', error);
-        return [];
+      },
+      error: (err) => {
+        this.messageService.customNotification(NotificationType.ERROR, 'Erro ao carregar chamados');
+        console.error(err);
       }
+    });
+  }
+
+  async getChartData(): Promise<any[]> {
+    try {
+      const tags = await this.tagService.getAllTagsByCall();
+
+      const tagsDataPromises = tags.map(async (tag) => {
+        const calls = await this.tagService.getCallsByTag(tag); // retorna Call[]
+        return {
+          name: tag,
+          y: calls.length, // aqui pega o total
+          color: this.getRandomColor()
+        };
+      });
+
+      return await Promise.all(tagsDataPromises);
+    } catch (error) {
+      console.error('Error fetching chart data:', error);
+      return [];
     }
+  }
 
 
-    private getRandomColor(): string {
-      return this.utilService.getRandomColor(); // Usando o serviço UtilService
-      // Ou se preferir manter local:
-      // return '#' + Math.floor(Math.random()*16777215).toString(16);
-    }
+  private getRandomColor(): string {
+    return this.utilService.getRandomColor(); // Usando o serviço UtilService
+    // Ou se preferir manter local:
+    // return '#' + Math.floor(Math.random()*16777215).toString(16);
+  }
 
 }
