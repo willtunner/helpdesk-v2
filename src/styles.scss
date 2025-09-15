@@ -253,21 +253,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 /* Regras globais pro Quill — garante aplicação no build otimizado */
-.ql-container {
-  min-height: 200px;
-}
-
-.ql-editor {
-  min-height: 200px; /* se quiser garantir min height também no editor */
-  max-height: 500px;
-  overflow-y: auto;
-}
-
-/* Ajustes da toolbar se necessário */
-.ql-toolbar {
-  border-radius: 4px 4px 0 0;
-  border: 1px solid rgba(0,0,0,0.12);
-  border-bottom: none;
+app-rich-text {
+  display: block;
+  width: 100%;
 }
 
 
