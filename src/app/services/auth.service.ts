@@ -45,16 +45,27 @@ export class AuthService {
 
   async login(email: string, password: string): Promise<boolean> {
     try {
-      // 🔍 Buscar apenas por EMAIL nas 3 coleções
-      const usersEmailQuery = query(this._usersCollection, where('email', '==', email));
-      const clientsEmailQuery = query(this._clientsCollection, where('email', '==', email));
-      const helpCompaniesEmailQuery = query(this._helpDeskClientsCollection, where('email', '==', email));
+      const normalizedEmail = email.trim().toLowerCase();
   
+      console.log('🔍 Iniciando login para:', normalizedEmail);
+  
+      // 🔍 Buscar apenas por EMAIL normalizado nas 3 coleções
+      const usersEmailQuery = query(this._usersCollection, where('email', '==', normalizedEmail));
+      const clientsEmailQuery = query(this._clientsCollection, where('email', '==', normalizedEmail));
+      const helpCompaniesEmailQuery = query(this._helpDeskClientsCollection, where('email', '==', normalizedEmail));
+  
+      // Executa as consultas em paralelo
       const [usersSnap, clientsSnap, helpCompaniesSnap] = await Promise.all([
         getDocs(usersEmailQuery),
         getDocs(clientsEmailQuery),
         getDocs(helpCompaniesEmailQuery),
       ]);
+  
+      console.log('📊 Resultados:', {
+        users: usersSnap.size,
+        clients: clientsSnap.size,
+        helpCompanies: helpCompaniesSnap.size,
+      });
   
       const totalEmailMatches = usersSnap.size + clientsSnap.size + helpCompaniesSnap.size;
   
@@ -86,6 +97,8 @@ export class AuthService {
       const user = userDoc.data() as User;
       user.id = userDoc.id;
   
+      console.log(`✅ Usuário encontrado na coleção: ${source}`, user);
+  
       // 📌 Valida senha
       if (user.password !== password) {
         throw new Error('Senha incorreta.');
@@ -96,10 +109,11 @@ export class AuthService {
       return true;
   
     } catch (error) {
-      console.error('Erro no login:', error);
+      console.error('❌ Erro no login:', error);
       throw error;
     }
   }
+  
   
   
 

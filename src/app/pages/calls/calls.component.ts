@@ -32,6 +32,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { CreateClienteModalComponent } from '../home/clients-modal/create-cliente-modal/create-cliente-modal.component';
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
+import { QuillModule } from 'ngx-quill';
 
 @Component({
   selector: 'app-calls',
@@ -43,6 +44,7 @@ import { AuthService } from '../../services/auth.service';
     MatProgressSpinnerModule,
     MatTooltipModule,
     TranslateModule,
+    QuillModule,
 
     // Componentes customizados
     DynamicSelectComponent,
