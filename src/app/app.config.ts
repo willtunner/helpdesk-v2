@@ -51,8 +51,6 @@ export const appConfig: ApplicationConfig = {
     // ✅ CONFIGURAÇÃO CORRETA DO QUILL (ATUALIZADA)
     provideQuillConfig({
       modules: {
-        syntax: false, // Desabilita syntax highlighting se não usar
-        table: true,   // Habilita módulo de tabelas
         toolbar: [
           ['bold', 'italic', 'underline', 'strike'],
           [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
@@ -62,15 +60,12 @@ export const appConfig: ApplicationConfig = {
           [{ 'font': [] }],
           [{ 'align': [] }],
           ['link', 'image', 'video'],
-          ['clean'],
-          [{ 'table': 'insert-table' }]
+          ['clean']
         ]
       },
       theme: 'snow',
       format: 'html',
-      bounds: document.body,
-      placeholder: 'Digite seu texto aqui...',
-      readOnly: false
+      placeholder: 'Digite seu texto aqui...'
     })
   ],
 };

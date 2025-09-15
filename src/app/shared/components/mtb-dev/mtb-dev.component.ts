@@ -69,20 +69,7 @@ export class MtbDevComponent implements OnInit {
         return dateStr;
       }
     }
-  ];
-
-  quillModules = {
-    toolbar: [
-      ['bold', 'italic', 'underline', 'strike'],
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      [{ 'list': 'ordered' }, { 'list': 'bullet' }],
-      [{ 'size': ['small', false, 'large', 'huge'] }],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'font': [] }],
-      [{ 'align': [] }],
-      ['link', 'image', 'video']
-    ]
-  };
+  ];  
 
   constructor(
     public dialog: MatDialog,

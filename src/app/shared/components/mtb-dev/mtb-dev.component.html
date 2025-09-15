@@ -30,7 +30,7 @@
     </mat-form-field>
 
     <div *ngIf="!showPreview(); else previewTemplate">
-      <quill-editor class="quill-editor" [(ngModel)]="editorContent" [modules]="quillModules"
+      <quill-editor class="quill-editor" [(ngModel)]="editorContent"
         placeholder="Digite seu texto aqui..." format="html">
       </quill-editor>
     </div>
@@ -52,44 +52,5 @@
       (load)="loadDocument($event)" (delete)="deleteDocument($event.id, $event)">
     </app-dynamic-table>
 
-
-    <!-- <table mat-table [dataSource]="savedDocuments()" class="mat-elevation-z1">
-      <ng-container matColumnDef="id">
-        <th mat-header-cell *matHeaderCellDef>ID</th>
-        <td mat-cell *matCellDef="let doc">{{ doc.id }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="title">
-        <th mat-header-cell *matHeaderCellDef>Título</th>
-        <td mat-cell *matCellDef="let doc">{{ doc.title }}</td>
-      </ng-container>
-
-      <ng-container matColumnDef="date">
-        <th mat-header-cell *matHeaderCellDef>Data</th>
-        <td mat-cell *matCellDef="let doc">
-          {{ doc.createdAt | dateFormat }}
-          <span *ngIf="doc.updatedAt" class="updated-info">
-            <br>(editado em {{ doc.updatedAt | dateFormat }})
-          </span>
-        </td>
-      </ng-container>
-
-      <ng-container matColumnDef="actions">
-        <th mat-header-cell *matHeaderCellDef class="actions-header">Ações</th>
-        <td mat-cell *matCellDef="let doc" class="actions-cell">
-          <div class="actions">
-            <button (click)="loadDocument(doc)" class="load-btn" [disabled]="isLoadingDoc || doc.id === currentDocumentId">
-              <i class="fas fa-edit"></i> Carregar
-            </button>
-            <button mat-raised-button (click)="deleteDocument(doc.id, doc)" color="warn" class="delete-btn">
-              <mat-icon>delete</mat-icon> Excluir
-            </button>
-          </div>
-        </td>
-      </ng-container>
-
-      <tr mat-header-row *matHeaderRowDef="['id', 'title', 'date', 'actions']"></tr>
-      <tr mat-row *matRowDef="let row; columns: ['id', 'title', 'date', 'actions'];"></tr>
-    </table> -->
   </div>
 </div>
