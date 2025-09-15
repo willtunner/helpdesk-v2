@@ -44,9 +44,10 @@ export class AuthService {
   }
 
   async login(email: string, password: string): Promise<boolean> {
+    console.log('🚀 Tentativa de login iniciada', { email, password });
+  
     try {
       const normalizedEmail = email.trim().toLowerCase();
-  
       console.log('🔍 Iniciando login para:', normalizedEmail);
   
       // 🔍 Buscar apenas por EMAIL normalizado nas 3 coleções
@@ -61,11 +62,10 @@ export class AuthService {
         getDocs(helpCompaniesEmailQuery),
       ]);
   
-      console.log('📊 Resultados:', {
-        users: usersSnap.size,
-        clients: clientsSnap.size,
-        helpCompanies: helpCompaniesSnap.size,
-      });
+      console.log('📊 Resultados encontrados:');
+      console.log('➡️ Users:', usersSnap.docs.map(d => ({ id: d.id, ...d.data() })));
+      console.log('➡️ Clients:', clientsSnap.docs.map(d => ({ id: d.id, ...d.data() })));
+      console.log('➡️ HelpCompanies:', helpCompaniesSnap.docs.map(d => ({ id: d.id, ...d.data() })));
   
       const totalEmailMatches = usersSnap.size + clientsSnap.size + helpCompaniesSnap.size;
   
@@ -113,6 +113,7 @@ export class AuthService {
       throw error;
     }
   }
+  
   
   
   
