@@ -45,76 +45,62 @@ export class AuthService {
 
   async login(email: string, password: string): Promise<boolean> {
     try {
-      // 🔍 Consulta em USERS
-      const usersQuery = query(
-        this._usersCollection,
-        where('email', '==', email),
-        where('password', '==', password)
-      );
-      const usersSnap = await getDocs(usersQuery);
+      // 🔍 Buscar apenas por EMAIL nas 3 coleções
+      const usersEmailQuery = query(this._usersCollection, where('email', '==', email));
+      const clientsEmailQuery = query(this._clientsCollection, where('email', '==', email));
+      const helpCompaniesEmailQuery = query(this._helpDeskClientsCollection, where('email', '==', email));
   
-      // 🔍 Consulta em CLIENTS
-      const clientsQuery = query(
-        this._clientsCollection,
-        where('email', '==', email),
-        where('password', '==', password)
-      );
-      const clientsSnap = await getDocs(clientsQuery);
+      const [usersSnap, clientsSnap, helpCompaniesSnap] = await Promise.all([
+        getDocs(usersEmailQuery),
+        getDocs(clientsEmailQuery),
+        getDocs(helpCompaniesEmailQuery),
+      ]);
   
-      // 🔍 Consulta em HELP COMPANIES
-      const helpCompaniesQuery = query(
-        this._helpDeskClientsCollection,
-        where('email', '==', email),
-        where('password', '==', password)
-      );
-      const helpCompaniesSnap = await getDocs(helpCompaniesQuery);
+      const totalEmailMatches = usersSnap.size + clientsSnap.size + helpCompaniesSnap.size;
   
-      // 📌 Verifica duplicados
-      const totalMatches =
-        usersSnap.size + clientsSnap.size + helpCompaniesSnap.size;
-      if (totalMatches > 1) {
-        throw new Error(
-          'E-mail duplicado encontrado em mais de uma conta (users/clients/helpCompanies).'
-        );
+      // 📌 Caso tenha mais de um email encontrado
+      if (totalEmailMatches > 1) {
+        throw new Error('E-mail duplicado encontrado em mais de uma conta (users/clients/helpCompanies).');
       }
   
-      // ✅ Se achou em users
+      // 📌 Nenhum email encontrado
+      if (totalEmailMatches === 0) {
+        throw new Error('E-mail não existe.');
+      }
+  
+      // 📌 Email encontrado em apenas UMA coleção
+      let userDoc: any = null;
+      let source = '';
+  
       if (!usersSnap.empty) {
-        const userDoc = usersSnap.docs[0];
-        const user = userDoc.data() as User;
-        user.id = userDoc.id;
-  
-        this._saveSession(user);
-        return true;
+        userDoc = usersSnap.docs[0];
+        source = 'users';
+      } else if (!clientsSnap.empty) {
+        userDoc = clientsSnap.docs[0];
+        source = 'clients';
+      } else if (!helpCompaniesSnap.empty) {
+        userDoc = helpCompaniesSnap.docs[0];
+        source = 'helpCompanies';
       }
   
-      // ✅ Se achou em clients
-      if (!clientsSnap.empty) {
-        const clientDoc = clientsSnap.docs[0];
-        const client = clientDoc.data() as User; // se tiver interface Client, troca aqui
-        client.id = clientDoc.id;
+      const user = userDoc.data() as User;
+      user.id = userDoc.id;
   
-        this._saveSession(client);
-        return true;
+      // 📌 Valida senha
+      if (user.password !== password) {
+        throw new Error('Senha incorreta.');
       }
   
-      // ✅ Se achou em helpCompanies
-      if (!helpCompaniesSnap.empty) {
-        const helpDoc = helpCompaniesSnap.docs[0];
-        const helpCompanyUser = helpDoc.data() as User; // se for interface diferente, cria
-        helpCompanyUser.id = helpDoc.id;
+      // ✅ Login bem-sucedido
+      this._saveSession(user);
+      return true;
   
-        this._saveSession(helpCompanyUser);
-        return true;
-      }
-  
-      // ❌ Nenhum encontrado
-      throw new Error('Usuário ou senha inválidos.');
     } catch (error) {
       console.error('Erro no login:', error);
       throw error;
     }
   }
+  
   
 
   private _saveSession(user: User) {
