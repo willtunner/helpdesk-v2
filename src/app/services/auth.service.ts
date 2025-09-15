@@ -47,15 +47,15 @@ export class AuthService {
     console.log('🚀 Tentativa de login iniciada', { email, password });
   
     this._debugCollections(); // Apenas para debug, pode ser removido depois
-    
+
     try {
-      const normalizedEmail = email.trim().toLowerCase();
-      console.log('🔍 Iniciando login para:', normalizedEmail);
+      // const normalizedEmail = email.trim().toLowerCase();
+      // console.log('🔍 Iniciando login para:', normalizedEmail);
   
       // 🔍 Buscar apenas por EMAIL normalizado nas 3 coleções
-      const usersEmailQuery = query(this._usersCollection, where('email', '==', normalizedEmail));
-      const clientsEmailQuery = query(this._clientsCollection, where('email', '==', normalizedEmail));
-      const helpCompaniesEmailQuery = query(this._helpDeskClientsCollection, where('email', '==', normalizedEmail));
+      const usersEmailQuery = query(this._usersCollection, where('email', '==', email));
+      const clientsEmailQuery = query(this._clientsCollection, where('email', '==', email));
+      const helpCompaniesEmailQuery = query(this._helpDeskClientsCollection, where('email', '==', email));
   
       // Executa as consultas em paralelo
       const [usersSnap, clientsSnap, helpCompaniesSnap] = await Promise.all([
