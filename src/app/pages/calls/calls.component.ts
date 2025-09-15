@@ -172,6 +172,9 @@ export class CallsComponent implements OnInit {
   private async patchFormWithCallData(): Promise<void> {
     if (!this.selectedCall) return;
 
+    // ✅ ADICIONAR VERIFICAÇÃO PARA resolution
+    const resolutionValue = this.selectedCall.resolution || '';
+
     // Primeiro preenche os valores básicos
     this.form.patchValue({
       companyId: this.selectedCall.companyId,
@@ -179,7 +182,7 @@ export class CallsComponent implements OnInit {
       connection: this.selectedCall.connection || '',
       title: this.selectedCall.title || '',
       description: this.selectedCall.description || '',
-      resolution: this.selectedCall.resolution || '',
+      resolution: resolutionValue,
       tags: this.selectedCall.tags || [],
       closed: this.selectedCall.closed || false,
       operatorId: this.selectedCall.operatorId || this.operator?.id,

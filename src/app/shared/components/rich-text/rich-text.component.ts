@@ -56,25 +56,28 @@ export class RichTextEditorComponent implements ControlValueAccessor, OnDestroy 
   };
 
   private _control!: FormControl;
-  @Input() 
-  set control(ctrl: AbstractControl | null) {
-    if (this.controlSubscription) {
-      this.controlSubscription.unsubscribe();
+
+ @Input() 
+set control(ctrl: AbstractControl | null) {
+  if (this.controlSubscription) {
+    this.controlSubscription.unsubscribe();
+  }
+  
+  if (ctrl) {
+    this._control = ctrl as FormControl;
+    
+    // ✅ ADICIONAR VERIFICAÇÃO DE NULL
+    if (this._control.value !== null && this._control.value !== undefined) {
+      this.writeValue(this._control.value);
     }
     
-    if (ctrl) {
-      this._control = ctrl as FormControl;
-      // Sincroniza o valor inicial
-      this.writeValue(this._control.value);
-      
-      // Observa mudanças externas ao controle
-      this.controlSubscription = this._control.valueChanges.subscribe(value => {
-        if (value !== this.editorContent) {
-          this.editorContent = value || '';
-        }
-      });
-    }
+    this.controlSubscription = this._control.valueChanges.subscribe(value => {
+      if (value !== this.editorContent && value !== null && value !== undefined) {
+        this.editorContent = value || '';
+      }
+    });
   }
+}
   
   get control(): FormControl {
     return this._control;

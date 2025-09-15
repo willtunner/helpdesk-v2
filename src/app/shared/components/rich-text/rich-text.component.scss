@@ -48,6 +48,10 @@
 .quill-editor {
   width: 100%;
   background-color: white;
+  
+  ::ng-deep .ql-container {
+    min-height: 200px; // Aumentar a altura mínima
+  }
 }
 
 .editor-controls {
