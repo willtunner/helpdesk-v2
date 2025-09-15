@@ -9,6 +9,7 @@
   <div *ngIf="!showPreview; else previewTemplate">
     <div class="editor-wrapper" [class.error-state]="showError">
       <quill-editor 
+        [theme]="'snow'"
         class="quill-editor"
         [modules]="quillModules"
         [placeholder]="placeholder"
