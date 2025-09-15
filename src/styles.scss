@@ -258,5 +258,47 @@ app-rich-text {
   width: 100%;
 }
 
+/* GARANTIR QUE O QUILL FUNCIONE NO BUILD DE PRODUÇÃO */
+.ql-container {
+  font-family: inherit !important;
+  font-size: 14px !important;
+  min-height: 200px !important;
+}
+
+.ql-editor {
+  min-height: 200px !important;
+  max-height: 500px !important;
+  overflow-y: auto !important;
+}
+
+.ql-toolbar {
+  border-radius: 4px 4px 0 0 !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-bottom: none !important;
+  background-color: #f8f9fa !important;
+}
+
+.ql-container {
+  border-radius: 0 0 4px 4px !important;
+  border: 1px solid rgba(0, 0, 0, 0.12) !important;
+  border-top: none !important;
+}
+
+/* Garantir que o placeholder seja visível */
+.ql-editor.ql-blank::before {
+  color: rgba(0, 0, 0, 0.6) !important;
+  font-style: normal !important;
+  font-family: inherit !important;
+}
+
+/* Integração com Material form field */
+mat-form-field .rich-text-container {
+  margin-top: 0;
+}
+
+mat-form-field .quill-editor {
+  margin-top: 0 !important;
+}
+
 
 
