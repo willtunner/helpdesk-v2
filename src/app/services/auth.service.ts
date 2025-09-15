@@ -46,6 +46,8 @@ export class AuthService {
   async login(email: string, password: string): Promise<boolean> {
     console.log('🚀 Tentativa de login iniciada', { email, password });
   
+    this._debugCollections(); // Apenas para debug, pode ser removido depois
+    
     try {
       const normalizedEmail = email.trim().toLowerCase();
       console.log('🔍 Iniciando login para:', normalizedEmail);
@@ -115,6 +117,17 @@ export class AuthService {
   }
   
   
+  // Só para debug - pega todos os docs da coleção
+async _debugCollections() {
+  const users = await getDocs(this._usersCollection);
+  console.log('🔥 users:', users.docs.map(d => ({ id: d.id, ...d.data() })));
+
+  const clients = await getDocs(this._clientsCollection);
+  console.log('🔥 clients:', clients.docs.map(d => ({ id: d.id, ...d.data() })));
+
+  const helpCompanies = await getDocs(this._helpDeskClientsCollection);
+  console.log('🔥 helpCompanies:', helpCompanies.docs.map(d => ({ id: d.id, ...d.data() })));
+}
   
   
 
