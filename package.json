@@ -2,9 +2,18 @@
   "name": "helpdesk-v2",
   "version": "0.0.0",
   "scripts": {
+    "ng": "ng",
     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
     "frontend": "ng serve --proxy-config proxy.conf.json",
-    "backend": "node backend/index.js"
+    "backend": "node backend/index.js",
+    "build": "ng build --configuration production --output-path=dist/helpdesk-v2",
+    "build:vercel": "npm run prebuild && ng build --configuration production --output-path=dist/helpdesk-v2",
+    "prebuild": "npm install",
+    "postinstall": "npm run ensure-quill",
+    "ensure-quill": "npm list quill@2.0.3 || npm install quill@2.0.3 && npm list ngx-quill@26.0.10 || npm install ngx-quill@26.0.10",
+    "test": "ng test",
+    "lint": "ng lint",
+    "e2e": "ng e2e"
   },
   "private": true,
   "dependencies": {
@@ -46,6 +55,7 @@
     "@types/crypto-js": "^4.2.2",
     "@types/highcharts": "^5.0.44",
     "@types/jasmine": "~5.1.0",
+    "@types/quill": "^2.0.10",
     "concurrently": "^9.2.0",
     "jasmine-core": "~5.2.0",
     "karma": "~6.4.0",
@@ -54,5 +64,9 @@
     "karma-jasmine": "~5.1.0",
     "karma-jasmine-html-reporter": "~2.1.0",
     "typescript": "~5.5.2"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=8.0.0"
   }
 }

@@ -8,46 +8,69 @@ import { getStorage, provideStorage } from '@angular/fire/storage';
 import { provideQuillConfig } from 'ngx-quill';
 import { provideNgxMask } from 'ngx-mask';
 import { provideAnimations } from '@angular/platform-browser/animations';
-import { HttpClient } from '@angular/common/http';
-import {TranslateHttpLoader} from '@ngx-translate/http-loader';
+import { HttpClient, provideHttpClient } from '@angular/common/http';
+import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 
-const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = (http: HttpClient) =>
-  new TranslateHttpLoader(http, './assets/i18n/', '.json');
+const httpLoaderFactory: (http: HttpClient) => TranslateHttpLoader = 
+  (http: HttpClient) => new TranslateHttpLoader(http, './assets/i18n/', '.json');
 
 export const appConfig: ApplicationConfig = {
   providers: [
     provideNgxMask(),
     provideRouter(routes),
     provideAnimations(),
-    provideFirebaseApp(() =>
-      initializeApp({
-        apiKey: environment.firebase.apiKey,
-        authDomain: environment.firebase.authDomain,
-        projectId: environment.firebase.projectId,
-        storageBucket: environment.firebase.storageBucket,
-        messagingSenderId: environment.firebase.messagingSenderId,
-        appId: environment.firebase.appId,
-        measurementId: environment.firebase.measurementId,
+    provideHttpClient(), // ✅ ADICIONE ESTA LINHA
+    
+    // Firebase
+    provideFirebaseApp(() => initializeApp({
+      apiKey: environment.firebase.apiKey,
+      authDomain: environment.firebase.authDomain,
+      projectId: environment.firebase.projectId,
+      storageBucket: environment.firebase.storageBucket,
+      messagingSenderId: environment.firebase.messagingSenderId,
+      appId: environment.firebase.appId,
+      measurementId: environment.firebase.measurementId,
+    })),
+    
+    // Translate
+    importProvidersFrom([
+      TranslateModule.forRoot({
+        loader: {
+          provide: TranslateLoader,
+          useFactory: httpLoaderFactory,
+          deps: [HttpClient],
+        },
       })
-    ),
-    importProvidersFrom([TranslateModule.forRoot({
-      loader: {
-        provide: TranslateLoader,
-        useFactory: httpLoaderFactory,
-        deps: [HttpClient],
-      },
-    })]),
+    ]),
+    
+    // Firebase Storage e Firestore
     provideStorage(() => getStorage()),
     provideFirestore(() => getFirestore()),
+    
+    // ✅ CONFIGURAÇÃO CORRETA DO QUILL (ATUALIZADA)
     provideQuillConfig({
       modules: {
-        table: true, // Habilita o módulo de tabelas
+        syntax: false, // Desabilita syntax highlighting se não usar
+        table: true,   // Habilita módulo de tabelas
         toolbar: [
-          // Sua configuração de toolbar pode ser replicada aqui se necessário
+          ['bold', 'italic', 'underline', 'strike'],
+          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+          [{ 'size': ['small', false, 'large', 'huge'] }],
+          [{ 'color': [] }, { 'background': [] }],
+          [{ 'font': [] }],
+          [{ 'align': [] }],
+          ['link', 'image', 'video'],
+          ['clean'],
+          [{ 'table': 'insert-table' }]
         ]
       },
-      theme: 'snow'
+      theme: 'snow',
+      format: 'html',
+      bounds: document.body,
+      placeholder: 'Digite seu texto aqui...',
+      readOnly: false
     })
   ],
 };

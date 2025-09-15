@@ -1,0 +1,30 @@
+{
+    "version": 2,
+    "builds": [
+      {
+        "src": "dist/helpdesk-v2/**/*",
+        "use": "@vercel/static"
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "/dist/helpdesk-v2/$1",
+        "headers": {
+          "Cache-Control": "s-maxage=31536000, immutable"
+        }
+      },
+      {
+        "src": "/assets/(.*)",
+        "dest": "/dist/helpdesk-v2/assets/$1",
+        "headers": {
+          "Cache-Control": "s-maxage=31536000, immutable"
+        }
+      },
+      {
+        "src": "/(.*)",
+        "dest": "/dist/helpdesk-v2/index.html"
+      }
+    ],
+    "outputDirectory": "dist/helpdesk-v2"
+  }
