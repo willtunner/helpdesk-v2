@@ -89,3 +89,13 @@
 .clients {
   display: flex;
 }
+
+.field-full app-rich-text-editor {
+  display: block;
+  width: 100%;
+  margin-top: 15px;
+}
+
+.field-full ::ng-deep .ql-container {
+  min-height: 200px;
+}

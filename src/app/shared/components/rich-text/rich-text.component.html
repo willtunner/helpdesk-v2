@@ -1,29 +1,13 @@
+<!-- rich-text.component.html (VERSÃO CORRIGIDA) -->
 <div class="rich-text-container">
-  <div class="editor-controls">
-    <button mat-button (click)="togglePreview()" class="preview-btn">
-      <mat-icon>{{ showPreview ? 'visibility_off' : 'visibility' }}</mat-icon>
-      {{ showPreview ? 'Ocultar Preview' : 'Mostrar Preview' }}
-    </button>
-  </div>
-
-  <div *ngIf="!showPreview; else previewTemplate">
-    <div class="editor-wrapper">
-      <quill-editor
-        class="quill-editor"
-        [modules]="quillModules"
-        [placeholder]="placeholder"
-        [style.height]="height"
-        [theme]="'snow'"
-        [format]="'html'"
-        [readOnly]="isDisabled"
-        [(ngModel)]="editorContent"
-        (onContentChanged)="onEditorChanged($event)"
-        (onBlur)="onBlur()">
-      </quill-editor>
-    </div>
-  </div>
-
-  <ng-template #previewTemplate>
-    <div class="preview-content ql-editor" [innerHTML]="editorContent"></div>
-  </ng-template>
+  <quill-editor 
+    class="quill-editor"
+    [ngModel]="value"
+    (ngModelChange)="onContentChange($event)"
+    [modules]="quillModules"
+    [placeholder]="placeholder"
+    [style.height]="height"
+    [readOnly]="isDisabled"
+    format="html">
+  </quill-editor>
 </div>

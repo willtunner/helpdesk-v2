@@ -33,6 +33,8 @@ import { CreateClienteModalComponent } from '../home/clients-modal/create-client
 import { TranslateModule } from '@ngx-translate/core';
 import { AuthService } from '../../services/auth.service';
 import { QuillModule } from 'ngx-quill';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-calls',
@@ -45,6 +47,10 @@ import { QuillModule } from 'ngx-quill';
     MatTooltipModule,
     TranslateModule,
     QuillModule,
+    
+    // ✅ MÓDULES DO MATERIAL NECESSÁRIOS
+    MatFormFieldModule,
+    MatInputModule,
 
     // Componentes customizados
     DynamicSelectComponent,
@@ -55,8 +61,6 @@ import { QuillModule } from 'ngx-quill';
     CallsListComponent,
     MatIconModule,
     MatButtonModule,
-    
-
   ],
   templateUrl: './calls.component.html',
   styleUrls: ['./calls.component.scss']
