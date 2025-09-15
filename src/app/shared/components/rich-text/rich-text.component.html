@@ -8,11 +8,12 @@
 
   <div *ngIf="!showPreview; else previewTemplate">
     <div class="editor-wrapper">
-      <quill-editor 
+      <quill-editor
         class="quill-editor"
         [modules]="quillModules"
         [placeholder]="placeholder"
-        [styles]="{ height: height }"
+        [style.height]="height"
+        [theme]="'snow'"
         [format]="'html'"
         [readOnly]="isDisabled"
         [(ngModel)]="editorContent"
