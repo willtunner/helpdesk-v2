@@ -4,26 +4,25 @@ import { Router } from '@angular/router';
 import { fadeInOut, INavbarData } from '../../../../interface/side-nav.interface';
 
 @Component({
-  selector: 'app-sublevel-menu',
-  standalone: true,
-  imports: [],
-  templateUrl: './sublevel-menu.component.html',
-  styleUrl: './sublevel-menu.component.scss',
-  animations: [
-    fadeInOut,
-    trigger('submenu', [
-      state('hidden', style({
-        height: '0',
-        overflow: 'hidden'
-      })),
-      state('visible', style({
-        height: '*'
-      })),
-      transition('visible <=> hidden', [style({overflow: 'hidden'}),
-        animate('{{transitionParams}}')]),
-      transition('void => *', animate(0))
-    ])
-  ]
+    selector: 'app-sublevel-menu',
+    imports: [],
+    templateUrl: './sublevel-menu.component.html',
+    styleUrl: './sublevel-menu.component.scss',
+    animations: [
+        fadeInOut,
+        trigger('submenu', [
+            state('hidden', style({
+                height: '0',
+                overflow: 'hidden'
+            })),
+            state('visible', style({
+                height: '*'
+            })),
+            transition('visible <=> hidden', [style({ overflow: 'hidden' }),
+                animate('{{transitionParams}}')]),
+            transition('void => *', animate(0))
+        ])
+    ]
 })
 export class SublevelMenuComponent {
   @Input() data: INavbarData = {

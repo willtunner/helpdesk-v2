@@ -9,19 +9,18 @@ import { CustomInputComponent } from '../../../shared/components/custom-input/cu
 import { DynamicButtonComponent } from '../../../shared/components/action-button/action-button.component';
 
 @Component({
-  selector: 'app-update-company-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatDialogModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatInputModule,
-    CustomInputComponent,
-    DynamicButtonComponent
-  ],
-  templateUrl: './update-company-modal.component.html',
-  styleUrls: ['./update-company-modal.component.scss']
+    selector: 'app-update-company-modal',
+    imports: [
+        CommonModule,
+        MatDialogModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatInputModule,
+        CustomInputComponent,
+        DynamicButtonComponent
+    ],
+    templateUrl: './update-company-modal.component.html',
+    styleUrls: ['./update-company-modal.component.scss']
 })
 export class UpdateCompanyModalComponent {
 

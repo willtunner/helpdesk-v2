@@ -13,18 +13,17 @@ import { EmailValidationService } from '../../../../services/email-validation.se
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-create-cliente-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    DynamicButtonComponent,
-    CustomInputComponent,
-    MatProgressSpinnerModule,
-    TranslateModule
-  ],
-  templateUrl: './create-cliente-modal.component.html',
-  styleUrl: './create-cliente-modal.component.scss'
+    selector: 'app-create-cliente-modal',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        DynamicButtonComponent,
+        CustomInputComponent,
+        MatProgressSpinnerModule,
+        TranslateModule
+    ],
+    templateUrl: './create-cliente-modal.component.html',
+    styleUrl: './create-cliente-modal.component.scss'
 })
 export class CreateClienteModalComponent {
   clientForm: FormGroup;

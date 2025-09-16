@@ -8,20 +8,19 @@ import { MatInputModule } from '@angular/material/input';
 import { CustomInputComponent } from '../../custom-input/custom-input.component';
 
 @Component({
-  selector: 'app-calendar-event-modal',
-  standalone: true,
-  imports: [
-    MatDialogModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    ReactiveFormsModule,
-    CommonModule,
-    FormsModule,
-    CustomInputComponent
-  ],
-  templateUrl: './calendar-event-modal.component.html',
-  styleUrls: ['./calendar-event-modal.component.scss']
+    selector: 'app-calendar-event-modal',
+    imports: [
+        MatDialogModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        ReactiveFormsModule,
+        CommonModule,
+        FormsModule,
+        CustomInputComponent
+    ],
+    templateUrl: './calendar-event-modal.component.html',
+    styleUrls: ['./calendar-event-modal.component.scss']
 })
 export class CalendarEventModalComponent {
   dialogRef = inject(MatDialogRef<CalendarEventModalComponent>);

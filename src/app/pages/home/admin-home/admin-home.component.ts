@@ -21,11 +21,10 @@ import { CallModalComponent } from '../call-modal/call-modal.component';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-admin-home',
-  standalone: true,
-  imports: [DashboardCardComponent, TranslateModule, CommonModule],
-  templateUrl: './admin-home.component.html',
-  styleUrl: './admin-home.component.scss'
+    selector: 'app-admin-home',
+    imports: [DashboardCardComponent, TranslateModule, CommonModule],
+    templateUrl: './admin-home.component.html',
+    styleUrl: './admin-home.component.scss'
 })
 export class AdminHomeComponent implements OnInit {
   user!: User;

@@ -3,11 +3,10 @@ import { Component, Input } from '@angular/core';
 import { Router, RouterModule } from '@angular/router';
 
 @Component({
-  selector: 'app-base',
-  standalone: true,
-  imports: [CommonModule, RouterModule],
-  templateUrl: './base.component.html',
-  styleUrl: './base.component.scss'
+    selector: 'app-base',
+    imports: [CommonModule, RouterModule],
+    templateUrl: './base.component.html',
+    styleUrl: './base.component.scss'
 })
 export class BaseComponent {
   @Input() collapsed = false;

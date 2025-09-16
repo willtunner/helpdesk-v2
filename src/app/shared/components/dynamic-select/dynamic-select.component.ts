@@ -9,28 +9,27 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
-  selector: 'app-dynamic-select',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatIconModule,
-    MatButtonModule,
-    MatTooltipModule
-  ],
-  templateUrl: './dynamic-select.component.html',
-  styleUrls: ['./dynamic-select.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => DynamicSelectComponent),
-      multi: true
-    }
-  ]
+    selector: 'app-dynamic-select',
+    imports: [
+        CommonModule,
+        FormsModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatOptionModule,
+        MatIconModule,
+        MatButtonModule,
+        MatTooltipModule
+    ],
+    templateUrl: './dynamic-select.component.html',
+    styleUrls: ['./dynamic-select.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => DynamicSelectComponent),
+            multi: true
+        }
+    ]
 })
 export class DynamicSelectComponent implements ControlValueAccessor {
 

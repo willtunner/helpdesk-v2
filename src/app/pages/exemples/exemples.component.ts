@@ -25,22 +25,21 @@ import { DashboardCardComponent } from '../../shared/components/dashboard-card/d
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-exemples',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CustomInputComponent, MatButtonModule,
-      DynamicTableComponent, DynamicButtonComponent, MatIconModule, DynamicThreeToggleComponent,
-      RichTextEditorComponent, MatInputModule, ChartComponent, 
-      DropdownVideosComponent, MtbDevComponent,
-      DashboardCardComponent, TranslateModule],
-  templateUrl: './exemples.component.html',
-  styleUrls: ['./exemples.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => RichTextEditorComponent),
-      multi: true
-    }
-  ]
+    selector: 'app-exemples',
+    imports: [CommonModule, ReactiveFormsModule, CustomInputComponent, MatButtonModule,
+        DynamicTableComponent, DynamicButtonComponent, MatIconModule, DynamicThreeToggleComponent,
+        RichTextEditorComponent, MatInputModule, ChartComponent,
+        DropdownVideosComponent, MtbDevComponent,
+        DashboardCardComponent, TranslateModule],
+    templateUrl: './exemples.component.html',
+    styleUrls: ['./exemples.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => RichTextEditorComponent),
+            multi: true
+        }
+    ]
 })
 export class ExemplesComponent {
   form: FormGroup;

@@ -5,11 +5,10 @@ import { DynamicButtonComponent } from '../../../shared/components/action-button
 import { MatCardModule } from '@angular/material/card';
 
 @Component({
-  selector: 'app-user-online',
-  standalone: true,
-  imports: [DynamicButtonComponent, MatCardModule],
-  templateUrl: './user-online.component.html',
-  styleUrl: './user-online.component.scss'
+    selector: 'app-user-online',
+    imports: [DynamicButtonComponent, MatCardModule],
+    templateUrl: './user-online.component.html',
+    styleUrl: './user-online.component.scss'
 })
 export class UserOnlineComponent {
   @Input() currentUser!: User;

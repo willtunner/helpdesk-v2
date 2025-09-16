@@ -8,12 +8,11 @@ import { CustomInputComponent } from '../../../shared/components/custom-input/cu
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-clients-modal',
-  standalone: true,
-  imports: [CommonModule, MatIconModule, MatDialogModule, 
-    DynamicButtonComponent, CustomInputComponent, TranslateModule],
-  templateUrl: './clients-modal.component.html',
-  styleUrl: './clients-modal.component.scss'
+    selector: 'app-clients-modal',
+    imports: [CommonModule, MatIconModule, MatDialogModule,
+        DynamicButtonComponent, CustomInputComponent, TranslateModule],
+    templateUrl: './clients-modal.component.html',
+    styleUrl: './clients-modal.component.scss'
 })
 
 export class ClientsModalComponent {

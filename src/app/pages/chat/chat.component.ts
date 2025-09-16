@@ -13,13 +13,12 @@ import { UserService } from '../../services/user.service';
 import { ActiveChatsComponent } from './active-chats/active-chats.component';
 import { ChatWindowComponent } from './chat-window/chat-window.component';
 @Component({
-  selector: 'app-chat',
-  standalone: true,
-  imports: [MatCardModule, MatTableModule, CommonModule, 
-    UserOnlineComponent, WaitingListComponent, 
-    OperatorsOnlineComponent, ActiveChatsComponent, ChatWindowComponent  ],
-  templateUrl: './chat.component.html',
-  styleUrl: './chat.component.scss'
+    selector: 'app-chat',
+    imports: [MatCardModule, MatTableModule, CommonModule,
+        UserOnlineComponent, WaitingListComponent,
+        OperatorsOnlineComponent, ActiveChatsComponent, ChatWindowComponent],
+    templateUrl: './chat.component.html',
+    styleUrl: './chat.component.scss'
 })
 export class ChatComponent implements OnInit {
   currentUser!: User;

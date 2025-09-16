@@ -7,11 +7,10 @@ import { SideNaveToggle } from './interface/side-nav.interface';
 import { FloatingLanguageSelectorComponent } from './shared/components/floating-language-selector/floating-language-selector.component';
 
 @Component({
-  selector: 'app-root',
-  standalone: true,
-  imports: [BaseComponent, AppSidenavComponent, FloatingLanguageSelectorComponent],
-  templateUrl: './app.component.html',
-  styleUrl: './app.component.scss'
+    selector: 'app-root',
+    imports: [BaseComponent, AppSidenavComponent, FloatingLanguageSelectorComponent],
+    templateUrl: './app.component.html',
+    styleUrl: './app.component.scss'
 })
 export class AppComponent {
   title = 'helpdesk-v2';

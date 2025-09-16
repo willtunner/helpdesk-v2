@@ -11,17 +11,16 @@ import { CallModalComponent } from '../../../pages/home/call-modal/call-modal.co
 import { MatDialog } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-chart',
-  standalone: true,
-  imports: [
-    CommonModule, 
-    HighchartsChartModule, 
-    DynamicThreeToggleComponent,
-    TranslateModule,
-    MatIconModule
-  ],
-  templateUrl: './line-chart.component.html',
-  styleUrls: ['./line-chart.component.scss'],
+    selector: 'app-chart',
+    imports: [
+        CommonModule,
+        HighchartsChartModule,
+        DynamicThreeToggleComponent,
+        TranslateModule,
+        MatIconModule
+    ],
+    templateUrl: './line-chart.component.html',
+    styleUrls: ['./line-chart.component.scss']
 })
 export class ChartComponent implements OnInit, OnChanges, OnDestroy {
   Highcharts: typeof Highcharts = Highcharts;

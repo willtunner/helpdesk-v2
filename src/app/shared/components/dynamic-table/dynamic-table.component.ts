@@ -17,23 +17,22 @@ import { NotificationType } from '../../../enums/notificationType.enum';
 import { TranslateService } from '../../../services/translate.service';
 
 @Component({
-  selector: 'app-dynamic-table',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatTableModule,
-    MatIconModule,
-    MatButtonModule,
-    MatSortModule,
-    MatPaginator,
-    TranslateModule,
-    FormsModule,
-    MatProgressSpinnerModule,
-    MatTooltipModule,
-    MatSnackBarModule
-  ],
-  templateUrl: './dynamic-table.component.html',
-  styleUrls: ['./dynamic-table.component.scss']
+    selector: 'app-dynamic-table',
+    imports: [
+        CommonModule,
+        MatTableModule,
+        MatIconModule,
+        MatButtonModule,
+        MatSortModule,
+        MatPaginator,
+        TranslateModule,
+        FormsModule,
+        MatProgressSpinnerModule,
+        MatTooltipModule,
+        MatSnackBarModule
+    ],
+    templateUrl: './dynamic-table.component.html',
+    styleUrls: ['./dynamic-table.component.scss']
 })
 export class DynamicTableComponent {
   @Input() headers: { key: string; label: string; formatter?: (row: any) => string }[] = [];

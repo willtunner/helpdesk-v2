@@ -13,18 +13,17 @@ import { EmailValidationService } from '../../services/email-validation.service'
 import { emailExistsValidator } from '../../services/email-exists.validator';
 
 @Component({
-  selector: 'app-new-account',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    RouterModule,
-    CustomInputComponent,
-    MatIconModule,
-    MatButtonModule
-  ],
-  templateUrl: './new-account.component.html',
-  styleUrl: './new-account.component.scss'
+    selector: 'app-new-account',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        RouterModule,
+        CustomInputComponent,
+        MatIconModule,
+        MatButtonModule
+    ],
+    templateUrl: './new-account.component.html',
+    styleUrl: './new-account.component.scss'
 })
 
 export class NewAccountComponent {

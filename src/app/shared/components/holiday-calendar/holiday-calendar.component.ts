@@ -34,30 +34,29 @@ interface CalendarEvent {
 }
 
 @Component({
-  selector: 'app-holiday-calendar',
-  standalone: true,
-  imports: [
-    CommonModule,
-    MatCardModule,
-    MatSelectModule,
-    MatFormFieldModule,
-    MatInputModule,
-    ReactiveFormsModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatIconModule,
-    MatTooltipModule,
-    MatProgressSpinnerModule,
-    MatDialogModule,
-    MatButtonModule,
-    MatListModule,
-    MatMenuModule,
-    FormsModule,
-    MatSnackBarModule,
-    TranslateModule
-  ],
-  templateUrl: './holiday-calendar.component.html',
-  styleUrls: ['./holiday-calendar.component.scss']
+    selector: 'app-holiday-calendar',
+    imports: [
+        CommonModule,
+        MatCardModule,
+        MatSelectModule,
+        MatFormFieldModule,
+        MatInputModule,
+        ReactiveFormsModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatIconModule,
+        MatTooltipModule,
+        MatProgressSpinnerModule,
+        MatDialogModule,
+        MatButtonModule,
+        MatListModule,
+        MatMenuModule,
+        FormsModule,
+        MatSnackBarModule,
+        TranslateModule
+    ],
+    templateUrl: './holiday-calendar.component.html',
+    styleUrls: ['./holiday-calendar.component.scss']
 })
 export class HolidayCalendarComponent implements OnInit {
   private http = inject(HttpClient);

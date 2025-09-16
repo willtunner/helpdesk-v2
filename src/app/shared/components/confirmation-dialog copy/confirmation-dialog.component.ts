@@ -3,11 +3,10 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { DynamicButtonComponent } from '../action-button/action-button.component';
 
 @Component({
-  selector: 'app-confirmation-dialog',
-  standalone: true,
-  imports: [DynamicButtonComponent],
-  templateUrl: './confirmation-dialog.component.html',
-  styleUrl: './confirmation-dialog.component.scss'
+    selector: 'app-confirmation-dialog',
+    imports: [DynamicButtonComponent],
+    templateUrl: './confirmation-dialog.component.html',
+    styleUrl: './confirmation-dialog.component.scss'
 })
 export class ConfirmationDialogComponent implements OnInit {
   constructor(

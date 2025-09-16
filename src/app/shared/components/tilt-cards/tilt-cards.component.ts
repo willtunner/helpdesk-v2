@@ -3,11 +3,10 @@ import VanillaTilt from 'vanilla-tilt';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-tilt-cards',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './tilt-cards.component.html',
-  styleUrls: ['./tilt-cards.component.scss']
+    selector: 'app-tilt-cards',
+    imports: [CommonModule],
+    templateUrl: './tilt-cards.component.html',
+    styleUrls: ['./tilt-cards.component.scss']
 })
 export class TiltCardsComponent implements AfterViewInit {
   constructor(private el: ElementRef) {}

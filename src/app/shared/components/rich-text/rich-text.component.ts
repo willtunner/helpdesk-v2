@@ -25,26 +25,25 @@ import { Subject } from 'rxjs';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Component({
-  selector: 'app-rich-text-editor',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    QuillModule
-  ],
-  templateUrl: './rich-text.component.html',
-  styleUrls: ['./rich-text.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => RichTextEditorComponent),
-      multi: true
-    },
-    {
-      provide: MatFormFieldControl,
-      useExisting: RichTextEditorComponent
-    }
-  ]
+    selector: 'app-rich-text-editor',
+    imports: [
+        CommonModule,
+        FormsModule,
+        QuillModule
+    ],
+    templateUrl: './rich-text.component.html',
+    styleUrls: ['./rich-text.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => RichTextEditorComponent),
+            multi: true
+        },
+        {
+            provide: MatFormFieldControl,
+            useExisting: RichTextEditorComponent
+        }
+    ]
 })
 export class RichTextEditorComponent implements ControlValueAccessor, MatFormFieldControl<string>, OnInit, AfterViewInit, DoCheck {
   @ViewChild('editor') editor!: ElementRef;

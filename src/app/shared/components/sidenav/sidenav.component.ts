@@ -17,38 +17,31 @@ interface SideNaveToggle {
 }
 
 @Component({
-  selector: 'app-sidenav',
-  standalone: true,
-  imports: [RouterModule, CommonModule, MatIconModule, 
-    SublevelMenuComponent, FirstLetterPipe, TranslateModule],
-  templateUrl: './sidenav.component.html',
-  styleUrl: './sidenav.component.scss',
-  animations: [
-    trigger('fadeInOut', [
-      transition(':enter', [
-        style({opacity: 0}),
-        animate('350ms',
-          style({opacity: 1})
-        )
-      ]),
-      transition(':leave', [
-        style({opacity: 1}),
-        animate('350ms',
-          style({opacity: 0})
-        )
-      ])
-    ]),
-    trigger('rotate', [
-      transition(':enter', [
-        animate('1000ms',
-          keyframes([
-            style({transform: 'rotate(0deg)', offset: '0'}),
-            style({transform: 'rotate(2turn)', offset: '1'}),
-          ])
-        )
-      ])
-    ])
-  ]
+    selector: 'app-sidenav',
+    imports: [RouterModule, CommonModule, MatIconModule,
+        SublevelMenuComponent, FirstLetterPipe, TranslateModule],
+    templateUrl: './sidenav.component.html',
+    styleUrl: './sidenav.component.scss',
+    animations: [
+        trigger('fadeInOut', [
+            transition(':enter', [
+                style({ opacity: 0 }),
+                animate('350ms', style({ opacity: 1 }))
+            ]),
+            transition(':leave', [
+                style({ opacity: 1 }),
+                animate('350ms', style({ opacity: 0 }))
+            ])
+        ]),
+        trigger('rotate', [
+            transition(':enter', [
+                animate('1000ms', keyframes([
+                    style({ transform: 'rotate(0deg)', offset: '0' }),
+                    style({ transform: 'rotate(2turn)', offset: '1' }),
+                ]))
+            ])
+        ])
+    ]
 })
 
 export class AppSidenavComponent implements OnInit {

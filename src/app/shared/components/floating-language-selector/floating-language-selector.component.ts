@@ -6,11 +6,10 @@ import { MatButtonModule } from '@angular/material/button';
 import { TranslateService } from '../../../services/translate.service';
 
 @Component({
-  selector: 'app-floating-language-selector',
-  standalone: true,
-  imports: [CommonModule, MatMenuModule, MatIconModule, MatButtonModule],
-  templateUrl: './floating-language-selector.component.html',
-  styleUrls: ['./floating-language-selector.component.scss']
+    selector: 'app-floating-language-selector',
+    imports: [CommonModule, MatMenuModule, MatIconModule, MatButtonModule],
+    templateUrl: './floating-language-selector.component.html',
+    styleUrls: ['./floating-language-selector.component.scss']
 })
 export class FloatingLanguageSelectorComponent implements OnInit {
   translateService = inject(TranslateService);

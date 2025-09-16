@@ -4,11 +4,10 @@ import { takeWhile } from 'rxjs/operators';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-number-counter',
-  standalone: true,
-  imports: [CommonModule],
-  templateUrl: './number-counter.component.html',
-  styleUrl: './number-counter.component.scss'
+    selector: 'app-number-counter',
+    imports: [CommonModule],
+    templateUrl: './number-counter.component.html',
+    styleUrl: './number-counter.component.scss'
 })
 export class NumberCounterComponent implements OnInit {
   @Input() end = 100;         // Valor final

@@ -11,11 +11,10 @@ import { SendNotificationService } from '../../../services/send-notification.ser
 import { NotificationType } from '../../../enums/notificationType.enum';
 
 @Component({
-  selector: 'app-waiting-list',
-  standalone: true,
-  imports: [CommonModule, MatCardModule, MatTableModule],
-  templateUrl: './waiting-list.component.html',
-  styleUrl: './waiting-list.component.scss'
+    selector: 'app-waiting-list',
+    imports: [CommonModule, MatCardModule, MatTableModule],
+    templateUrl: './waiting-list.component.html',
+    styleUrl: './waiting-list.component.scss'
 })
 export class WaitingListComponent implements OnInit, OnDestroy {
 

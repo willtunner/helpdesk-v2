@@ -37,33 +37,30 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
-  selector: 'app-calls',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatRadioModule,
-    MatProgressSpinnerModule,
-    MatTooltipModule,
-    TranslateModule,
-    QuillModule,
-    
-    // ✅ MÓDULES DO MATERIAL NECESSÁRIOS
-    MatFormFieldModule,
-    MatInputModule,
-
-    // Componentes customizados
-    DynamicSelectComponent,
-    CustomInputComponent,
-    // RichTextEditorComponent,
-    TagsComponent,
-    DynamicButtonComponent,
-    CallsListComponent,
-    MatIconModule,
-    MatButtonModule,
-  ],
-  templateUrl: './calls.component.html',
-  styleUrls: ['./calls.component.scss']
+    selector: 'app-calls',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatRadioModule,
+        MatProgressSpinnerModule,
+        MatTooltipModule,
+        TranslateModule,
+        QuillModule,
+        // ✅ MÓDULES DO MATERIAL NECESSÁRIOS
+        MatFormFieldModule,
+        MatInputModule,
+        // Componentes customizados
+        DynamicSelectComponent,
+        CustomInputComponent,
+        // RichTextEditorComponent,
+        TagsComponent,
+        DynamicButtonComponent,
+        CallsListComponent,
+        MatIconModule,
+        MatButtonModule,
+    ],
+    templateUrl: './calls.component.html',
+    styleUrls: ['./calls.component.scss']
 })
 
 export class CallsComponent implements OnInit {

@@ -4,11 +4,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { NumberCounterComponent } from '../number-counter/number-counter.component'; // ajuste o caminho conforme necessário
 
 @Component({
-  selector: 'app-dashboard-card',
-  standalone: true,
-  imports: [CommonModule, MatIconModule, NumberCounterComponent],
-  templateUrl: './dashboard-card.component.html',
-  styleUrls: ['./dashboard-card.component.scss']
+    selector: 'app-dashboard-card',
+    imports: [CommonModule, MatIconModule, NumberCounterComponent],
+    templateUrl: './dashboard-card.component.html',
+    styleUrls: ['./dashboard-card.component.scss']
 })
 export class DashboardCardComponent {
   @Input() icon = 'insert_chart';   // Ex: 'people', 'attach_money', etc.

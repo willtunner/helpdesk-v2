@@ -6,11 +6,10 @@ import { ChatService } from '../../../services/chat-service.service';
 import { ChatVisibilityService } from '../../../services/chat-visibility.service';
 
 @Component({
-  selector: 'app-active-chats',
-  standalone: true,
-  imports: [MatCardModule, CommonModule],
-  templateUrl: './active-chats.component.html',
-  styleUrl: './active-chats.component.scss'
+    selector: 'app-active-chats',
+    imports: [MatCardModule, CommonModule],
+    templateUrl: './active-chats.component.html',
+    styleUrl: './active-chats.component.scss'
 })
 export class ActiveChatsComponent {
   @Input() activeChats: ChatRoom[] = [];

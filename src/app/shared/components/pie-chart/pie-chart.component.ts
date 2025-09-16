@@ -10,11 +10,10 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { CallModalComponent } from '../../../pages/home/call-modal/call-modal.component';
 
 @Component({
-  selector: 'app-pie-chart',
-  standalone: true,
-  imports: [CommonModule, HighchartsChartModule],
-  templateUrl: './pie-chart.component.html',
-  styleUrls: ['./pie-chart.component.scss'],
+    selector: 'app-pie-chart',
+    imports: [CommonModule, HighchartsChartModule],
+    templateUrl: './pie-chart.component.html',
+    styleUrls: ['./pie-chart.component.scss']
 })
 export class PieChartComponent implements OnInit {
   @Input() title: string = '';

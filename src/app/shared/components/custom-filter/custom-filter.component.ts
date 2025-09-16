@@ -14,12 +14,11 @@ interface FilterField {
 }
 
 @Component({
-  selector: 'app-custom-filter',
-  standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, CustomInputComponent, 
-    MatButtonModule, DynamicButtonComponent, MatTooltipModule],
-  templateUrl: './custom-filter.component.html',
-  styleUrls: ['./custom-filter.component.scss']
+    selector: 'app-custom-filter',
+    imports: [CommonModule, ReactiveFormsModule, CustomInputComponent,
+        MatButtonModule, DynamicButtonComponent, MatTooltipModule],
+    templateUrl: './custom-filter.component.html',
+    styleUrls: ['./custom-filter.component.scss']
 })
 export class CustomFilterComponent implements OnInit, OnChanges {
   @Input() fields: FilterField[] = [];

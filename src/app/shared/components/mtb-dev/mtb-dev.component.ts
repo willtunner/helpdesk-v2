@@ -21,24 +21,23 @@ import { AuthService } from '../../../services/auth.service';
 import { User } from '../../../models/models';
 
 @Component({
-  selector: 'app-mtb-dev',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    QuillModule,
-    MatButtonModule,
-    MatInputModule,
-    MatTableModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    FirebaseDatePipe,
-    DynamicTableComponent,
-    DynamicButtonComponent
-  ],
-  providers: [FirebaseDatePipe],
-  templateUrl: './mtb-dev.component.html',
-  styleUrls: ['./mtb-dev.component.scss']
+    selector: 'app-mtb-dev',
+    imports: [
+        CommonModule,
+        FormsModule,
+        QuillModule,
+        MatButtonModule,
+        MatInputModule,
+        MatTableModule,
+        MatIconModule,
+        MatProgressSpinnerModule,
+        FirebaseDatePipe,
+        DynamicTableComponent,
+        DynamicButtonComponent
+    ],
+    providers: [FirebaseDatePipe],
+    templateUrl: './mtb-dev.component.html',
+    styleUrls: ['./mtb-dev.component.scss']
 })
 export class MtbDevComponent implements OnInit {
   @ViewChild('previewContent') previewContent!: ElementRef;

@@ -18,25 +18,24 @@ import { DynamicButtonComponent } from '../../action-button/action-button.compon
 import { ConfirmationDialogComponent } from '../../confirmation-dialog copy/confirmation-dialog.component';
 
 @Component({
-  selector: 'app-addVideoDialogComponent',
-  templateUrl: './addVideoDialogComponent.component.html',
-  styleUrls: ['./addVideoDialogComponent.component.css'],
-  standalone: true,
-  imports: [
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatButtonModule,
-    MatIconModule,
-    MatTableModule,
-    CommonModule,
-    ReactiveFormsModule,
-    MatCheckboxModule,
-    CustomInputComponent,
-    DynamicButtonComponent,
-  ]
+    selector: 'app-addVideoDialogComponent',
+    templateUrl: './addVideoDialogComponent.component.html',
+    styleUrls: ['./addVideoDialogComponent.component.css'],
+    imports: [
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatOptionModule,
+        MatButtonModule,
+        MatIconModule,
+        MatTableModule,
+        CommonModule,
+        ReactiveFormsModule,
+        MatCheckboxModule,
+        CustomInputComponent,
+        DynamicButtonComponent,
+    ]
 })
 export class AddVideoDialogComponentComponent {
   videoForm: FormGroup;

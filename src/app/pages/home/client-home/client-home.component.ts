@@ -15,18 +15,17 @@ import { CreateClienteModalComponent } from '../clients-modal/create-cliente-mod
 import { ConfirmationDialogComponent } from '../../../shared/components/confirmation-dialog copy/confirmation-dialog.component';
 
 @Component({
-  selector: 'app-client-home',
-  standalone: true,
-  imports: [
-    TranslateModule,
-    CommonModule,
-    MatIconModule,
-    DynamicTableComponent,
-    MatIconModule,
-    CommonModule
-  ],
-  templateUrl: './client-home.component.html',
-  styleUrl: './client-home.component.scss'
+    selector: 'app-client-home',
+    imports: [
+        TranslateModule,
+        CommonModule,
+        MatIconModule,
+        DynamicTableComponent,
+        MatIconModule,
+        CommonModule
+    ],
+    templateUrl: './client-home.component.html',
+    styleUrl: './client-home.component.scss'
 })
 export class ClientHomeComponent implements OnInit {
   user!: User;

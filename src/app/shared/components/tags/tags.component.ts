@@ -9,11 +9,10 @@ import { TranslateModule } from '@ngx-translate/core';
 import { UtilService } from '../../../services/util.service';
 
 @Component({
-  selector: 'app-tags',
-  templateUrl: './tags.component.html',
-  styleUrls: ['./tags.component.scss'],
-  standalone: true,
-  imports: [CommonModule, MatIconModule, ReactiveFormsModule, MatError, TranslateModule],
+    selector: 'app-tags',
+    templateUrl: './tags.component.html',
+    styleUrls: ['./tags.component.scss'],
+    imports: [CommonModule, MatIconModule, ReactiveFormsModule, MatError, TranslateModule]
 })
 export class TagsComponent implements OnInit {
   @Input() tags: string[] | null = null;

@@ -31,23 +31,22 @@ import { TagService } from '../../../services/tag.service';
 import { ColumnTagChartComponent } from '../../../shared/components/column-tag-chart/column-tag-chart.component';
 
 @Component({
-  selector: 'app-operator-home',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatInputModule,
-    ChartComponent,
-    PieChartComponent,
-    DashboardCardComponent,
-    TranslateModule,
-    MatProgressSpinnerModule,
-    ColumnTagChartComponent
-  ],
-  templateUrl: './operator-home.component.html',
-  styleUrls: ['./operator-home.component.scss']
+    selector: 'app-operator-home',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatIconModule,
+        MatInputModule,
+        ChartComponent,
+        PieChartComponent,
+        DashboardCardComponent,
+        TranslateModule,
+        MatProgressSpinnerModule,
+        ColumnTagChartComponent
+    ],
+    templateUrl: './operator-home.component.html',
+    styleUrls: ['./operator-home.component.scss']
 })
 export class OperatorHomeComponent implements OnInit {
   user!: User;

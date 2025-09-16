@@ -19,21 +19,20 @@ import { AuthService } from '../../services/auth.service';
 import { User } from '../../models/models';
 
 @Component({
-  selector: 'app-tutorials',
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    QuillModule,
-    MatButtonModule,
-    MatInputModule,
-    MatTableModule,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    DateFormatPipe
-  ],
-  templateUrl: './tutorials.component.html',
-  styleUrl: './tutorials.component.scss'
+    selector: 'app-tutorials',
+    imports: [
+        CommonModule,
+        FormsModule,
+        QuillModule,
+        MatButtonModule,
+        MatInputModule,
+        MatTableModule,
+        MatIconModule,
+        MatProgressSpinnerModule,
+        DateFormatPipe
+    ],
+    templateUrl: './tutorials.component.html',
+    styleUrl: './tutorials.component.scss'
 })
 export class TutorialsComponent {
   @ViewChild('previewContent') previewContent!: ElementRef;

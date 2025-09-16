@@ -18,26 +18,25 @@ import { CustomInputComponent } from '../custom-input/custom-input.component';
 import { DynamicSelectComponent } from '../dynamic-select/dynamic-select.component';
 
 @Component({
-  selector: 'app-dropdown-videos',
-  templateUrl: './dropdown-videos.component.html',
-  styleUrls: ['./dropdown-videos.component.css'],
-  standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatSelectModule,
-    MatOptionModule,
-    MatButtonModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatIconModule,
-    MatDialogModule,
-    OnlyDatePipe,
-    CustomInputComponent,
-    DynamicSelectComponent
-  ],
+    selector: 'app-dropdown-videos',
+    templateUrl: './dropdown-videos.component.html',
+    styleUrls: ['./dropdown-videos.component.css'],
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatSelectModule,
+        MatOptionModule,
+        MatButtonModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatIconModule,
+        MatDialogModule,
+        OnlyDatePipe,
+        CustomInputComponent,
+        DynamicSelectComponent
+    ]
 })
 export class DropdownVideosComponent implements OnInit {
   activeDropdown: number | null = null;

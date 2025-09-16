@@ -7,17 +7,16 @@ import { MatButtonModule } from '@angular/material/button';
 import { CommonModule } from '@angular/common';
 
 @Component({
-  selector: 'app-occurrence-modal',
-  templateUrl: './occurrence-modal.component.html',
-  styleUrls: ['./occurrence-modal.component.scss'],
-  standalone: true, // Torna o componente standalone
-  imports: [
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatSelectModule,
-    MatButtonModule,
-    CommonModule
-  ],
+    selector: 'app-occurrence-modal',
+    templateUrl: './occurrence-modal.component.html',
+    styleUrls: ['./occurrence-modal.component.scss'], // Torna o componente standalone
+    imports: [
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatSelectModule,
+        MatButtonModule,
+        CommonModule
+    ]
 })
 export class OccurrenceModalComponent {
   occurrenceForm: FormGroup;

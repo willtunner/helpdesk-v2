@@ -13,23 +13,22 @@ import { TranslateService } from '../../../services/translate.service';
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-custom-input',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    NgxMaskDirective,
-    MatIconModule,
-    MatProgressSpinnerModule,
-    MatDatepickerModule,
-    MatNativeDateModule,
-    MatDatepickerToggle,
-    TranslateModule
-  ],
-  templateUrl: './custom-input.component.html',
-  styleUrls: ['./custom-input.component.scss']
+    selector: 'app-custom-input',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        NgxMaskDirective,
+        MatIconModule,
+        MatProgressSpinnerModule,
+        MatDatepickerModule,
+        MatNativeDateModule,
+        MatDatepickerToggle,
+        TranslateModule
+    ],
+    templateUrl: './custom-input.component.html',
+    styleUrls: ['./custom-input.component.scss']
 })
 export class CustomInputComponent implements OnInit {
   @Input() label = '';

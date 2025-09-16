@@ -12,11 +12,10 @@ import { SendNotificationService } from '../../services/send-notification.servic
 import { NotificationType } from '../../enums/notificationType.enum';
 
 @Component({
-  selector: 'app-companies',
-  standalone: true,
-  imports: [DynamicTableComponent, TranslateModule, CustomFilterComponent],
-  templateUrl: './companies.component.html',
-  styleUrl: './companies.component.scss'
+    selector: 'app-companies',
+    imports: [DynamicTableComponent, TranslateModule, CustomFilterComponent],
+    templateUrl: './companies.component.html',
+    styleUrl: './companies.component.scss'
 })
 export class CompaniesComponent implements OnInit {
 

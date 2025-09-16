@@ -20,29 +20,28 @@ import { UserType } from '../../enums/user-types.enum';
 
 
 @Component({
-  selector: 'app-home',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatButtonModule,
-    MatIconModule,
-    MatInputModule,
-    TranslateModule,
-    ClientHomeComponent,
-    OperatorHomeComponent,
-    AdminHomeComponent,
-    MasterHomeComponent
-  ],
-  templateUrl: './home.component.html',
-  styleUrls: ['./home.component.scss'],
-  providers: [
-    {
-      provide: NG_VALUE_ACCESSOR,
-      useExisting: forwardRef(() => RichTextEditorComponent),
-      multi: true
-    }
-  ]
+    selector: 'app-home',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatButtonModule,
+        MatIconModule,
+        MatInputModule,
+        TranslateModule,
+        ClientHomeComponent,
+        OperatorHomeComponent,
+        AdminHomeComponent,
+        MasterHomeComponent
+    ],
+    templateUrl: './home.component.html',
+    styleUrls: ['./home.component.scss'],
+    providers: [
+        {
+            provide: NG_VALUE_ACCESSOR,
+            useExisting: forwardRef(() => RichTextEditorComponent),
+            multi: true
+        }
+    ]
 })
 
 export class HomeComponent implements OnInit {

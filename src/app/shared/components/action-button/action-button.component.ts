@@ -9,11 +9,10 @@ type ButtonType = 'save' | 'edit' | 'delete' | 'clear' | 'print' |
 'find' | 'add' | 'pdf' | 'cancel' | 'login' | 'close' | 'logout' | 'ok';
 
 @Component({
-  selector: 'app-dynamic-button',
-  standalone: true,
-  imports: [CommonModule, MatIconModule, TranslateModule, MatTooltipModule],
-  templateUrl: './action-button.component.html',
-  styleUrls: ['./action-button.component.scss']
+    selector: 'app-dynamic-button',
+    imports: [CommonModule, MatIconModule, TranslateModule, MatTooltipModule],
+    templateUrl: './action-button.component.html',
+    styleUrls: ['./action-button.component.scss']
 })
 export class DynamicButtonComponent implements OnDestroy {
   @Input() type: ButtonType = 'save';

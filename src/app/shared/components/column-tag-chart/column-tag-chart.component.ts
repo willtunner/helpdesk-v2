@@ -12,19 +12,18 @@ import { Call, ChartData } from '../../../models/models';
 import { Subscription } from 'rxjs';
 
 @Component({
-  selector: 'app-column-tag-chart',
-  standalone: true,
-  imports: [
-    HighchartsChartModule,
-    CommonModule,
-    TranslateModule,
-    MatProgressSpinnerModule
-  ],
-  templateUrl: './column-tag-chart.component.html',
-  styleUrls: ['./column-tag-chart.component.scss'],
-  host: {
-    class: 'full-width-chart'
-  }
+    selector: 'app-column-tag-chart',
+    imports: [
+        HighchartsChartModule,
+        CommonModule,
+        TranslateModule,
+        MatProgressSpinnerModule
+    ],
+    templateUrl: './column-tag-chart.component.html',
+    styleUrls: ['./column-tag-chart.component.scss'],
+    host: {
+        class: 'full-width-chart'
+    }
 })
 export class ColumnTagChartComponent implements OnInit, OnDestroy {
   // Configuração do Highcharts

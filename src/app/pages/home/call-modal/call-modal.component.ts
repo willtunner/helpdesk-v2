@@ -9,19 +9,18 @@ import { DynamicButtonComponent } from '../../../shared/components/action-button
 import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
-  selector: 'app-call-modal',
-  standalone: true,
-  imports: [
-    CommonModule,
-    ReactiveFormsModule,
-    MatDialogModule,
-    MatIconModule,
-    CustomInputComponent,
-    DynamicButtonComponent,
-    TranslateModule
-  ],
-  templateUrl: './call-modal.component.html',
-  styleUrl: './call-modal.component.scss',
+    selector: 'app-call-modal',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatDialogModule,
+        MatIconModule,
+        CustomInputComponent,
+        DynamicButtonComponent,
+        TranslateModule
+    ],
+    templateUrl: './call-modal.component.html',
+    styleUrl: './call-modal.component.scss'
 })
 export class CallModalComponent {
   public calls: Call[] = [];

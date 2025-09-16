@@ -18,20 +18,19 @@ import { MatDialog } from '@angular/material/dialog';
 import { AddOperatorDialogComponent } from './add-operator-dialog/add-operator-dialog.component';
 
 @Component({
-  selector: 'app-profile-settings',
-  standalone: true,
-  imports: [
-    CommonModule, 
-    ReactiveFormsModule, 
-    MatFormFieldModule, 
-    MatCardModule, 
-    MatInputModule,
-    MatButtonModule,
-    MatProgressSpinnerModule,
-    DynamicTableComponent
-  ],
-  templateUrl: './profile-settings.component.html',
-  styleUrl: './profile-settings.component.scss'
+    selector: 'app-profile-settings',
+    imports: [
+        CommonModule,
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatCardModule,
+        MatInputModule,
+        MatButtonModule,
+        MatProgressSpinnerModule,
+        DynamicTableComponent
+    ],
+    templateUrl: './profile-settings.component.html',
+    styleUrl: './profile-settings.component.scss'
 })
 export class ProfileSettingsComponent implements OnInit {
   userForm!: FormGroup;

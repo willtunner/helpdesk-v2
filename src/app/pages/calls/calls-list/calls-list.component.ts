@@ -7,11 +7,10 @@ import { Router } from '@angular/router';
 import { CustomFilterComponent } from '../../../shared/components/custom-filter/custom-filter.component';
 
 @Component({
-  selector: 'app-calls-list',
-  standalone: true,
-  imports: [DynamicTableComponent, CustomFilterComponent],
-  templateUrl: './calls-list.component.html',
-  styleUrl: './calls-list.component.scss'
+    selector: 'app-calls-list',
+    imports: [DynamicTableComponent, CustomFilterComponent],
+    templateUrl: './calls-list.component.html',
+    styleUrl: './calls-list.component.scss'
 })
 export class CallsListComponent implements OnInit {
   private callService = inject(CallService);

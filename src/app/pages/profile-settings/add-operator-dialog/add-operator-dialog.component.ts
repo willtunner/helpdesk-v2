@@ -9,18 +9,17 @@ import { emailExistsValidator } from '../../../services/email-exists.validator';
 import { EmailValidationService } from '../../../services/email-validation.service';
 
 @Component({
-  selector: 'app-add-operator-dialog',
-  standalone: true,
-  imports: [
-    ReactiveFormsModule,
-    MatFormFieldModule,
-    MatInputModule,
-    MatButtonModule,
-    MatDialogModule,
-    CustomInputComponent
-  ],
-  templateUrl: './add-operator-dialog.component.html',
-  styleUrl: './add-operator-dialog.component.scss'
+    selector: 'app-add-operator-dialog',
+    imports: [
+        ReactiveFormsModule,
+        MatFormFieldModule,
+        MatInputModule,
+        MatButtonModule,
+        MatDialogModule,
+        CustomInputComponent
+    ],
+    templateUrl: './add-operator-dialog.component.html',
+    styleUrl: './add-operator-dialog.component.scss'
 })
 export class AddOperatorDialogComponent {
   operatorForm: FormGroup;

@@ -2,9 +2,10 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
-  selector: 'app-chat-image-modal',
-  templateUrl: './chat-image-modal.component.html',
-  styleUrls: ['./chat-image-modal.component.css']
+    selector: 'app-chat-image-modal',
+    templateUrl: './chat-image-modal.component.html',
+    styleUrls: ['./chat-image-modal.component.css'],
+    standalone: false
 })
 export class ChatImageModalComponent implements OnInit {
 

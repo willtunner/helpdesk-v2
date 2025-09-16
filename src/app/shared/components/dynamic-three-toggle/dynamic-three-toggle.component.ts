@@ -4,13 +4,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
 @Component({
-  selector: 'app-dynamic-three-toggle',
-  standalone: true,
-  templateUrl: './dynamic-three-toggle.component.html',
-  styleUrls: ['./dynamic-three-toggle.component.scss'],
-  imports: [MatButtonToggleModule, CommonModule, 
-    MatButtonToggleModule, FormsModule],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'app-dynamic-three-toggle',
+    templateUrl: './dynamic-three-toggle.component.html',
+    styleUrls: ['./dynamic-three-toggle.component.scss'],
+    imports: [MatButtonToggleModule, CommonModule,
+        MatButtonToggleModule, FormsModule],
+    changeDetection: ChangeDetectionStrategy.OnPush
 })
 
 export class DynamicThreeToggleComponent {

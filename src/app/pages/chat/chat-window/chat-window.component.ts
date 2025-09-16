@@ -15,20 +15,19 @@ import { ChatVisibilityService } from '../../../services/chat-visibility.service
 import { UploadService } from '../../../services/upload.service';
 
 @Component({
-  selector: 'app-chat-window',
-  standalone: true,
-  imports: [
-    CommonModule, 
-    FormsModule, 
-    MatIconModule, 
-    MatButtonModule, 
-    DateFormatPipe, 
-    MatProgressSpinnerModule,
-    MatDialogModule
-  ],
-  providers: [DatePipe],
-  templateUrl: './chat-window.component.html',
-  styleUrls: ['./chat-window.component.scss'],
+    selector: 'app-chat-window',
+    imports: [
+        CommonModule,
+        FormsModule,
+        MatIconModule,
+        MatButtonModule,
+        DateFormatPipe,
+        MatProgressSpinnerModule,
+        MatDialogModule
+    ],
+    providers: [DatePipe],
+    templateUrl: './chat-window.component.html',
+    styleUrls: ['./chat-window.component.scss']
 })
 export class ChatWindowComponent implements OnInit, OnDestroy {
   @ViewChild('chatWindow') chatWindow!: ElementRef<HTMLDivElement>;
