@@ -46,13 +46,16 @@ import { MatInputModule } from '@angular/material/input';
         MatProgressSpinnerModule,
         MatTooltipModule,
         TranslateModule,
-        QuillModule.forRoot(),
+        QuillModule,
+
         // ✅ MÓDULES DO MATERIAL NECESSÁRIOS
         MatFormFieldModule,
         MatInputModule,
+
         // Componentes customizados
         DynamicSelectComponent,
         CustomInputComponent,
+        
         // RichTextEditorComponent,
         TagsComponent,
         DynamicButtonComponent,
