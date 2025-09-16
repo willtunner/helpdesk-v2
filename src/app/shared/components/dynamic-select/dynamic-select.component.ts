@@ -10,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 
 @Component({
     selector: 'app-dynamic-select',
+    standalone: true,
     imports: [
         CommonModule,
         FormsModule,

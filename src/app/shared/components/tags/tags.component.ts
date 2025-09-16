@@ -10,6 +10,7 @@ import { UtilService } from '../../../services/util.service';
 
 @Component({
     selector: 'app-tags',
+    standalone: true,
     templateUrl: './tags.component.html',
     styleUrls: ['./tags.component.scss'],
     imports: [CommonModule, MatIconModule, ReactiveFormsModule, MatError, TranslateModule]

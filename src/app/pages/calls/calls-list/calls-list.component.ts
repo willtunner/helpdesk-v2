@@ -8,6 +8,7 @@ import { CustomFilterComponent } from '../../../shared/components/custom-filter/
 
 @Component({
     selector: 'app-calls-list',
+    standalone: true,
     imports: [DynamicTableComponent, CustomFilterComponent],
     templateUrl: './calls-list.component.html',
     styleUrl: './calls-list.component.scss'

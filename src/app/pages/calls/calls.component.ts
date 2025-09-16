@@ -38,6 +38,7 @@ import { MatInputModule } from '@angular/material/input';
 
 @Component({
     selector: 'app-calls',
+    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,
@@ -45,7 +46,7 @@ import { MatInputModule } from '@angular/material/input';
         MatProgressSpinnerModule,
         MatTooltipModule,
         TranslateModule,
-        QuillModule,
+        QuillModule.forRoot(),
         // ✅ MÓDULES DO MATERIAL NECESSÁRIOS
         MatFormFieldModule,
         MatInputModule,

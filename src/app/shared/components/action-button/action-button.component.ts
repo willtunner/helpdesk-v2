@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnDestroy, ChangeDetectorRef } from '@angular/core';
+import { Component, EventEmitter, Input, Output, OnDestroy, ChangeDetectorRef, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatIconModule } from '@angular/material/icon';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
@@ -10,6 +10,7 @@ type ButtonType = 'save' | 'edit' | 'delete' | 'clear' | 'print' |
 
 @Component({
     selector: 'app-dynamic-button',
+    standalone: true,
     imports: [CommonModule, MatIconModule, TranslateModule, MatTooltipModule],
     templateUrl: './action-button.component.html',
     styleUrls: ['./action-button.component.scss']
@@ -25,9 +26,9 @@ export class DynamicButtonComponent implements OnDestroy {
   hovered: boolean = false;
 
   private langChangeSub: Subscription;
+  private translateService = inject(TranslateService);
 
   constructor(
-    private translateService: TranslateService,
     private cdr: ChangeDetectorRef
   ) {
     this.langChangeSub = this.translateService.onLangChange.subscribe(() => {

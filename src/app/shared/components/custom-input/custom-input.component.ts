@@ -14,6 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-custom-input',
+    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,
