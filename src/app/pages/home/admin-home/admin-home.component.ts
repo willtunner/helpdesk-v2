@@ -22,6 +22,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-admin-home',
+    standalone: true,
     imports: [DashboardCardComponent, TranslateModule, CommonModule],
     templateUrl: './admin-home.component.html',
     styleUrl: './admin-home.component.scss'

@@ -11,6 +11,7 @@ import { CallModalComponent } from '../../../pages/home/call-modal/call-modal.co
 
 @Component({
     selector: 'app-pie-chart',
+    standalone: true,
     imports: [CommonModule, HighchartsChartModule],
     templateUrl: './pie-chart.component.html',
     styleUrls: ['./pie-chart.component.scss']

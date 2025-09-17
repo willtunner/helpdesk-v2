@@ -8,10 +8,10 @@ import { FloatingLanguageSelectorComponent } from './shared/components/floating-
 
 @Component({
     selector: 'app-root',
+    standalone: true,
     imports: [BaseComponent, AppSidenavComponent, FloatingLanguageSelectorComponent],
     templateUrl: './app.component.html',
     styleUrl: './app.component.scss',
-    standalone: true
 })
 export class AppComponent {
   title = 'helpdesk-v2';

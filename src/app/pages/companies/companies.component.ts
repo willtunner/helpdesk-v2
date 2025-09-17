@@ -4,7 +4,6 @@ import { AuthService } from '../../services/auth.service';
 import { Company } from '../../models/models';
 import { DynamicTableComponent } from '../../shared/components/dynamic-table/dynamic-table.component';
 import { MatDialog } from '@angular/material/dialog';
-import { UpdateCompanyModalComponent } from './update-company-modal/update-company-modal.component';
 import { TranslateModule, TranslateService } from '@ngx-translate/core';
 import { CustomFilterComponent } from '../../shared/components/custom-filter/custom-filter.component';
 import { ConfirmationDialogComponent } from '../../shared/components/confirmation-dialog copy/confirmation-dialog.component';

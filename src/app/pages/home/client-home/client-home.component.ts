@@ -16,6 +16,7 @@ import { ConfirmationDialogComponent } from '../../../shared/components/confirma
 
 @Component({
     selector: 'app-client-home',
+    standalone: true,
     imports: [
         TranslateModule,
         CommonModule,

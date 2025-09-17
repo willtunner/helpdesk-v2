@@ -15,6 +15,7 @@ interface FilterField {
 
 @Component({
     selector: 'app-custom-filter',
+    standalone: true,
     imports: [CommonModule, ReactiveFormsModule, CustomInputComponent,
         MatButtonModule, DynamicButtonComponent, MatTooltipModule],
     templateUrl: './custom-filter.component.html',

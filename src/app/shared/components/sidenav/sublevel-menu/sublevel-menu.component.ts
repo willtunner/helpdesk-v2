@@ -5,6 +5,7 @@ import { fadeInOut, INavbarData } from '../../../../interface/side-nav.interface
 
 @Component({
     selector: 'app-sublevel-menu',
+    standalone: true,
     imports: [],
     templateUrl: './sublevel-menu.component.html',
     styleUrl: './sublevel-menu.component.scss',

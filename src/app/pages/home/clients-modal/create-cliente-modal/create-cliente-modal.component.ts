@@ -14,6 +14,7 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-create-cliente-modal',
+    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,

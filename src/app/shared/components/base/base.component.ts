@@ -4,6 +4,7 @@ import { Router, RouterModule } from '@angular/router';
 
 @Component({
     selector: 'app-base',
+    standalone: true,
     imports: [CommonModule, RouterModule],
     templateUrl: './base.component.html',
     styleUrl: './base.component.scss'

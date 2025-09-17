@@ -21,6 +21,7 @@ import { UserType } from '../../enums/user-types.enum';
 
 @Component({
     selector: 'app-home',
+    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,

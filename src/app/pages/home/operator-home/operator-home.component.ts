@@ -32,6 +32,7 @@ import { ColumnTagChartComponent } from '../../../shared/components/column-tag-c
 
 @Component({
     selector: 'app-operator-home',
+    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,

@@ -18,6 +18,7 @@ interface SideNaveToggle {
 
 @Component({
     selector: 'app-sidenav',
+    standalone: true,
     imports: [RouterModule, CommonModule, MatIconModule,
         SublevelMenuComponent, FirstLetterPipe, TranslateModule],
     templateUrl: './sidenav.component.html',

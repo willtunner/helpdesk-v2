@@ -13,6 +13,7 @@ import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-column-tag-chart',
+    standalone: true,
     imports: [
         HighchartsChartModule,
         CommonModule,
