@@ -12,6 +12,7 @@ import { NotificationType } from '../../../enums/notificationType.enum';
 
 @Component({
     selector: 'app-waiting-list',
+    standalone: true,
     imports: [CommonModule, MatCardModule, MatTableModule],
     templateUrl: './waiting-list.component.html',
     styleUrl: './waiting-list.component.scss'

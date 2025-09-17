@@ -19,6 +19,7 @@ import { DynamicSelectComponent } from '../dynamic-select/dynamic-select.compone
 
 @Component({
     selector: 'app-dropdown-videos',
+    standalone: true,
     templateUrl: './dropdown-videos.component.html',
     styleUrls: ['./dropdown-videos.component.css'],
     imports: [

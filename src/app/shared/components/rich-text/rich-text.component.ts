@@ -26,6 +26,7 @@ import { coerceBooleanProperty } from '@angular/cdk/coercion';
 
 @Component({
     selector: 'app-rich-text-editor',
+    standalone: true,
     imports: [
         CommonModule,
         FormsModule,

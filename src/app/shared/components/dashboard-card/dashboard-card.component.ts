@@ -5,6 +5,7 @@ import { NumberCounterComponent } from '../number-counter/number-counter.compone
 
 @Component({
     selector: 'app-dashboard-card',
+    standalone: true,
     imports: [CommonModule, MatIconModule, NumberCounterComponent],
     templateUrl: './dashboard-card.component.html',
     styleUrls: ['./dashboard-card.component.scss']

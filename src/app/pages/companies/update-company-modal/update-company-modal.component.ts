@@ -10,6 +10,7 @@ import { DynamicButtonComponent } from '../../../shared/components/action-button
 
 @Component({
     selector: 'app-update-company-modal',
+    standalone: true,
     imports: [
         CommonModule,
         MatDialogModule,

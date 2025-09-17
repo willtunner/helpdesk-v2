@@ -22,6 +22,7 @@ import { User } from '../../../models/models';
 
 @Component({
     selector: 'app-mtb-dev',
+    standalone: true,
     imports: [
         CommonModule,
         FormsModule,
@@ -31,7 +32,6 @@ import { User } from '../../../models/models';
         MatTableModule,
         MatIconModule,
         MatProgressSpinnerModule,
-        FirebaseDatePipe,
         DynamicTableComponent,
         DynamicButtonComponent
     ],

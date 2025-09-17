@@ -13,6 +13,7 @@ import { NotificationType } from '../../enums/notificationType.enum';
 
 @Component({
     selector: 'app-companies',
+    standalone: true,
     imports: [DynamicTableComponent, TranslateModule, CustomFilterComponent],
     templateUrl: './companies.component.html',
     styleUrl: './companies.component.scss'

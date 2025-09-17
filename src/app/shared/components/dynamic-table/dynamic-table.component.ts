@@ -18,6 +18,7 @@ import { TranslateService } from '../../../services/translate.service';
 
 @Component({
     selector: 'app-dynamic-table',
+    standalone: true,
     imports: [
         CommonModule,
         MatTableModule,

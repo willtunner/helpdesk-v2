@@ -6,6 +6,7 @@ import { MatCardModule } from '@angular/material/card';
 
 @Component({
     selector: 'app-user-online',
+    standalone: true,
     imports: [DynamicButtonComponent, MatCardModule],
     templateUrl: './user-online.component.html',
     styleUrl: './user-online.component.scss'

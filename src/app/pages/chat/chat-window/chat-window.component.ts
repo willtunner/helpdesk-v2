@@ -16,6 +16,7 @@ import { UploadService } from '../../../services/upload.service';
 
 @Component({
     selector: 'app-chat-window',
+    standalone: true,
     imports: [
         CommonModule,
         FormsModule,

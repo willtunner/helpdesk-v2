@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-chart',
+    standalone: true,
     imports: [
         CommonModule,
         HighchartsChartModule,

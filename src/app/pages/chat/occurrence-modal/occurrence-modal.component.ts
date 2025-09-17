@@ -8,6 +8,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-occurrence-modal',
+    standalone: true,
     templateUrl: './occurrence-modal.component.html',
     styleUrls: ['./occurrence-modal.component.scss'], // Torna o componente standalone
     imports: [

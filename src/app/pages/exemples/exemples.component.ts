@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnInit, signal, Signal } from '@angular/core';
+import { Component, forwardRef, signal, Signal } from '@angular/core';
 import { FormBuilder, FormControl, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CustomInputComponent } from '../../shared/components/custom-input/custom-input.component';
@@ -13,7 +13,6 @@ import { MatInputModule } from '@angular/material/input';
 import { Router } from '@angular/router';
 import { ThemeService } from '../../services/theme.service';
 import { cnpjValidator, cpfValidator } from '../../shared/validators/validators';
-import { ChartComponent } from '../../shared/components/line-chart/line-chart.component';
 import { ChartType } from '../../enums/chart-types.enum';
 import { DropdownVideosComponent } from '../../shared/components/dropdown-videos/dropdown-videos.component';
 import { DropDownVideos } from '../../models/models';
@@ -26,9 +25,10 @@ import { TranslateModule } from '@ngx-translate/core';
 
 @Component({
     selector: 'app-exemples',
+    standalone: true,
     imports: [CommonModule, ReactiveFormsModule, CustomInputComponent, MatButtonModule,
         DynamicTableComponent, DynamicButtonComponent, MatIconModule, DynamicThreeToggleComponent,
-        RichTextEditorComponent, MatInputModule, ChartComponent,
+        RichTextEditorComponent, MatInputModule,
         DropdownVideosComponent, MtbDevComponent,
         DashboardCardComponent, TranslateModule],
     templateUrl: './exemples.component.html',

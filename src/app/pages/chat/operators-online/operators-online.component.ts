@@ -6,6 +6,7 @@ import { ChatService } from '../../../services/chat-service.service';
 
 @Component({
     selector: 'app-operators-online',
+    standalone: true,
     imports: [CommonModule, MatCardModule, MatTableModule],
     templateUrl: './operators-online.component.html',
     styleUrl: './operators-online.component.scss'

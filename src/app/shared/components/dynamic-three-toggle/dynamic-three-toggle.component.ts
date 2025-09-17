@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 
 @Component({
     selector: 'app-dynamic-three-toggle',
+    standalone: true,
     templateUrl: './dynamic-three-toggle.component.html',
     styleUrls: ['./dynamic-three-toggle.component.scss'],
     imports: [MatButtonToggleModule, CommonModule,

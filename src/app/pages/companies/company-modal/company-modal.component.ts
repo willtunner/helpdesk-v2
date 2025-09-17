@@ -13,6 +13,7 @@ import { UtilService } from '../../../services/util.service';
 
 @Component({
     selector: 'app-company-modal',
+    standalone: true,
     imports: [
         CommonModule,
         ReactiveFormsModule,

@@ -3,9 +3,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 
 @Component({
     selector: 'app-chat-image-modal',
+    standalone: true,
     templateUrl: './chat-image-modal.component.html',
-    styleUrls: ['./chat-image-modal.component.css'],
-    standalone: false
+    styleUrls: ['./chat-image-modal.component.css']
 })
 export class ChatImageModalComponent implements OnInit {
 

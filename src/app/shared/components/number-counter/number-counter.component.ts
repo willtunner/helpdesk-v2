@@ -5,6 +5,7 @@ import { CommonModule } from '@angular/common';
 
 @Component({
     selector: 'app-number-counter',
+    standalone: true,
     imports: [CommonModule],
     templateUrl: './number-counter.component.html',
     styleUrl: './number-counter.component.scss'

@@ -51,11 +51,10 @@ import { MatInputModule } from '@angular/material/input';
         // ✅ MÓDULES DO MATERIAL NECESSÁRIOS
         MatFormFieldModule,
         MatInputModule,
-
+        
         // Componentes customizados
         DynamicSelectComponent,
         CustomInputComponent,
-        
         // RichTextEditorComponent,
         TagsComponent,
         DynamicButtonComponent,

@@ -7,6 +7,7 @@ import { ChatVisibilityService } from '../../../services/chat-visibility.service
 
 @Component({
     selector: 'app-active-chats',
+    standalone: true,
     imports: [MatCardModule, CommonModule],
     templateUrl: './active-chats.component.html',
     styleUrl: './active-chats.component.scss'
