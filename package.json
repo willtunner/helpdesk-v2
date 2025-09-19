@@ -33,7 +33,7 @@
     "jspdf": "^2.5.2",
     "moment": "^2.30.1",
     "ngx-mask": "^19.0.7",
-    "ngx-quill": "^26.0.10",
+    "ngx-quill": "^28.0.1",
     "quill": "^2.0.3",
     "quill-delta-to-html": "^0.12.1",
     "rxjs": "~7.8.0",
