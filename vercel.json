@@ -1,5 +1,5 @@
 {
-  "buildCommand": "npm install --legacy-peer-deps && npm run build",
+  "buildCommand": "npm install --legacy-peer-deps && npm run build-quill && npm run build",
   "outputDirectory": "dist/helpdesk-v2",
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
