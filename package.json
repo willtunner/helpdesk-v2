@@ -5,7 +5,8 @@
     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
     "frontend": "ng serve --proxy-config proxy.conf.json",
     "backend": "node backend/index.js",
-    "vercel-build": "npm install --legacy-peer-deps && ng build --configuration=production"
+    "vercel-build": "npm install --legacy-peer-deps && ng build --configuration=production",
+    "build": "ng build --configuration=production"
   },
   "private": true,
   "dependencies": {

@@ -1,14 +1,6 @@
 {
-  "builds": [
-    {
-      "src": "angular.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist/helpdesk-v2" }
-    }
-  ],
-  "scripts": {
-    "build": "npm run vercel-build"
-  },
+  "buildCommand": "npm install --legacy-peer-deps && npm run build",
+  "outputDirectory": "dist/helpdesk-v2",
   "rewrites": [
     { "source": "/(.*)", "destination": "/" }
   ],
