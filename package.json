@@ -5,10 +5,15 @@
     "start": "concurrently \"npm run backend\" \"npm run frontend\"",
     "frontend": "ng serve --proxy-config proxy.conf.json",
     "backend": "node backend/index.js",
-    "vercel-build": "npm install --legacy-peer-deps && ng build --configuration=production",
-    "build": "ng build --configuration=production"
+    "vercel-build": "npm install --legacy-peer-deps && npm run build",
+    "build": "ng build --configuration=production",
+    "postinstall": "npm run build-quill",
+    "build-quill": "cd node_modules/quill && npm install && npm run build"
   },
   "private": true,
+  "resolutions": {
+    "quill": "^2.0.0"
+  },
   "dependencies": {
     "@angular/animations": "^20.3.0",
     "@angular/cdk": "^20.2.3",
