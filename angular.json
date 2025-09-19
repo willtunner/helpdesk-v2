@@ -27,19 +27,16 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               "src/favicon.ico",
-              "src/assets",
-              {
-                "glob": "**/*",
-                "input": "node_modules/quill/dist/",
-                "output": "/quill-assets/"
-              }
+              "src/assets"
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss",
               "node_modules/quill/dist/quill.snow.css"
             ],
-            "scripts": [],
+            "scripts": [
+              "node_modules/quill/dist/quill.min.js"
+            ],
             "allowedCommonJsDependencies": [
               "moment",
               "crypto-js",
@@ -99,11 +96,6 @@
               {
                 "glob": "**/*",
                 "input": "public"
-              },
-              {
-                "glob": "**/*",
-                "input": "node_modules/quill/dist/",
-                "output": "/quill-assets/"
               }
             ],
             "styles": [
@@ -111,7 +103,9 @@
               "src/styles.scss",
               "node_modules/quill/dist/quill.snow.css"
             ],
-            "scripts": []
+            "scripts": [
+              "node_modules/quill/dist/quill.min.js"
+            ]
           }
         }
       }
