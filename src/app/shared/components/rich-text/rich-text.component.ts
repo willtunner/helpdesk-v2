@@ -8,46 +8,44 @@ import {
   OnInit, 
   AfterViewInit,
   DoCheck,
-  Optional,
-  Self,
   Injector
 } from '@angular/core';
 import { 
   FormsModule, 
   NG_VALUE_ACCESSOR, 
   ControlValueAccessor,
-  NgControl,
-  FormControl
+  NgControl
 } from '@angular/forms';
-import { QuillModule } from 'ngx-quill';
+import { QuillModule, QuillEditorComponent } from 'ngx-quill';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { Subject } from 'rxjs';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
+import Quill from 'quill';
 
 @Component({
-    selector: 'app-rich-text-editor',
-    standalone: true,
-    imports: [
-        CommonModule,
-        FormsModule,
-        QuillModule
-    ],
-    templateUrl: './rich-text.component.html',
-    styleUrls: ['./rich-text.component.scss'],
-    providers: [
-        {
-            provide: NG_VALUE_ACCESSOR,
-            useExisting: forwardRef(() => RichTextEditorComponent),
-            multi: true
-        },
-        {
-            provide: MatFormFieldControl,
-            useExisting: RichTextEditorComponent
-        }
-    ]
+  selector: 'app-rich-text-editor',
+  standalone: true,
+  imports: [
+    CommonModule,
+    FormsModule,
+    QuillModule
+  ],
+  templateUrl: './rich-text.component.html',
+  styleUrls: ['./rich-text.component.scss'],
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      useExisting: forwardRef(() => RichTextEditorComponent),
+      multi: true
+    },
+    {
+      provide: MatFormFieldControl,
+      useExisting: RichTextEditorComponent
+    }
+  ]
 })
 export class RichTextEditorComponent implements ControlValueAccessor, MatFormFieldControl<string>, OnInit, AfterViewInit, DoCheck {
-  @ViewChild('editor') editor!: ElementRef;
+  @ViewChild(QuillEditorComponent, { static: false }) editor!: QuillEditorComponent;
   @Input() placeholder: string = 'Digite seu texto aqui...';
   @Input() height: string = '150px';
 
@@ -58,23 +56,23 @@ export class RichTextEditorComponent implements ControlValueAccessor, MatFormFie
   errorState = false;
   controlType = 'rich-text';
   describedBy = '';
-  
+
   private _value: string = '';
   private _required = false;
   private _disabled = false;
   ngControl: NgControl | null = null;
 
+  /** Configuração de toolbar */
   quillModules = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],
-      [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-      [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-      [{ 'size': ['small', false, 'large', 'huge'] }],
-      [{ 'color': [] }, { 'background': [] }],
-      [{ 'font': [] }],
-      [{ 'align': [] }],
-      ['link', 'image', 'video'],
-      [{ 'table': 'insert-table' }]
+      [{ header: [1, 2, 3, 4, 5, 6, false] }],
+      [{ list: 'ordered' }, { list: 'bullet' }],
+      [{ size: ['small', false, 'large', 'huge'] }],
+      [{ color: [] }, { background: [] }],
+      [{ font: [] }],
+      [{ align: [] }],
+      ['link', 'image', 'video']
     ]
   };
 
@@ -104,7 +102,7 @@ export class RichTextEditorComponent implements ControlValueAccessor, MatFormFie
   }
 
   writeValue(value: any): void {
-    this.value = value;
+    this.value = value || '';
   }
 
   registerOnChange(fn: any): void {
@@ -130,7 +128,7 @@ export class RichTextEditorComponent implements ControlValueAccessor, MatFormFie
   }
 
   get empty(): boolean {
-    return !this._value;
+    return !this._value || this._value === '<p><br></p>';
   }
 
   get shouldLabelFloat(): boolean {
@@ -158,8 +156,8 @@ export class RichTextEditorComponent implements ControlValueAccessor, MatFormFie
   }
 
   onContainerClick(event: MouseEvent): void {
-    if (this.editor?.nativeElement) {
-      this.editor.nativeElement.focus();
+    if (this.editor?.quillEditor) {
+      this.editor.quillEditor.focus();
     }
   }
 
@@ -167,8 +165,12 @@ export class RichTextEditorComponent implements ControlValueAccessor, MatFormFie
     this.describedBy = ids.join(' ');
   }
 
-  onContentChange(content: string): void {
-    this.value = content;
+  /** 
+   * Evento do ngx-quill dispara objeto { editor, html, text }
+   * Não é só string.
+   */
+  onContentChange(event: { html: string | null }): void {
+    this.value = event.html || '';
     this.onTouched();
   }
 

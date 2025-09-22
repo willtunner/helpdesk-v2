@@ -32,11 +32,10 @@
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
               "src/styles.scss",
-              "./node_modules/quill/dist/quill.snow.css"
+              "./node_modules/quill/dist/quill.snow.css",
+              "./node_modules/quill/dist/quill.bubble.css"
             ],
-            "scripts": [
-              "./node_modules/quill/dist/quill.min.js"
-            ],
+            "scripts": [],
             "allowedCommonJsDependencies": [
               "moment",
               "crypto-js",
@@ -100,11 +99,11 @@
             ],
             "styles": [
               "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
-              "src/styles.scss"
+              "src/styles.scss",
+              "./node_modules/quill/dist/quill.snow.css",
+              "./node_modules/quill/dist/quill.bubble.css"
             ],
-            "scripts": [
-              
-            ]
+            "scripts": []
           }
         }
       }
