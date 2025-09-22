@@ -2,12 +2,12 @@
   "name": "helpdesk-v2",
   "version": "0.0.0",
   "scripts": {
-    "start": "concurrently \"npm run backend\" \"npm run frontend\"",
-    "frontend": "ng serve --proxy-config proxy.conf.json",
-    "backend": "node backend/index.js",
-    "vercel-build": "npm install --legacy-peer-deps && npm run build",
-    "build": "ng build --configuration=production"
-  },
+  "start": "concurrently \"npm run backend\" \"npm run frontend\"",
+  "frontend": "ng serve --proxy-config proxy.conf.json",
+  "backend": "node backend/index.js",
+  "vercel-build": "npm install --legacy-peer-deps && npm run build",
+  "build": "ng build --configuration=production"
+},
   "private": true,
   "resolutions": {
     "quill": "^2.0.0"
