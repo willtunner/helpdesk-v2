@@ -1,11 +1,15 @@
 {
-  "builds": [
-    {
-      "src": "angular.json",
-      "use": "@vercel/static-build",
-      "config": { "distDir": "dist/helpdesk-v2" }
-    }
+  "buildCommand": "npm install --legacy-peer-deps --ignore-scripts && npm run build",
+  "outputDirectory": "dist/helpdesk-v2",
+  "rewrites": [
+    { "source": "/(.*)", "destination": "/" }
   ],
-  "installCommand": "npm install --ignore-scripts",
-  "rewrites": [{ "source": "/(.*)", "destination": "/" }]
+  "headers": [
+    {
+      "source": "/(.*)\\.(js|css|woff2|woff|ttf|svg|png|jpg|jpeg|gif|ico)",
+      "headers": [
+        { "key": "Cache-Control", "value": "public,max-age=31536000,immutable" }
+      ]
+    }
+  ]
 }
