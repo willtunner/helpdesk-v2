@@ -1,35 +1,28 @@
 import { CommonModule } from '@angular/common';
-import { 
-  Component, 
-  forwardRef, 
-  Input, 
-  ViewChild, 
-  ElementRef,
-  OnInit, 
+import {
+  Component,
+  forwardRef,
+  Input,
+  OnInit,
   AfterViewInit,
   DoCheck,
   Injector
 } from '@angular/core';
-import { 
-  FormsModule, 
-  NG_VALUE_ACCESSOR, 
+import {
+  NG_VALUE_ACCESSOR,
   ControlValueAccessor,
-  NgControl
+  NgControl,
+  FormsModule,
 } from '@angular/forms';
-import { QuillModule, QuillEditorComponent } from 'ngx-quill';
+import { QuillModule } from 'ngx-quill';
 import { MatFormFieldControl } from '@angular/material/form-field';
 import { Subject } from 'rxjs';
 import { coerceBooleanProperty } from '@angular/cdk/coercion';
-import Quill from 'quill';
 
 @Component({
   selector: 'app-rich-text-editor',
   standalone: true,
-  imports: [
-    CommonModule,
-    FormsModule,
-    QuillModule
-  ],
+  imports: [CommonModule, FormsModule, QuillModule],
   templateUrl: './rich-text.component.html',
   styleUrls: ['./rich-text.component.scss'],
   providers: [
@@ -44,8 +37,9 @@ import Quill from 'quill';
     }
   ]
 })
-export class RichTextEditorComponent implements ControlValueAccessor, MatFormFieldControl<string>, OnInit, AfterViewInit, DoCheck {
-  @ViewChild(QuillEditorComponent, { static: false }) editor!: QuillEditorComponent;
+export class RichTextEditorComponent
+  implements ControlValueAccessor, MatFormFieldControl<string>, OnInit, AfterViewInit, DoCheck
+{
   @Input() placeholder: string = 'Digite seu texto aqui...';
   @Input() height: string = '150px';
 
@@ -62,7 +56,7 @@ export class RichTextEditorComponent implements ControlValueAccessor, MatFormFie
   private _disabled = false;
   ngControl: NgControl | null = null;
 
-  /** Configuração de toolbar */
+  // módulos do toolbar (ngx-quill aceita direto)
   quillModules = {
     toolbar: [
       ['bold', 'italic', 'underline', 'strike'],
@@ -96,13 +90,15 @@ export class RichTextEditorComponent implements ControlValueAccessor, MatFormFie
 
   ngDoCheck(): void {
     if (this.ngControl) {
-      this.errorState = (this.ngControl.invalid ?? false) && (this.ngControl.touched ?? false);
+      this.errorState =
+        (this.ngControl.invalid ?? false) && (this.ngControl.touched ?? false);
       this.stateChanges.next();
     }
   }
 
+  // ControlValueAccessor
   writeValue(value: any): void {
-    this.value = value || '';
+    this.value = value;
   }
 
   registerOnChange(fn: any): void {
@@ -117,18 +113,18 @@ export class RichTextEditorComponent implements ControlValueAccessor, MatFormFie
     this.disabled = isDisabled;
   }
 
+  // Getters/Setters
   get value(): string {
     return this._value;
   }
-
   set value(value: string) {
-    this._value = value;
-    this.onChange(value);
+    this._value = value || '';
+    this.onChange(this._value);
     this.stateChanges.next();
   }
 
   get empty(): boolean {
-    return !this._value || this._value === '<p><br></p>';
+    return !this._value;
   }
 
   get shouldLabelFloat(): boolean {
@@ -139,7 +135,6 @@ export class RichTextEditorComponent implements ControlValueAccessor, MatFormFie
   get required(): boolean {
     return this._required;
   }
-
   set required(req: boolean) {
     this._required = coerceBooleanProperty(req);
     this.stateChanges.next();
@@ -149,28 +144,21 @@ export class RichTextEditorComponent implements ControlValueAccessor, MatFormFie
   get disabled(): boolean {
     return this._disabled;
   }
-
   set disabled(dis: boolean) {
     this._disabled = coerceBooleanProperty(dis);
     this.stateChanges.next();
   }
 
-  onContainerClick(event: MouseEvent): void {
-    if (this.editor?.quillEditor) {
-      this.editor.quillEditor.focus();
-    }
-  }
+  // MatFormFieldControl
+  onContainerClick(_: MouseEvent): void {}
 
   setDescribedByIds(ids: string[]): void {
     this.describedBy = ids.join(' ');
   }
 
-  /** 
-   * Evento do ngx-quill dispara objeto { editor, html, text }
-   * Não é só string.
-   */
-  onContentChange(event: { html: string | null }): void {
-    this.value = event.html || '';
+  // eventos do quill
+  onContentChange(content: string): void {
+    this.value = content;
     this.onTouched();
   }
 
