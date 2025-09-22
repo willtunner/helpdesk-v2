@@ -6,9 +6,7 @@
     "frontend": "ng serve --proxy-config proxy.conf.json",
     "backend": "node backend/index.js",
     "vercel-build": "npm install --legacy-peer-deps && npm run build",
-    "build": "ng build --configuration=production",
-    "postinstall": "npm run build-quill",
-    "build-quill": "cd node_modules/quill && npm install && npm run build"
+    "build": "ng build --configuration=production"
   },
   "private": true,
   "resolutions": {
