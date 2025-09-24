@@ -1,8 +1,11 @@
 {
   "buildCommand": "npm install --legacy-peer-deps --ignore-scripts && npm run build",
   "outputDirectory": "dist/helpdesk-v2",
-  "rewrites": [
-    { "source": "/(.*)", "destination": "/index.html" }
+  "routes": [
+    {
+      "src": "/.*",
+      "dest": "/index.html"
+    }
   ],
   "headers": [
     {
