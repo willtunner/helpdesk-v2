@@ -94,7 +94,8 @@
             "assets": [
               {
                 "glob": "**/*",
-                "input": "public"
+                "input": "node_modules/quill/dist/assets",
+                "output": "assets/quill"
               }
             ],
             "styles": [
