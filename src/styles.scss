@@ -1,5 +1,7 @@
 
 @import url("https://fonts.googleapis.com/css2?family=Poppins:wght@300;400&display=swap");
+@import "quill/dist/quill.snow.css";
+@import "quill/dist/quill.bubble.css";
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
@@ -300,6 +302,11 @@ mat-form-field .rich-text-container {
 
 mat-form-field .quill-editor {
   margin-top: 0 !important;
+}
+
+.ql-snow .ql-picker.ql-font .ql-picker-label::before,
+.ql-snow .ql-picker.ql-font .ql-picker-item::before {
+  content: attr(data-label);
 }
 
 

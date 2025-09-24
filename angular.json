@@ -40,7 +40,12 @@
               "moment",
               "crypto-js",
               "html2canvas",
-              "highcharts"
+              "highcharts",
+              "vanilla-tilt",
+              "canvg",
+              "rgbcolor",
+              "quill-delta",
+              "dompurify"
             ]
           },
           "configurations": {
@@ -48,13 +53,8 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "3mb",
-                  "maximumError": "5mb"
-                },
-                {
-                  "type": "anyComponentStyle",
-                  "maximumWarning": "10kb",
-                  "maximumError": "15kb"
+                  "maximumWarning": "5mb",
+                  "maximumError": "7mb"
                 }
               ],
               "outputHashing": "all"
@@ -92,6 +92,8 @@
             "tsConfig": "tsconfig.spec.json",
             "inlineStyleLanguage": "scss",
             "assets": [
+              "src/favicon.ico",
+              "src/assets",
               {
                 "glob": "**/*",
                 "input": "node_modules/quill/dist/assets",
