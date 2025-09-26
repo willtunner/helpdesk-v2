@@ -20,38 +20,46 @@ const PATH_HELPDESKS_COMPANIES = 'helpCompanies';
 })
 export class AuthService {
   private _firestore = inject(Firestore);
-  private _usersCollection: CollectionReference = collection(this._firestore, PATH_USERS);
-  private _clientsCollection: CollectionReference = collection(this._firestore, PATH_CLIENTS);
-  private _helpDeskClientsCollection: CollectionReference = collection(this._firestore, PATH_HELPDESKS_COMPANIES);
+  private _sessionService = inject(SessionService);
+  private _layoutService = inject(LayoutService);
 
   // Signal para o estado de autenticação e usuário logado
   loggedIn = signal(false);
   currentUser = signal<User | null>(null);
 
-  constructor(
-    private layoutService: LayoutService,
-    private sessionService: SessionService
-  ) {
-    const session = this.sessionService.getSession();
+  constructor() {
+    // Inicialização no constructor deve ser feita após a injeção
+    const session = this._sessionService.getSession();
     if (session) {
       this.loggedIn.set(true);
       this.currentUser.set(session);
-      this.layoutService.setShowSideNav(true);
+      this._layoutService.setShowSideNav(true);
     } else {
       this.loggedIn.set(false);
       this.currentUser.set(null);
     }
   }
 
+  // Getters lazy para as coleções - criados apenas quando necessários
+  private get _usersCollection(): CollectionReference {
+    return collection(this._firestore, PATH_USERS);
+  }
+
+  private get _clientsCollection(): CollectionReference {
+    return collection(this._firestore, PATH_CLIENTS);
+  }
+
+  private get _helpDeskClientsCollection(): CollectionReference {
+    return collection(this._firestore, PATH_HELPDESKS_COMPANIES);
+  }
+
   async login(email: string, password: string): Promise<boolean> {
+    debugger;
     console.log('🚀 Tentativa de login iniciada', { email, password });
   
-    this._debugCollections(); // Apenas para debug, pode ser removido depois
+    await this._debugCollections(); // Ajustado para await
 
     try {
-      // const normalizedEmail = email.trim().toLowerCase();
-      // console.log('🔍 Iniciando login para:', normalizedEmail);
-  
       // 🔍 Buscar apenas por EMAIL normalizado nas 3 coleções
       const usersEmailQuery = query(this._usersCollection, where('email', '==', email));
       const clientsEmailQuery = query(this._clientsCollection, where('email', '==', email));
@@ -116,33 +124,30 @@ export class AuthService {
     }
   }
   
-  
   // Só para debug - pega todos os docs da coleção
-async _debugCollections() {
-  const users = await getDocs(this._usersCollection);
-  console.log('🔥 users:', users.docs.map(d => ({ id: d.id, ...d.data() })));
+  private async _debugCollections() {
+    const users = await getDocs(this._usersCollection);
+    console.log('🔥 users:', users.docs.map(d => ({ id: d.id, ...d.data() })));
 
-  const clients = await getDocs(this._clientsCollection);
-  console.log('🔥 clients:', clients.docs.map(d => ({ id: d.id, ...d.data() })));
+    const clients = await getDocs(this._clientsCollection);
+    console.log('🔥 clients:', clients.docs.map(d => ({ id: d.id, ...d.data() })));
 
-  const helpCompanies = await getDocs(this._helpDeskClientsCollection);
-  console.log('🔥 helpCompanies:', helpCompanies.docs.map(d => ({ id: d.id, ...d.data() })));
-}
+    const helpCompanies = await getDocs(this._helpDeskClientsCollection);
+    console.log('🔥 helpCompanies:', helpCompanies.docs.map(d => ({ id: d.id, ...d.data() })));
+  }
   
-  
-
   private _saveSession(user: User) {
-    this.sessionService.setSession(user);
+    this._sessionService.setSession(user);
     this.loggedIn.set(true);
     this.currentUser.set(user);
-    this.layoutService.setShowSideNav(true);
+    this._layoutService.setShowSideNav(true);
   }
 
   logout(): void {
-    this.sessionService.clearSession();
+    this._sessionService.clearSession();
     this.loggedIn.set(false);
     this.currentUser.set(null);
-    this.layoutService.setShowSideNav(false);
+    this._layoutService.setShowSideNav(false);
   }
 
   isLoggedIn(): boolean {
