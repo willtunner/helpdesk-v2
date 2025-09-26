@@ -96,8 +96,7 @@
               "src/assets",
               {
                 "glob": "**/*",
-                "input": "node_modules/quill/dist/assets",
-                "output": "assets/quill"
+                "input": "public"
               }
             ],
             "styles": [
