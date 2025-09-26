@@ -18,24 +18,24 @@ import { DynamicButtonComponent } from '../../action-button/action-button.compon
 import { ConfirmationDialogComponent } from '../../confirmation-dialog copy/confirmation-dialog.component';
 
 @Component({
-    selector: 'app-addVideoDialogComponent',
-    templateUrl: './addVideoDialogComponent.component.html',
-    styleUrls: ['./addVideoDialogComponent.component.css'],
-    imports: [
-        FormsModule,
-        MatFormFieldModule,
-        MatInputModule,
-        MatSelectModule,
-        MatOptionModule,
-        MatButtonModule,
-        MatIconModule,
-        MatTableModule,
-        CommonModule,
-        ReactiveFormsModule,
-        MatCheckboxModule,
-        CustomInputComponent,
-        DynamicButtonComponent,
-    ]
+  selector: 'app-addVideoDialogComponent',
+  templateUrl: './addVideoDialogComponent.component.html',
+  styleUrls: ['./addVideoDialogComponent.component.css'],
+  imports: [
+    FormsModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatSelectModule,
+    MatOptionModule,
+    MatButtonModule,
+    MatIconModule,
+    MatTableModule,
+    CommonModule,
+    ReactiveFormsModule,
+    MatCheckboxModule,
+    CustomInputComponent,
+    DynamicButtonComponent,
+  ]
 })
 export class AddVideoDialogComponentComponent {
   videoForm: FormGroup;
@@ -92,27 +92,27 @@ export class AddVideoDialogComponentComponent {
       nameProfile: user.username,
       sector: newVideo.sector
     };
-    
+
     if (this.isEditable && this.showForm) {
       // Se for atualizar sessão incluindo novo video
       this.videoDropDown.videos.push(videoToSave);
       console.log('dowpDownSection1:', this.videoDropDown)
-      // this.videoService.updateSection(this.videoDropDown.id!, this.videoDropDown);
+      this.videoService.updateSection(this.videoDropDown.id!, this.videoDropDown);
       this.onClose();
-    } else if(this.isEditable && !this.showForm) {
+    } else if (this.isEditable && !this.showForm) {
       // Se for atualizar somente o titulo da sessão
       this.videoDropDown.dropdownText = newVideo.sectionTitle;
-      // this.videoService.updateSection(this.videoDropDown.id!, this.videoDropDown);
+      this.videoService.updateSection(this.videoDropDown.id!, this.videoDropDown);
     } else {
       // cria uma sessão nova
       this.videoDropDown.dropdownText = newVideo.sectionTitle;
       this.videoDropDown.videos.push(videoToSave);
       console.log('dowpDownSection2:', this.videoDropDown)
-      // this.videoService.sectionSave(this.videoDropDown);
+      this.videoService.sectionSave(this.videoDropDown);
       this.onClose();
     }
   }
-  
+
 
   //? Deleta sessão inteira
   deleteDropDownVideo() {
@@ -127,14 +127,14 @@ export class AddVideoDialogComponentComponent {
 
       dialogRef.afterClosed().subscribe(async (result) => {
         if (result) {
-          // try {
-          //   this.videoService.deleteSection(this.videoDropDown.id!).then(() => {
-          //     console.log('Dropdown e vídeos excluídos com sucesso!');
-          //   });
-          //   this.onClose();
-          // } catch (error) {
-          //   console.error('Erro ao tentar excluir a sessão', error);
-          // }
+          try {
+            this.videoService.deleteSection(this.videoDropDown.id!).then(() => {
+              console.log('Dropdown e vídeos excluídos com sucesso!');
+            });
+            this.onClose();
+          } catch (error) {
+            console.error('Erro ao tentar excluir a sessão', error);
+          }
         }
       });
     }
@@ -146,13 +146,13 @@ export class AddVideoDialogComponentComponent {
     if (event && event.key !== "Enter") {
       return;
     }
-  
+
     const index = this.videoDropDown.videos.findIndex(v => v.title === video.title);
     if (index !== -1) {
       this.videoDropDown.videos[index] = video;
-      // this.videoService.updateSection(this.videoDropDown.id!, this.videoDropDown);
+      this.videoService.updateSection(this.videoDropDown.id!, this.videoDropDown);
     }
-  
+
     // Sai do modo de edição
     this.editing[video.title] = false;
   }
@@ -166,23 +166,21 @@ export class AddVideoDialogComponentComponent {
         width: '400px',
         data: {
           title: 'Deseja excluir o video?',
-          message: `Você está preste a deletar o video ${ video.title }, tem certeza?`,
+          message: `Você está preste a deletar o video ${video.title}, tem certeza?`,
         },
       });
 
       dialogRef.afterClosed().subscribe(async (result) => {
         if (result) {
-          // try {
-          //   this.videoDropDown.videos = this.videoDropDown.videos.filter(v => v !== video);
-          //   this.videoService.updateSection(this.videoDropDown.id!, this.videoDropDown);
-          //   this.onClose();
-          // } catch (error) {
-          //   console.error('Erro tentar excluir o video', error);
-          // }
+          try {
+            this.videoDropDown.videos = this.videoDropDown.videos.filter(v => v !== video);
+            this.videoService.updateSection(this.videoDropDown.id!, this.videoDropDown);
+            this.onClose();
+          } catch (error) {
+            console.error('Erro tentar excluir o video', error);
+          }
         }
       });
-
-
     }
   }
 
@@ -203,15 +201,15 @@ export class AddVideoDialogComponentComponent {
   get sectionTitleControl(): FormControl {
     return this.videoForm.get('sectionTitle') as FormControl;
   }
-  
+
   get videoTitleControl(): FormControl {
     return this.videoForm.get('videoTitle') as FormControl;
   }
-  
+
   get videoUrlControl(): FormControl {
     return this.videoForm.get('videoUrl') as FormControl;
   }
-  
+
   get sectorControl(): FormControl {
     return this.videoForm.get('sector') as FormControl;
   }

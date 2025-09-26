@@ -62,16 +62,17 @@
       <!-- Observação -->
       <div class="field-full">
         <label class="quill-label">Resolução</label>
-        <quill-editor formControlName="resolution" [placeholder]="'calls.placeholders.observation' | translate"
-          [styles]="{ 'min-height': '200px', 'max-height': '300px' }"
-          (onBlur)="getControl('resolution').markAsTouched()">
-        </quill-editor>
+
+        <app-rich-text-editor formControlName="resolution" [placeholder]="'calls.placeholders.observation' | translate"
+          height="200px">
+        </app-rich-text-editor>
 
         <div class="mat-error"
           *ngIf="getControl('resolution').hasError('required') && getControl('resolution').touched">
           Resolução é obrigatória.
         </div>
       </div>
+
 
       <!-- Tags e Radio -->
       <div class="tags" style="margin-top: 10px;">

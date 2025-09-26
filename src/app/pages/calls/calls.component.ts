@@ -55,7 +55,7 @@ import { MatInputModule } from '@angular/material/input';
         // Componentes customizados
         DynamicSelectComponent,
         CustomInputComponent,
-        // RichTextEditorComponent,
+        RichTextEditorComponent,
         TagsComponent,
         DynamicButtonComponent,
         CallsListComponent,
